@@ -1,3 +1,5 @@
 export default function JoinPage() {
-  return <div></div>;
+  return <div>
+    참가하기
+  </div>;
 }
