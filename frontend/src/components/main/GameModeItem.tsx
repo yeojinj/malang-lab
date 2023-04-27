@@ -9,7 +9,7 @@ type Props = {
 }
 
 export default function GameModeItem({ mode }: Props) {
-    return <Link href={`/${mode.path}`} className="relative bg-white w-[32%] rounded-[10px] flex flex-col justify-center align-middle py-10">
+    return <Link href={`/${mode.path}`} className="relative bg-white w-[32%] rounded-[10px] flex flex-col justify-center align-middle py-10 hover:scale-[1.02]">
         {mode.path === '' && <Lock />}
         <Image src={blue} alt="" className="w-[90%] mx-auto mt-2 mb-4" />
         <p className="text-center text-2xl my-2 font-bold">
