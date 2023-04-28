@@ -1,3 +1,5 @@
+'use client'
+
 import GameModeItem from "@/components/main/GameModeItem";
 
 export interface Mode {

@@ -1,6 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import Head from 'next/head';
+import { Providers } from '@/store/provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,8 +15,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    // redux 적용
     <html lang="en" className={inter.className}>
-      <body className='text-black'>{children}</body>
+      <body className='text-black'>
+        <Providers>
+          {children}
+        </Providers>
+      </body>
     </html>
   )
 }

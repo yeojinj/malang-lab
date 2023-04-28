@@ -4,6 +4,10 @@ import ModeCard from '@/components/create/ModeCard';
 import RoundSetting from '@/components/create/RoundSetting';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { useDispatch } from 'react-redux';
+import { pushAction } from '../../store/roundSlice'
 
 const modes = [
   {
@@ -17,9 +21,15 @@ const modes = [
 ];
 
 export default function CreatePage() {
+  // 1. 방 정보 설정 상태
   const [step, setStep] = useState(0);
   const [mode, setMode] = useState('');
   const [game, setGame] = useState('');
+
+  // 2. 라운드 정보 설정 상태
+  const dispatch = useDispatch()
+  let rounds = useSelector((state: RootState) => state.round)
+  const [roundInfos, setRoundInfos] = useState(rounds);
 
   // 다음, 이전 컴포넌트로 이동하기
   const handleClickStep = () => {
@@ -27,10 +37,37 @@ export default function CreatePage() {
   };
 
   // 라운드 세팅 추가하기
-  const handleClickAdd = () => {};
+  const handleClickAdd = () => {
+    if (roundInfos.length === 3) {
+      alert('최대 3라운드까지 가능해요!')
+      return;
+    }
+
+    let nextState = rounds.concat({
+      topic: '',
+      hidden: '',
+      seconds: 0,
+    })
+
+    // 상태값 변경하기
+    setRoundInfos(nextState)
+    // redux에 반영하기
+    dispatch(pushAction(nextState))
+  };
+
+  // 라운드 수 제거하기
+  const handleClickDelete = (idx: number) => {
+    // console.log(idx) 
+    // console.log(roundInfos, '🎈')
+    // let tmp = roundInfos
+    // let nextState = tmp.splice(idx, 1)
+    // console.log(nextState)
+  };
 
   // 방 만들기
-  const handleClickCreate = () => {};
+  const handleClickCreate = () => {
+    // 여기다 이제 소켓 연결하는 함수 만들자,,
+   };
 
   return (
     <div
@@ -38,14 +75,15 @@ export default function CreatePage() {
       style={{ backgroundImage: "url('/imgs/bg-3.png')" }}
     >
       <section className="glass w-[70%] h-[90%] border-2 m-auto flex ">
-        <div className="w-[90%] md:w-[80%] lg:w-[70%] mx-auto my-7 py-8 flex flex-col align-middle">
-          <div className="w-[50%] mx-auto flex justify-center align-middle">
+        <div className="w-[90%] md:w-[80%] lg:w-[70%] mx-auto py-8 flex flex-col align-middle">
+          <div className="mx-auto flex justify-center align-middle">
             <input
               placeholder="말랑이의 연구소"
               className="bg-transparent p-3 mr-4 border-b-[3px] border-black placeholder-black placeholder:text-2xl placeholder:text-center placeholder:font-bold"
             />
             <PencilIcon className="w-7" />
           </div>
+          {/* 1. 게임 설정 컴포넌트 */}
           {!(step % 2) ? (
             <>
               {/* 모드 선택하기 */}
@@ -66,9 +104,12 @@ export default function CreatePage() {
               </button>
             </>
           ) : (
+            // 2. 라운드 설정 컴포넌트
             <>
-              <div>
-                <RoundSetting />
+              <div className='mt-5 h-[90%]'>
+                <div className='h-[80%] overflow-y-scroll scrollbar-thumb-lightgray'>
+                  {roundInfos.map((roundinfo, idx) => <RoundSetting handleClickDelete={handleClickDelete} roundinfo={roundinfo} idx={idx} key={idx} />)}
+                </div>
                 <button
                   className="bg-white w-[80px] h-[40px] rounded-md mx-auto my-3"
                   onClick={handleClickStep}
