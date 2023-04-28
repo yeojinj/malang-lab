@@ -20,7 +20,7 @@ const cards = [
 
 export default function ResultPage() {
   return (
-    <div className="min-h-screen bg-cover bg-bg-3 flex flex-col justify-center items-center gap-20">
+    <div className="w-screen h-screen bg-cover bg-bg-3 flex flex-col justify-center items-center gap-32">
       <header className="text-4xl font-bold">
         총 {'100'}개의 단어를 생각했어요!
       </header>

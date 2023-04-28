@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useSpringCarousel } from 'react-spring-carousel';
 
-const Carousel = () => {
+const WordCarousel = () => {
   const mockItems = [
     {
       id: 'item-1',
@@ -117,4 +117,4 @@ const Carousel = () => {
   );
 };
 
-export default Carousel;
+export default WordCarousel;
