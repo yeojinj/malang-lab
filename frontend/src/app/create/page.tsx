@@ -57,11 +57,11 @@ export default function CreatePage() {
 
   // 라운드 수 제거하기
   const handleClickDelete = (idx: number) => {
-    // console.log(idx) 
-    // console.log(roundInfos, '🎈')
-    // let tmp = roundInfos
-    // let nextState = tmp.splice(idx, 1)
-    // console.log(nextState)
+    console.log(idx) 
+    console.log(roundInfos, '🎈')
+    let tmp = roundInfos
+    let nextState = tmp.splice(idx, 1)
+    console.log(nextState)
   };
 
   // 방 만들기

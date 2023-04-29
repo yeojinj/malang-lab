@@ -7,6 +7,9 @@
     @apply w-[px] h-[px] shadow-[20px_20px_100px_rgba(0,0,0,0.02)] backdrop-blur-[75px] rounded-[15px];
     background: linear-gradient(180deg,rgba(255, 255, 255, 0.6) 0%,rgba(255, 255, 255, 0.3) 100%);
   }
+  .button-black {
+    @apply bg-black h-12 mx-auto text-white rounded-[5px] text-lg
+  }
 }
 
 
@@ -23,4 +26,11 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-track {
   background: rgba(33, 122, 244, .1);  /*스크롤바 뒷 배경 색상*/
+}
+
+input::-webkit-inner-spin-button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  outline: none;
 }
