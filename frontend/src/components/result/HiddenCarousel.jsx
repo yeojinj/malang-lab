@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import { useSpringCarousel } from 'react-spring-carousel';
 
 const CarouselItem = ({ children }) => (
-  <div className="bg-white rounded shadow-lg flex justify-center items-center text-lg w-32 h-20">{children}</div>
+  <div className="bg-white rounded shadow-lg flex justify-center items-center text-lg w-32 h-20">
+    {children}
+  </div>
 );
 
-const MyCarousel = () => {
+const HiddenCarousel = () => {
   const mockItems = [
     {
       id: 'item-1',
@@ -84,7 +86,7 @@ const MyCarousel = () => {
       id: item.id,
       renderItem: (
         <CarouselItem>
-          <p className=''>{item.username}</p>
+          <p className="">{item.username}</p>
         </CarouselItem>
       ),
     })),
@@ -108,12 +110,7 @@ const MyCarousel = () => {
     };
   }, []);
 
-  return (
-    <div className="h-[500px] overflow-hidden">
-      {carouselFragment}
-    </div>
-  );
+  return <div className="h-[500px] overflow-hidden">{carouselFragment}</div>;
 };
 
-
-export default MyCarousel;
+export default HiddenCarousel;

@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/result/UserCarousel.jsx"
+    "src/components/result/HiddenCarousel.jsx"
   ],
   "exclude": ["node_modules"]
 }

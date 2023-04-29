@@ -1,19 +1,24 @@
 'use client';
 
 import Image from 'next/image';
-import MyCarousel from './UserCarousel';
+import HiddenCarousel from './HiddenCarousel';
 
 export default function HiddenWord() {
   return (
     <section className="flex">
-      <MyCarousel />
-      <Image
-        src={`/imgs/word.png`}
-        alt="Picture of the author"
-        width={800}
-        height={500}
-      ></Image>
-      <MyCarousel />
+      <HiddenCarousel />
+      <div className="relative">
+        <Image
+          src={`/imgs/word.png`}
+          alt="Picture of the author"
+          width={800}
+          height={500}
+        />
+        <h1 className="absolute top-[45%] left-[50%] -translate-x-1/2 -translate-y-1/2 font-bold text-5xl">
+          hidden word
+        </h1>
+      </div>
+      <HiddenCarousel />
     </section>
   );
 }
