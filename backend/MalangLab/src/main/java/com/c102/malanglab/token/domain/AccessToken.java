@@ -1,8 +1,6 @@
 package com.c102.malanglab.token.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,7 +21,7 @@ public class AccessToken {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime expiredAt;
 
-        public void extendExpiredAt(LocalDateTime at) {
-                this.expiredAt = at;
+        public void setExpiredAt(LocalDateTime expiredAt) {
+                this.expiredAt = expiredAt;
         }
 }

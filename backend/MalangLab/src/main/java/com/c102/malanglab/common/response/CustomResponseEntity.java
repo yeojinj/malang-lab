@@ -14,7 +14,7 @@ public class CustomResponseEntity<T> {
     @JsonIgnore
     private HttpStatus httpStatus;
     private int status;
-    private String message = "성공";
+    private String message;
     private T data;
 
     public CustomResponseEntity(T data) {
