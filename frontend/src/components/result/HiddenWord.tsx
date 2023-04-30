@@ -6,7 +6,7 @@ import HiddenCarousel from './HiddenCarousel';
 export default function HiddenWord() {
   return (
     <section className="flex">
-      <HiddenCarousel />
+      <HiddenCarousel left={true} />
       <div className="relative">
         <Image
           src={`/imgs/word.png`}
@@ -18,7 +18,7 @@ export default function HiddenWord() {
           hidden word
         </h1>
       </div>
-      <HiddenCarousel />
+      <HiddenCarousel left={false} />
     </section>
   );
 }

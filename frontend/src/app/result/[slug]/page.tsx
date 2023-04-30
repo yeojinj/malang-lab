@@ -1,4 +1,4 @@
-import WordCarousel from '@/components/result/Carousel';
+import WordCarousel from '@/components/result/WordCarousel';
 import HiddenWord from '@/components/result/HiddenWord';
 import WordCloud from '@/components/result/WordCloud';
 import Link from 'next/link';

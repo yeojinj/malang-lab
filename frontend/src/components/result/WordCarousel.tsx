@@ -42,8 +42,8 @@ const WordCarousel = () => {
         ...item,
         renderItem: (
           <section
-            className={`relative grid aspect-[2] w-full place-items-center text-2xl  transition-all duration-700 bg-white shadow-lg rounded px-5 ${
-              currentSlide === item.id ? 'z-10 scale-150' : 'bg-opacity-70'
+            className={`relative grid aspect-[2] w-full place-items-center text-2xl transition-all duration-700 bg-white shadow-lg rounded px-5 ${
+              currentSlide === item.id ? 'z-10 scale-150' : 'bg-opacity-50'
             }`}
           >
             <Image

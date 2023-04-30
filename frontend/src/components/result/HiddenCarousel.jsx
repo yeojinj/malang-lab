@@ -1,73 +1,64 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useSpringCarousel } from 'react-spring-carousel';
+import { config } from '@react-spring/web';
 
-const CarouselItem = ({ children }) => (
-  <div className="bg-white rounded shadow-lg flex justify-center items-center text-lg w-32 h-20">
-    {children}
-  </div>
-);
+export default function HiddenCarousel({ left }) {
+  const CarouselItem = ({ children }) => (
+    <div className="bg-white bg-opacity-50 rounded shadow-xl flex justify-center items-center text-lg w-32 h-32">
+      {children}
+    </div>
+  );
 
-const HiddenCarousel = () => {
   const mockItems = [
     {
       id: 'item-1',
-      title: '멋사',
       username: '유나',
       profileImg: 'character',
     },
     {
       id: 'item-2',
-      title: '우테코',
       username: '나유나',
       profileImg: 'character',
     },
     {
       id: 'item-3',
-      title: '싸피',
+      username: '여지니',
+      profileImg: 'character',
+    },
+    {
+      id: 'item-3',
+      username: '태미니',
+      profileImg: 'character',
+    },
+    {
+      id: 'item-3',
+      username: '디주니',
+      profileImg: 'character',
+    },
+    {
+      id: 'item-3',
       username: '나유나',
       profileImg: 'character',
     },
     {
       id: 'item-3',
-      title: '싸피',
+      username: '지우지',
+      profileImg: 'character',
+    },
+    {
+      id: 'item-3',
       username: '나유나',
       profileImg: 'character',
     },
     {
       id: 'item-3',
-      title: '싸피',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      title: '싸피',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      title: '싸피',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      title: '싸피',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      title: '싸피',
-      username: '나유나',
+      username: '지애지',
       profileImg: 'character',
     },
   ];
-
-  const [currentSlide, setCurrentSlide] = useState(mockItems[0].id);
 
   const {
     carouselFragment,
@@ -82,27 +73,31 @@ const HiddenCarousel = () => {
     itemsPerSlide: 3,
     initialStartingPosition: 'center',
     gutter: 24,
+    springConfig: config.slow,
     items: mockItems.map(item => ({
       id: item.id,
       renderItem: (
         <CarouselItem>
-          <p className="">{item.username}</p>
+          <div className="flex flex-col justify-center items-center">
+            <Image
+              src={`/imgs/${item.profileImg}.png`}
+              alt="Picture of the author"
+              width={80}
+              height={80}
+              priority
+            />
+            <p className="">{item.username}</p>
+          </div>
         </CarouselItem>
       ),
     })),
   });
 
-  useListenToCustomEvent(event => {
-    if (event.eventName === 'onSlideStartChange') {
-      setCurrentSlide(event?.nextItem?.id);
-    }
-  });
-
-  const intervalDuration = 3000;
-
   useEffect(() => {
+    const intervalDuration = 2000;
     const interval = setInterval(() => {
-      slideToNextItem();
+      left && slideToNextItem();
+      !left && slideToPrevItem();
     }, intervalDuration);
 
     return () => {
@@ -111,6 +106,4 @@ const HiddenCarousel = () => {
   }, []);
 
   return <div className="h-[500px] overflow-hidden">{carouselFragment}</div>;
-};
-
-export default HiddenCarousel;
+}
