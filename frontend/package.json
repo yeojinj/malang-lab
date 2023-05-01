@@ -18,9 +18,9 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
+    "gsap": "^3.11.5",
     "immer": "^10.0.1",
     "konva": "^9.0.1",
-    "gsap": "^3.11.5",
     "next": "13.3.1",
     "next-redux-wrapper": "^8.1.0",
     "postcss": "8.4.23",
@@ -33,6 +33,7 @@
     "tailwind-scrollbar": "^3.0.0",
     "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss": "3.3.2",
+    "tsparticles-confetti": "^2.9.3",
     "typescript": "5.0.4"
   }
 }
