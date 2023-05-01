@@ -1,7 +1,7 @@
 spring:
   redis:
     port: 6379
-    host: localhost
+    host: ENC(APo4roRnbfRYNUo027T3DSUR0vu5x22288tInpytFt8=)
   jpa:
     hibernate:
       ddl-auto: create
