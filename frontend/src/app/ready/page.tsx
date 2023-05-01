@@ -1,6 +1,5 @@
-import GuestGrid from '@/components/ready/GuestGrid';
 import GuestsList from '@/components/ready/GuestsList';
-import PinCode from '@/components/ready/PinCode';
+import PinCode from '@/components/ready/EnterCode';
 import StartBtn from '@/components/ready/StartBtn';
 import UserNum from '@/components/ready/UserNum';
 
@@ -24,7 +23,7 @@ export default function ReadyPage() {
               <UserNum num={6} />
             </div>
           </div>
-          <GuestsList />
+          <GuestsList height={32}/>
         </div>
       ) : (
         <div
@@ -35,7 +34,7 @@ export default function ReadyPage() {
             <h1 className="text-[2rem] font-bold">말랑이의 연구소</h1>
             <h2 className="my-5">당신의 닉네임이 있는지 확인해보세요! </h2>
             <UserNum num={6} />
-            <GuestsList />
+            <GuestsList height={67}/>
           </div>
         </div>
       )}

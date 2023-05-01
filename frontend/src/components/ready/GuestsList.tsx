@@ -1,6 +1,7 @@
 'use client';
 
 import GuestGrid from './GuestGrid';
+import { useRef, useState, useEffect } from 'react';
 
 const guests = [
   {
@@ -16,15 +17,38 @@ const guests = [
     image: '/imgs/character.png',
   },
   {
-    name: '디쥬니',
+    name: '냠냠이',
+    image: '/imgs/character.png',
+  },
+  {
+    name: '문어지지마',
+    image: '/imgs/character.png',
+  },
+  {
+    name: '지냠이',
     image: '/imgs/character.png',
   },
 ];
 
-export default function GuestsList() {
+type Props = {
+  height: number;
+};
+
+export default function GuestsList({ height }: Props) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   if (scrollRef.current) {
+  //     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  //   }
+  // }, []);
+
   return (
-    <section className="my-5">
+    <div
+      className={`w-screen h-[70vh] sm:h-[${height}vh] my-5 overflow-y-auto scrollbar-hide`}
+      ref={scrollRef}
+    >
       <GuestGrid guests={guests} />
-    </section>
+    </div>
   );
 }
