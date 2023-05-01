@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Router, { useRouter } from 'next/router';
 
 export default function JoinPage() {
-  const router = useRouter();
+  // const router = useRouter();
   const [pin, setPin] = useState('');
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
