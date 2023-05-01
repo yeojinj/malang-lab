@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSpringCarousel } from 'react-spring-carousel';
 import { config } from '@react-spring/web';
 
