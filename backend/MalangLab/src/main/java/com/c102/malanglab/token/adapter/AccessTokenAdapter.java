@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -21,11 +20,9 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class AccessTokenAdapter implements AccessTokenPort {
-
-    @Qualifier("TokenObjectMapper")
-    private final ObjectMapper objectMapper;
     private final int TOKEN_RETENTION_DAY = 1;
     private final String TOKEN_PREFIX = "token:";
+    private final ObjectMapper objectMapper;
     private final RedisTemplate redisTemplate;
     @Override
     public AccessToken getRandomUserToken() {
@@ -33,7 +30,7 @@ public class AccessTokenAdapter implements AccessTokenPort {
 
         try {
             while(true) {
-                AccessToken token = generateUUID();
+                AccessToken token = generateAccessToken();
                 Boolean success = valueOperations.setIfAbsent(
                         getTokenKey(token.getToken()),
                         objectMapper.writeValueAsString(token)
@@ -43,9 +40,12 @@ public class AccessTokenAdapter implements AccessTokenPort {
                             Date.from(token.getExpiredAt().atZone(ZoneId.systemDefault()).toInstant()));
                     return token;
                 }
+                Thread.sleep(100);
             }
         } catch (JsonProcessingException e) {
             log.error("랜덤 토큰 저장 JSON Processing Exception 발생 -> {}", e.getMessage());
+        } catch (InterruptedException e) {
+            log.error("랜덤 토큰 저장 중복발생으로 Thread Sleep 중 Exception 발생 -> {}", e.getMessage());
         }
         return null;
     }
@@ -76,7 +76,7 @@ public class AccessTokenAdapter implements AccessTokenPort {
     public AccessToken refreshToken(String key) {
         try {
             AccessToken token = getToken(key);
-            token.extendExpiredAt(LocalDateTime.now().plusDays(TOKEN_RETENTION_DAY));
+            token.setExpiredAt(LocalDateTime.now().plusDays(TOKEN_RETENTION_DAY));
 
             ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
             valueOperations.set(getTokenKey(key), objectMapper.writeValueAsString(token));
@@ -93,7 +93,7 @@ public class AccessTokenAdapter implements AccessTokenPort {
         return TOKEN_PREFIX + key;
     }
 
-    private AccessToken generateUUID() {
+    private AccessToken generateAccessToken() {
         LocalDateTime current = LocalDateTime.now();
         return AccessToken.builder()
                 .token(String.valueOf(UUID.randomUUID()))
