@@ -38,7 +38,7 @@ export default function JoinPage() {
   // step 3
   const handleClickJoin = () => {
     // 진짜 참여하기
-    router.push('/ready');
+    // router.push('/ready');
   };
 
   return (
