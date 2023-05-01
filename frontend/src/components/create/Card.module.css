@@ -1,0 +1,96 @@
+.checkbox{
+  position : relative
+}
+
+.checkboxInput {
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.checkboxInput:checked + .checkboxTile {
+  box-shadow: 0 5px 10px rgba(#000, 0.1);
+  color: #ffffff;
+  background-color: #44474B;
+}
+
+.checkboxInput:checked::before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkboxTile::before {
+  transform: scale(1);
+  opacity: 1;
+  background-color: #44474B;
+  border-color: #44474B;
+}
+
+.checkboxInput .checkboxLabel {
+  color: #44474B;
+}
+
+.checkboxInput:focus + .checkboxTile {
+  border-color: #44474B;
+  box-shadow: 0 5px 10px rgba(#000, 0.1), 0 0 0 4px #b5c9fc;
+}
+
+.checkboxInput:focus::before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkboxTile::before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkboxTile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 7rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(#000, 0.1);
+  transition: 0.15s ease;
+  cursor: pointer;
+}
+
+.checkboxTile:hover {
+  background-color: #44474B;
+  color: #ffffff;
+}
+
+.checkboxTile:hover::before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkboxTile:before {
+  position: absolute;
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: #fff;
+  border-radius: 50%;
+  top: 0.25rem;
+  left: 0.25rem;
+  opacity: 0;
+  transform: scale(0);
+  transition: 0.25s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' fill='%23FFFFFF' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' fill='none'%3E%3C/rect%3E%3Cpolyline points='216 72.005 104 184 48 128.005' fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border : 2px solid red;
+}
+
+.checkboxLabel {
+  color: #707070;
+  transition: 0.375s ease;
+}

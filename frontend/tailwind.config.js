@@ -18,8 +18,15 @@ module.exports = {
         'bg-3': "url('/imgs/bg-3.png')",
         'bg-4': "url('/imgs/bg-4.png')"
       },
+      colors: {
+        'black': '#44474B',
+        'lightgray': '#ACACAC',
+      }
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [
+    require('tailwind-scrollbar'),
+    require("tailwind-scrollbar-hide")
+  ],
 }
 
