@@ -1,6 +1,6 @@
-package com.c102.malanglab.game.adapter;
+package com.c102.malanglab.game.adapter.persistence;
 
-import com.c102.malanglab.game.application.port.GamePort;
+import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class GameAdapter implements GamePort {
-
     private final RoomRepository roomRepository;
 
     @Override

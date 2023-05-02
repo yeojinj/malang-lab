@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.messaging.simp.stomp.StompBrokerRelayMessageHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -21,8 +20,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${spring.rabbitmq.virtual-host:/}")
     private String virtualHost;
 
-    @Value("${spring.rabbitmq.port:61613}")
-    private int port;
+    @Value("${spring.rabbitmq.stomp-port:61613}")
+    private int stompPort;
 
     @Value("${spring.rabbitmq.username:guest}")
     private String userName;
@@ -48,7 +47,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         enableStompBrokerRelay("/queue", "/topic")
                 .setRelayHost(host)
                 .setVirtualHost(virtualHost)
-                .setRelayPort(port)
+                .setRelayPort(stompPort)
                 .setSystemLogin(systemUserName)
                 .setSystemPasscode(systemPassword)
                 .setClientLogin(userName)

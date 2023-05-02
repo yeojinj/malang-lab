@@ -3,7 +3,8 @@ spring:
     port: 6379
     host: localhost
   rabbitmq:
-    port: 61613
+    port: 5672
+    stomp-port: 61613
     host: localhost
     virtual-host: /
     username: guest
