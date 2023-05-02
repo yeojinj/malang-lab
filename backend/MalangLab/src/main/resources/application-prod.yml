@@ -2,6 +2,15 @@ spring:
   redis:
     port: 6379
     host: ENC(APo4roRnbfRYNUo027T3DSUR0vu5x22288tInpytFt8=)
+  rabbitmq:
+    port: 61613
+    host: ENC(R63XLXvnUL0mU32Sts4KUJuqubvj0eyhoggeO7vJ+ic=)
+    virtual-host: ENC(aHrz94iirnMQgilAY8VCnhyoCP/QQ4Jc)
+    username: ENC(tYq3BmmTuCgAWE+pUbu60A==)
+    password: ENC(c3kXGdgS5sDyjLTeQkIScKiHPLFj7XwN)
+    system:
+      username: ENC(bq3aIoG79aXz9Xlpu0aFId/Gy/QzmBMJ)
+      password: ENC(sOjFpjOAVA0PFrShaNFEcezLLYk7WGZC4ymnxfIJHw4=)
   jpa:
     hibernate:
       ddl-auto: create
