@@ -3,11 +3,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import roundSlice from './roundSlice';
+import statusSlice from './statusSlice';
 
 // redux 생성 함수
 const store = configureStore({
   reducer: {
-    round: roundSlice
+    round: roundSlice,
+    status: statusSlice,
   },
 });
 

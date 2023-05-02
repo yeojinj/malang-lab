@@ -31,10 +31,10 @@ const guests = [
 ];
 
 type Props = {
-  height: number;
+  host: boolean;
 };
 
-export default function GuestsList({ height }: Props) {
+export default function GuestsList({ host }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // useEffect(() => {
@@ -45,7 +45,9 @@ export default function GuestsList({ height }: Props) {
 
   return (
     <div
-      className={`w-screen h-[70vh] sm:h-[${height}vh] my-5 overflow-y-auto scrollbar-hide`}
+      className={`w-screen h-[70vh] ${
+        host ? 'sm:h-[32vh]' : 'sm:h-[67vh]'
+      } my-5 overflow-y-auto scrollbar-hide`}
       ref={scrollRef}
     >
       <GuestGrid guests={guests} />
