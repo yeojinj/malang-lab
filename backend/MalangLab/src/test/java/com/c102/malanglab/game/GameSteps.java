@@ -27,9 +27,9 @@ public class GameSteps {
                 "게임 생성 테스트",
                 GameMode.SOLO,
                 List.of(
-                        new Setting("GOOGLE", "갓태민", Integer.valueOf(30)),
-                        new Setting("삼성", "갓여진", Integer.valueOf(60)),
-                        new Setting("신한은행", "갓동준", Integer.valueOf(90))
+                        new Setting("GOOGLE", "갓태민", Integer.valueOf(30),1),
+                        new Setting("삼성", "갓여진", Integer.valueOf(60), 1),
+                        new Setting("신한은행", "갓동준", Integer.valueOf(90), 1)
                 ));
     }
 
