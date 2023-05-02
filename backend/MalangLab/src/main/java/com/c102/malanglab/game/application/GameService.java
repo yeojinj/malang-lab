@@ -32,6 +32,20 @@ public class GameService {
             @RequestBody CreateRequest request,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String userId) {
 
+        // TODO: 방 PIN 번호 중복 검사
+        Long roomNumber = 0L;
+//        try {
+//            while(true) {
+//                roomNumber = generateRoomId();
+//
+//                // TODO: Redis 중복 검사 코드
+//                if (                           ) { break; }
+//            }
+//        } catch(Exception e) {
+//            return new CustomResponseEntity(HttpStatus.SERVICE_UNAVAILABLE, "실패", null).convertToResponseEntity();
+//        }
+
+        // TODO: roomNumber에 중복 검사를 마친 PIN 번호를 할당하고, new Room(roomNumber, ... )로 수정해주기
         // 방 생성하기
         Room room = new Room(generateRoomId(), request.title(), userId, request.mode(), request.settings());
 
@@ -49,7 +63,6 @@ public class GameService {
     public long generateRoomId() {
         return ThreadLocalRandom.current().nextLong(100000, 1000000);
     }
-
 
     @GetMapping("/{roomId}")
     public ResponseEntity<Room> get(@PathVariable Long roomId) {
