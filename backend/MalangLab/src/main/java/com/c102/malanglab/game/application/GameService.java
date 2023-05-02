@@ -26,9 +26,14 @@ public class GameService {
 
     private Logger logger = LoggerFactory.getLogger(GameService.class);
 
+    /**
+     * 게임 방을 생성합니다
+     *
+     * @return ResponseEntity<Room>
+     */
     @PostMapping
     @Transactional
-    public ResponseEntity<Room> create(
+    public ResponseEntity<Room> createRoom(
             @RequestBody CreateRequest request,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String userId) {
 
@@ -60,13 +65,29 @@ public class GameService {
 
         return new CustomResponseEntity(HttpStatus.CREATED, room).convertToResponseEntity();
     }
+
+    /**
+     * 방 번호(PIN)를 생성합니다
+     *
+     * @return Long
+     */
     public long generateRoomId() {
         return ThreadLocalRandom.current().nextLong(100000, 1000000);
     }
 
+    /**
+     * 방 번호(PIN)를 통해 참여 하기 요청에 답합니다
+     *
+     * @return ResponseEntity<Room>
+     */
     @GetMapping("/{roomId}")
-    public ResponseEntity<Room> get(@PathVariable Long roomId) {
-        Room room = gamePort.findById(roomId);
-        return ResponseEntity.ok(room);
+    public ResponseEntity<Room> checkRoom(@PathVariable Long roomId) {
+        // TODO: Redis에서 방 PIN 유무 검사 후 없는 PIN 번호에 대한 요청인 경우 400 BAD REQUEST 응답하기
+//        if (           ) {
+//            return new CustomResponseEntity(HttpStatus.BAD_REQUEST, "실패", null).convertToResponseEntity();
+//        }
+
+        
+        return new CustomResponseEntity(HttpStatus.OK).convertToResponseEntity();
     }
 }
