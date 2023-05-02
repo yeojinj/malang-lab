@@ -1,17 +1,21 @@
 'use client';
 
-import { useRef } from "react";
-import { confetti, ConfettiOptions } from "tsparticles-confetti";
+import { useEffect, useRef } from 'react';
+import { confetti, ConfettiOptions } from 'tsparticles-confetti';
 
-const duration = 15 * 1000;
+const duration = 30 * 1000;
 
 function randomInRange(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
 
-const Confetti: React.FC = () => {
+export default function Confetti() {
   const animationEnd = Date.now() + duration;
   const skewRef = useRef(1);
+
+  useEffect(() => {
+    run();
+  }, []);
 
   const run = () => {
     const frame = () => {
@@ -29,10 +33,10 @@ const Confetti: React.FC = () => {
           // since particles fall down, skew start toward the top
           y: Math.random() * skewRef.current - 0.2,
         },
-        colors: ["#ffffff"],
-        shapes: ["circle"],
+        colors: ['#E70006', '#FDA620', '#009FC5', '#EF7A9B', '#957ACB', '#008737'],
+        shapes: ['square'],
         gravity: randomInRange(0.4, 0.6),
-        scalar: randomInRange(0.4, 1),
+        scalar: 2,
         drift: randomInRange(-0.4, 0.4),
       };
 
@@ -46,11 +50,5 @@ const Confetti: React.FC = () => {
     frame();
   };
 
-  return (
-    <div>
-      <button onClick={run}>Run Confetti</button>
-    </div>
-  );
-};
-
-export default Confetti;
+  return <div></div>;
+}
