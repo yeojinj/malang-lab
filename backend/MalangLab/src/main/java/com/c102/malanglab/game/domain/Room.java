@@ -30,7 +30,7 @@ public class Room {
     @JoinColumn(name = "ROOM_ID")
     private List<Setting> settings = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ROOM_ID")
     private List<Guest> guests = new ArrayList<>();
 
