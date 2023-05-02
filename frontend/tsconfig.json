@@ -21,7 +21,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
   },
   "include": [
     "next-env.d.ts",
@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/result/HiddenCarousel.jsx"
-  ],
+, "webpack.config.js"  ],
   "exclude": ["node_modules"]
 }

@@ -12,8 +12,10 @@ type Props = {
 };
 
 export default function ModeCard({ mode, handleClickMode, selectedMode }: Props) {
+  console.log(selectedMode)
+  
   return (
-    <div className={`relative bg-white text-black rounded-md p-5 hover:bg-black hover:text-white ${selectedMode === mode.id ? 'bg-black text-white' : ''} ${mode.id === 'TEAM' ? 'pointer-events-none' : ''}`}
+    <div className={`relative  rounded-md p-5 hover:bg-black hover:text-white ${selectedMode === mode.id ? 'text-white bg-black' : 'bg-white text-black'} ${mode.id === 'TEAM' ? 'pointer-events-none' : ''}`}
       onClick={() => handleClickMode(mode.id)}>
       <CheckCircleIcon className={`w-6 text-white absolute top-2 left-2 ${selectedMode === mode.id ? '' : 'hidden'}`} />
       {mode.id === 'TEAM' && <Lock />}

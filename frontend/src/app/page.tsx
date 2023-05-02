@@ -13,7 +13,7 @@ const modes = [{ name: "방 만들기", image: "", path: "create" }, { name: "�
 export default function MainPage() {
   return <div className="w-[100vw] h-[100vh] bg-cover bg-center flex justify-center align-middle" style={{ backgroundImage: "url('/imgs/bg-2.png')" }}>
     <section
-      className="w-[60vw] flex justify-center align-middle m-auto glass py-10">
+      className="w-[90%] md:w-[70%] lg:w-[60%] flex justify-center align-middle m-auto glass py-10">
       <div className="w-[96%] h-[60%] flex flex-col">
         <h1 className="text-center text-4xl font-semibold">말랑연구소</h1>
         <div className="w-full flex justify-between mx-auto my-10">

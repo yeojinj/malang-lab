@@ -9,7 +9,7 @@ import { RootState } from '@/store/store';
 import { useDispatch } from 'react-redux';
 import gameInfoSlice, { addRoundAction, changekeywordAction, deleteRoundAction, gameAction, modeAction } from '../../store/gameInfoSlice'
 import GameCard from '../../components/create/GameCard';
-import { dirxml } from 'console';
+
 
 const modes = [
   {
@@ -103,7 +103,7 @@ export default function CreatePage() {
 
   // 라운드 수 제거하기
   const handleClickDelete = (idx: number) => {
-    if(gameinfo.settings.length===1) return
+    if (gameinfo.settings.length === 1) return
     dispatch(deleteRoundAction(idx))
   };
 
@@ -119,13 +119,15 @@ export default function CreatePage() {
       style={{ backgroundImage: "url('/imgs/bg-3.png')" }}
     >
       <section className="glass w-[70%] min-h-[90vh] border-2 mx-auto flex my-5">
-        <div className="w-[90%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">
-          <div className="w-[80%] mx-auto flex justify-center align-middle">
-            <input
-              placeholder="말랑이의 연구소"
-              className="bg-transparent p-1 mr-4 w-[70%] border-b-[3px] text-2xl font-bold text-black border-black placeholder-black placeholder:text-2xl placeholder:text-center placeholder:font-bold text-center"
-            />
-            <PencilIcon className="w-[5%]" />
+        <div className="w-[70%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">
+          <div className="w-[70%] mx-auto flex border-b-[2px] border-black">
+            <>
+              <input
+                placeholder="말랑이의 연구소"
+                className="bg-transparent w-[93%] text-2xl font-bold text-black placeholder-black placeholder:text-2xl placeholder:text-center placeholder:font-bold text-center"
+              />
+            </>
+            <PencilIcon className="w-[7%]" />
           </div>
           {/* 1. 게임 설정 컴포넌트 */}
           {!(step % 2) ? (
@@ -169,25 +171,25 @@ export default function CreatePage() {
                       <RoundSetting handleClickDelete={handleClickDelete} setting={setting} idx={idx} />
                     </div>
                   ))}
-                <button className="bg-white w-20 mt-2 mx-auto" onClick={handleClickAdd}>
-                  추가
-                </button>
+                  <button className="bg-white w-20 mt-2 mx-auto" onClick={handleClickAdd}>
+                    추가
+                  </button>
                 </div>
                 <div className='flex justify-center absolute bottom-7 left-[50%] translate-x-[-50%]'>
 
-                <button
-                  className="bg-white w-[80px] h-12 rounded-[5px] mr-3"
-                  onClick={handleClickStep}
+                  <button
+                    className="bg-white w-[80px] h-12 rounded-[5px] mr-3"
+                    onClick={handleClickStep}
                   >
-                  이전
-                </button>
-                <button
-                  className="button-black w-[200px] mx-0"
-                  onClick={handleClickCreate}
+                    이전
+                  </button>
+                  <button
+                    className="button-black w-[200px] mx-0"
+                    onClick={handleClickCreate}
                   >
-                  방 만들기
-                </button>
-                  </div>
+                    방 만들기
+                  </button>
+                </div>
               </div>
             </>
           )}
