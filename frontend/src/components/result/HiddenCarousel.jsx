@@ -78,7 +78,7 @@ export default function HiddenCarousel({ left }) {
       id: item.id,
       renderItem: (
         <CarouselItem>
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center p-2 gap-2">
             <Image
               src={`/imgs/${item.profileImg}.png`}
               alt="Picture of the author"
@@ -86,7 +86,7 @@ export default function HiddenCarousel({ left }) {
               height={80}
               priority
             />
-            <p className="">{item.username}</p>
+            <p className="text-sm md:text-lg lg:text-xl">{item.username}</p>
           </div>
         </CarouselItem>
       ),
