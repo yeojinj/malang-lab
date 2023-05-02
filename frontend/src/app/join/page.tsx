@@ -20,7 +20,7 @@ export default function JoinPage() {
   // fabric
   const [canvas, setCanvas] = useState("");
 
-  const test = new fabric.Canvas('malang')
+  // const test = new fabric.Canvas('malang')
 
   // const initCanvas = () => {
   //   return new fabric.Canvas('malang', { 
