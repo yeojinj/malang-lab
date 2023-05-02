@@ -11,6 +11,6 @@ spring:
         format_sql: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: ENC(8e7kwdMKDq3c5ZRnWQAckgf3/X2G5u5C18zXbiWIYNs9utAWnwJTow3pqamuZX1kUorMypyvlrE=)
-    username: ENC(NCOgpqaAu9Hb4wUjNpOY6p4tdJIkUgNT)
-    password: ENC(/UoGpFo8ByaVICDxKpZVzw1gGNhdd+kv67GnYqC78Lo=)
+    url: jdbc:mariadb://localhost:3306/malang
+    username: root
+    password: '1234'
