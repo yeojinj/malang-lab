@@ -6,13 +6,17 @@ import Ribbon from '@/components/award/Ribbon';
 import AlertBox from '@/components/common/AlertBox';
 import Blur from '@/components/common/Blur';
 import Image from 'next/image';
+import Link from 'next/link';
 
-export default function Page() {
+type Props = {
+  params: {
+    slug: string;
+  };
+};
+
+export default function Page({ params }: Props) {
   const isHost = false;
   const award = true;
-  const handleClick = () => {
-    // 누르면 다음 페이지로
-  };
 
   return (
     <div>
@@ -56,14 +60,15 @@ export default function Page() {
         )}
       </div>
       {isHost && (
-        <Image
-          src={'/imgs/awardbtn.png'}
-          width={100}
-          height={100}
-          alt="btn"
-          className="w-16 h-20 absolute bottom-5 right-5 cursor-pointer"
-          onClick={handleClick}
-        />
+        <Link href={`/award/${Number(params.slug) + 1}`}>
+          <Image
+            src={'/imgs/awardbtn.png'}
+            width={100}
+            height={100}
+            alt="btn"
+            className="w-16 h-20 absolute bottom-5 right-5 cursor-pointer"
+          />
+        </Link>
       )}
     </div>
   );
