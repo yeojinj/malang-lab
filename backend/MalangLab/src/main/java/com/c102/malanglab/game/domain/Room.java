@@ -30,13 +30,16 @@ public class Room {
     @JoinColumn(name = "ROOM_ID")
     private List<Setting> settings = new ArrayList<>();
 
-    public Room(String name, String hostId, GameMode mode, List<Setting> settings) {
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "ROOM_ID")
+    private List<Guest> guests = new ArrayList<>();
+
+    public Room(Long id, String name, String hostId, GameMode mode, List<Setting> settings) {
+        this.id = id;
         this.name = name;
         this.hostId = hostId;
         this.mode = mode;
         this.settings = settings;
     }
-
-
 
 }
