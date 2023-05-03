@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
@@ -63,25 +65,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setSystemPasscode(systemPassword)
                 .setClientLogin(userName)
                 .setClientPasscode(password);
-    }
-
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration){
-        registration.interceptors(new StompHandler());
-    }
-
-    public class StompHandler implements ChannelInterceptor {
-
-        @Override
-        public Message<?> preSend(Message<?> message, MessageChannel channel) {
-            StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-            if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                // STOMP 연결 됐을 때,
-                accessor.setSessionId(accessor.getNativeHeader("Authorization").get(0));
-            } else if(StompCommand.DISCONNECT.equals(accessor.getCommand())) {
-                // STOMP 연결 종료 시,
-            }
-            return message;
-        }
     }
 }

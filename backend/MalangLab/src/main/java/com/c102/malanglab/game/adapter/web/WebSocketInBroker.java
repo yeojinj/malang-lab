@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.NativeMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -22,9 +23,8 @@ public class WebSocketInBroker {
     @MessageMapping("room.{roomId}")
     public void messageHandler(
             @DestinationVariable Long roomId,
-            StompHeaderAccessor accessor,
+            @Header("Authorization") String userId,
             Message message) {
-        String userId = accessor.getSessionId();
         log.info("roomId -> {}, userId -> {}, message -> {}", roomId, userId, message);
         switch(message.getType()) {
             case JOIN:
