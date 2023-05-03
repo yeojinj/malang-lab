@@ -2,6 +2,16 @@ spring:
   redis:
     port: 6379
     host: localhost
+  rabbitmq:
+    port: 5672
+    stomp-port: 61613
+    host: localhost
+    virtual-host: /
+    username: guest
+    password: guest
+    system:
+      username: guest
+      password: guest
   jpa:
     hibernate:
       ddl-auto: create
