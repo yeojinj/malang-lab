@@ -4,8 +4,8 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.Room;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,13 +25,18 @@ public class GameAdapter implements GamePort {
 
     /** Room Id 랜덤 생성, 중복 체크 후 Redis 저장 */
     private long getRandomRoomId() {
-        SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
         String key = "room:id";
-        Long id = ThreadLocalRandom.current().nextLong(100000, 1000000);
-        while (!setOperations.isMember(key, id)) {
+        BoundSetOperations<String, Object> boundSetOperations = redisTemplate.boundSetOps(key);
+
+        Long id = null;
+        while (true) {
             id = ThreadLocalRandom.current().nextLong(100000, 1000000);
+            Boolean success = (boundSetOperations.add(id) == 1);
+            if (success) {
+                break;
+            }
         }
-        setOperations.add(key, id);
+
         return id;
     }
 
