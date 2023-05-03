@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,10 +32,6 @@ public class GameService implements GameStatusCase {
         RoomResponse roomResponse = new RoomResponse(room.getId(), room.getName(), room.getHostId(), room.getMode(), room.getSettings(), room.getGuests());
         return roomResponse;
     }
-    public long generateRoomId() {
-        return ThreadLocalRandom.current().nextLong(100000, 1000000);
-    }
-
 
     @Override
     public RoomResponse get(final Long roomId) {
