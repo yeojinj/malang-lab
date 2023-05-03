@@ -1,7 +1,4 @@
 spring:
-  redis:
-    port: 6379
-    host: ENC(APo4roRnbfRYNUo027T3DSUR0vu5x22288tInpytFt8=)
   rabbitmq:
     port: 5672
     stomp-port: 61613
@@ -24,3 +21,7 @@ spring:
     url: ENC(8e7kwdMKDq3c5ZRnWQAckgf3/X2G5u5C18zXbiWIYNs9utAWnwJTow3pqamuZX1kUorMypyvlrE=)
     username: ENC(NCOgpqaAu9Hb4wUjNpOY6p4tdJIkUgNT)
     password: ENC(/UoGpFo8ByaVICDxKpZVzw1gGNhdd+kv67GnYqC78Lo=)
+  data:
+    redis:
+      port: 6379
+      host: ENC(APo4roRnbfRYNUo027T3DSUR0vu5x22288tInpytFt8=)

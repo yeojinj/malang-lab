@@ -1,10 +1,9 @@
 package com.c102.malanglab.game.adapter.web;
 
-
 import com.c102.malanglab.common.response.CustomResponseEntity;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
-import com.c102.malanglab.game.domain.Room;
-import com.c102.malanglab.game.dto.CreateRequest;
+import com.c102.malanglab.game.dto.RoomRequest;
+import com.c102.malanglab.game.dto.RoomResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,16 +16,15 @@ import org.springframework.web.bind.annotation.*;
 public class ApiController {
     private final GameStatusCase gameStatusCase;
     @PostMapping
-    public ResponseEntity<Room> create(
-            @RequestBody CreateRequest request,
+    public ResponseEntity<RoomResponse> create(
+            @RequestBody RoomRequest request,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String userId) {
-        Room room = gameStatusCase.create(request, userId);
-
-        return new CustomResponseEntity(HttpStatus.CREATED, room).convertToResponseEntity();
+        RoomResponse roomResponse = gameStatusCase.create(request, userId);
+        return new CustomResponseEntity(HttpStatus.CREATED, roomResponse).convertToResponseEntity();
     }
 
     @GetMapping("/{roomId}")
-    public ResponseEntity<Room> get(@PathVariable Long roomId) {
+    public ResponseEntity<RoomResponse> get(@PathVariable Long roomId) {
         return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.get(roomId)).convertToResponseEntity();
     }
 }
