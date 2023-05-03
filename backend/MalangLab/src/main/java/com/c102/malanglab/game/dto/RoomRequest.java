@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public record CreateRequest(String title, GameMode mode, List<Setting> settings) {
-    public CreateRequest {
+public record RoomRequest(String name, GameMode mode, List<Setting> settings) {
+    public RoomRequest {
         if(Objects.isNull(settings)) settings = new ArrayList<>();
     }
 }
