@@ -29,4 +29,13 @@ public class ApiController {
     public ResponseEntity<Room> get(@PathVariable Long roomId) {
         return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.get(roomId)).convertToResponseEntity();
     }
+
+    @PostMapping("/{roomId}/start")
+    public ResponseEntity<Boolean> start(
+            @PathVariable Long roomId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId) {
+
+        gameStatusCase.start(roomId, userId);
+        return new CustomResponseEntity(HttpStatus.OK, true).convertToResponseEntity();
+    }
 }
