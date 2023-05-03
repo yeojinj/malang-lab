@@ -46,6 +46,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	/** ObjectMapper with Redis [jsr: LocalDateTime 저장] */
+	implementation 'com.fasterxml.jackson.core:jackson-core'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0'
 
