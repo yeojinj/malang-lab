@@ -1,59 +1,52 @@
 package com.c102.malanglab.game.application;
 
-import com.c102.malanglab.common.response.CustomResponseEntity;
-import com.c102.malanglab.game.application.port.GamePort;
+import com.c102.malanglab.game.application.port.out.GameBroadCastPort;
+import com.c102.malanglab.game.application.port.out.GamePort;
+import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.domain.Room;
-import com.c102.malanglab.game.dto.CreateRequest;
+import com.c102.malanglab.game.dto.RoomRequest;
+import com.c102.malanglab.game.dto.RoomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.ThreadLocalRandom;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 @Slf4j
-@RestController
-@RequestMapping("/game")
+@Service
 @RequiredArgsConstructor
-public class GameService {
-
+public class GameService implements GameStatusCase {
     private final GamePort gamePort;
+    private final GameBroadCastPort gameBroadCastPort;
 
-    private Logger logger = LoggerFactory.getLogger(GameService.class);
-
-    @PostMapping
-    @Transactional
-    public ResponseEntity<Room> create(
-            @RequestBody CreateRequest request,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId) {
-
+    @Override
+    public RoomResponse create(RoomRequest request, String hostId) {
         // 방 생성하기
-        Room room = new Room(generateRoomId(), request.title(), userId, request.mode(), request.settings());
-
+        Room room = new Room(request.getName(), hostId, request.getMode(), request.getSettings());
         // 방 생성 유효성 검사하기
         RoomValidator.validate(room);
-
         // 게임 저장하기
         Room roomCreated = gamePort.save(room);
-
         // 방 생성하기 로그
-        logger.info(String.valueOf(roomCreated));
+        log.info(String.valueOf(roomCreated));
 
-        return new CustomResponseEntity(HttpStatus.CREATED, room).convertToResponseEntity();
-    }
-    public long generateRoomId() {
-        return ThreadLocalRandom.current().nextLong(100000, 1000000);
+        RoomResponse roomResponse = new RoomResponse(roomCreated.getId(), roomCreated.getName(), roomCreated.getHostId(), roomCreated.getMode(), roomCreated.getSettings(), roomCreated.getGuests());
+        return roomResponse;
     }
 
-
-    @GetMapping("/{roomId}")
-    public ResponseEntity<Room> get(@PathVariable Long roomId) {
+    @Override
+    public RoomResponse get(final Long roomId) {
         Room room = gamePort.findById(roomId);
-        return ResponseEntity.ok(room);
+        RoomResponse roomResponse = new RoomResponse(room.getId(), room.getName(), room.getHostId(), room.getMode(), room.getSettings(), room.getGuests());
+        return roomResponse;
+    }
+
+    @Override
+    public void join(Long roomId, String userId) {
+        gameBroadCastPort.alertJoin(roomId, userId);
+    }
+
+    @Scheduled(fixedDelay = 1000)
+    public void sendServerTime() {
+        gameBroadCastPort.alertServerTime(System.currentTimeMillis());
     }
 }
