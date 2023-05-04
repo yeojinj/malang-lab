@@ -7,9 +7,15 @@ import { PencilIcon } from '@heroicons/react/24/solid';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useDispatch } from 'react-redux';
-import gameInfoSlice, { addRoundAction, changekeywordAction, deleteRoundAction, gameAction, modeAction } from '../../store/gameInfoSlice'
+import gameInfoSlice, {
+  addRoundAction,
+  changekeywordAction,
+  deleteRoundAction,
+  gameAction,
+  modeAction,
+} from '../../store/gameInfoSlice';
 import GameCard from '../../components/create/GameCard';
-
+import { makeRoomApi } from '../apis/apis';
 
 const modes = [
   {
@@ -32,8 +38,8 @@ const games = [
     desc: [
       '제시어에 따른 연상단어 입력',
       '단어를 빨리빨리! 순발력',
-      '단어를 많이많이! 사고력'
-    ]
+      '단어를 많이많이! 사고력',
+    ],
   },
   {
     id: 'NOTYET',
@@ -42,51 +48,52 @@ const games = [
     desc: [
       '제시어에 따른 연상단어 입력',
       '단어를 빨리빨리! 순발력',
-      '단어를 많이많이! 사고력'
-    ]
-  }
+      '단어를 많이많이! 사고력',
+    ],
+  },
 ];
 
 export default function CreatePage() {
-  let gameinfo = useSelector((state: RootState) => state.gameinfo)
-  const dispatch = useDispatch()
+  let gameinfo = useSelector((state: RootState) => state.gameinfo);
+  const dispatch = useDispatch();
 
   // 1. 방 정보 설정 상태
   const [step, setStep] = useState(0);
   const [selectedMode, setMode] = useState(gameinfo.mode);
-  const [selectedGame, setGame] = useState(gameinfo.title);
+  const [selectedGame, setGame] = useState(gameinfo.name);
 
   // 게임 모드 선택하기
   const handleClickMode = (id: string) => {
     if (selectedMode === id) {
-      setMode('')
-      return
+      setMode('');
+      return;
     }
-    dispatch(modeAction(id))
-    setMode(id)
-    console.log(id)
-  }
+    dispatch(modeAction(id));
+    setMode(id);
+    console.log(id, 'mode');
+  };
 
   // 진행할 게임 선택하기
   const handleClickGame = (id: string) => {
     if (selectedGame === id) {
-      setGame('')
-      return
+      setGame('');
+      return;
     }
-    setGame(id)
-    dispatch(gameAction(id))
-  }
+    dispatch(gameAction(id));
+    setGame(id);
+    console.log(id, 'game');
+  };
 
   // 다음, 이전 컴포넌트로 이동하기
   const handleClickStep = () => {
     if (step === 0) {
       if (selectedGame === '') {
-        alert('게임을 선택하세요!')
-        return
+        alert('게임을 선택하세요!');
+        return;
       }
       if (selectedMode === '') {
-        alert('모드를 선택하세요!')
-        return
+        alert('모드를 선택하세요!');
+        return;
       }
     }
     setStep((num: number) => (num % 2) + 1);
@@ -95,21 +102,21 @@ export default function CreatePage() {
   // 라운드 세팅 추가하기
   const handleClickAdd = () => {
     if (gameinfo.settings.length === 3) {
-      alert('최대 3라운드까지 가능해요!')
+      alert('최대 3라운드까지 가능해요!');
       return;
     }
-    dispatch(addRoundAction())
+    dispatch(addRoundAction());
   };
 
   // 라운드 수 제거하기
   const handleClickDelete = (idx: number) => {
-    if (gameinfo.settings.length === 1) return
-    dispatch(deleteRoundAction(idx))
+    if (gameinfo.settings.length === 1) return;
+    dispatch(deleteRoundAction(idx));
   };
 
   // 방 만들기
   const handleClickCreate = () => {
-    console.log(gameinfo)
+    const res = makeRoomApi(gameinfo);
     // 여기다 이제 소켓 연결하는 함수 만들자,,
   };
 
@@ -137,8 +144,12 @@ export default function CreatePage() {
                 <p className="my-1.5">모드 선택하기</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-7">
                   {modes.map(mode => (
-                    <div key={mode.title} >
-                      <ModeCard mode={mode} handleClickMode={handleClickMode} selectedMode={selectedMode} />
+                    <div key={mode.title}>
+                      <ModeCard
+                        mode={mode}
+                        handleClickMode={handleClickMode}
+                        selectedMode={selectedMode}
+                      />
                     </div>
                   ))}
                 </div>
@@ -148,8 +159,12 @@ export default function CreatePage() {
                 <p className="my-1.5">진행할 게임 선택하기</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-7">
                   {games.map(game => (
-                    <div key={game.id} >
-                      <GameCard game={game} handleClickGame={handleClickGame} selectedGame={selectedGame} />
+                    <div key={game.id}>
+                      <GameCard
+                        game={game}
+                        handleClickGame={handleClickGame}
+                        selectedGame={selectedGame}
+                      />
                     </div>
                   ))}
                 </div>
@@ -164,19 +179,25 @@ export default function CreatePage() {
           ) : (
             // 2. 라운드 설정 컴포넌트
             <>
-              <div className='mt-3 h-[90%]'>
-                <div className='h-[60vh] overflow-y-scroll scrollbar-thumb-lightgray scrollbar-none flex flex-col rounded-md'>
+              <div className="mt-3 h-[90%]">
+                <div className="h-[60vh] overflow-y-scroll scrollbar-thumb-lightgray scrollbar-none flex flex-col rounded-md">
                   {gameinfo.settings.map((setting: any, idx) => (
                     <div key={idx}>
-                      <RoundSetting handleClickDelete={handleClickDelete} setting={setting} idx={idx} />
+                      <RoundSetting
+                        handleClickDelete={handleClickDelete}
+                        setting={setting}
+                        idx={idx}
+                      />
                     </div>
                   ))}
-                  <button className="bg-white w-20 mt-2 mx-auto" onClick={handleClickAdd}>
+                  <button
+                    className="bg-white w-20 mt-2 mx-auto"
+                    onClick={handleClickAdd}
+                  >
                     추가
                   </button>
                 </div>
-                <div className='flex justify-center absolute bottom-7 left-[50%] translate-x-[-50%]'>
-
+                <div className="flex justify-center absolute bottom-7 left-[50%] translate-x-[-50%]">
                   <button
                     className="bg-white w-[80px] h-12 rounded-[5px] mr-3"
                     onClick={handleClickStep}

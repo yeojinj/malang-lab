@@ -1,6 +1,8 @@
 'use client';
 
 import GameModeItem from '@/components/main/GameModeItem';
+import { useEffect } from 'react';
+import { getTokenApi } from './apis/apis';
 
 export interface Mode {
   name: string;
@@ -15,6 +17,10 @@ const modes = [
 ];
 
 export default function MainPage() {
+  useEffect(() => {
+    console.log('first enter');
+    const res = getTokenApi();
+  }, []);
   return (
     <div
       className="w-[100vw] h-[100vh] bg-cover bg-center flex justify-center align-middle"
@@ -25,9 +31,7 @@ export default function MainPage() {
           <h1 className="text-center text-4xl font-semibold">말랑연구소</h1>
           <div className="w-full flex justify-between mx-auto my-10">
             {modes.map(mode => (
-              <div key={mode.path}>
-                <GameModeItem mode={mode} />
-              </div>
+              <GameModeItem key={mode.path} mode={mode} />
             ))}
           </div>
         </div>

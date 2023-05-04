@@ -7,16 +7,17 @@ export interface Setting {
   keyword: string;
   hidden: string;
   time: number;
+  round: number;
 }
 
 type GameInfo = {
-  title: string;
+  name: string;
   mode: string;
   settings: Setting[];
 };
 
 const initialState: GameInfo = {
-  title: '',
+  name: '',
   mode: '',
   settings: [
     {
@@ -24,6 +25,7 @@ const initialState: GameInfo = {
       keyword: '',
       hidden: '',
       time: 30,
+      round: 1,
     },
   ],
 };
@@ -36,7 +38,7 @@ export const gameInfoSlice = createSlice({
       state.mode = action.payload;
     },
     gameAction(state, action) {
-      state.title = action.payload;
+      state.name = action.payload;
     },
     // keyword가 입력 될때
     changekeywordAction(state, action) {
@@ -55,7 +57,6 @@ export const gameInfoSlice = createSlice({
     // 삭제버튼을 눌렀을 때
     deleteRoundAction(state, action) {
       state.settings.splice(action.payload, 1);
-      console.log(current(state.settings))
     },
 
     // 추가 버튼을 눌렀을때
@@ -65,6 +66,7 @@ export const gameInfoSlice = createSlice({
         keyword: '',
         hidden: '',
         time: 30,
+        round: state.settings.length + 1,
       });
     },
   },
