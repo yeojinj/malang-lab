@@ -7,23 +7,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setNicknameAction, setPinAction } from '@/store/guestSlice';
 import { RootState } from '@/store/store';
 
+import CustomProfile from '@/components/profile/CustomProfile';
 
 export default function JoinPage() {
-  const dispatch = useDispatch()
-  const guest = useSelector((state: RootState) => state.guest)
-  console.log(guest)
+  const dispatch = useDispatch();
+  const guest = useSelector((state: RootState) => state.guest);
+  console.log(guest);
   // const router = useRouter();
   const [pin, setPin] = useState('');
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
 
   // fabric
-  const [canvas, setCanvas] = useState("");
+  const [canvas, setCanvas] = useState('');
 
   // const test = new fabric.Canvas('malang')
 
   // const initCanvas = () => {
-  //   return new fabric.Canvas('malang', { 
+  //   return new fabric.Canvas('malang', {
   //     height : 600,
   //     width : 600,
   //    })
@@ -33,27 +34,25 @@ export default function JoinPage() {
   //   setCanvas(initCanvas());
   // }, [])
 
-
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
   };
 
   const handleClickPin = () => {
     if (pin === '') {
-      alert('PIN 번호를 입력해주세요!')
-      return
+      alert('PIN 번호를 입력해주세요!');
+      return;
     }
 
-    let isValid = true
+    let isValid = true;
     // 유효한 세션인지 확인 한후
     if (isValid) {
       // 소켓 연결!!!
       // 리덕스에 저장
-      dispatch(setPinAction(pin))
+      dispatch(setPinAction(pin));
       // 다음 페이지로 이동
       setStep(step => step + 1);
     }
-
   };
 
   // step2 - 닉네임 입력하기
@@ -67,7 +66,7 @@ export default function JoinPage() {
 
     if (isValid) {
       // 닉네임 저장하기
-      dispatch(setNicknameAction(nickname))
+      dispatch(setNicknameAction(nickname));
       // 다음 단계로 넘어가기
       setStep(step => step + 1);
     }
@@ -101,7 +100,9 @@ export default function JoinPage() {
       {/* 닉네임 설정하기 */}
       {step === 1 && (
         <section className="w-[70%] sm:w-[50%] md:w-[40%] lg:w-[30%] flex flex-col justify-center align-middle gap-5">
-          <p className="text-center text-4xl lg:text-5xl font-bold mb-5">닉네임 설정하기</p>
+          <p className="text-center text-4xl lg:text-5xl font-bold mb-5">
+            닉네임 설정하기
+          </p>
           <input
             type="text"
             placeholder="닉네임 입력"
@@ -119,9 +120,9 @@ export default function JoinPage() {
       {/* 캐릭터 생성하기 */}
       {step === 2 && (
         <section className="w-[80%] flex flex-col justify-center align-middle gap-10">
-          <p className="text-center text-4xl lg:text-5xl font-bold">말랑이 생성하기</p>
+          <p className="text-center text-5xl font-bold">말랑이 생성하기</p>
           <div className="mx-auto">
-            <canvas id='malang' />
+            <CustomProfile />
           </div>
           <button className="button-black w-[20%]" onClick={handleClickJoin}>
             완료
