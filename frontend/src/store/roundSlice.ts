@@ -1,7 +1,6 @@
 'use client';
 
 import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
-import produce, { Draft } from 'immer';
 
 export interface Round {
   topic: string;
@@ -39,7 +38,7 @@ export const roundSlice = createSlice({
       //     seconds: 0,
       //   });
       // });
-      return action.payload
+      return action.payload;
     },
   },
 });
