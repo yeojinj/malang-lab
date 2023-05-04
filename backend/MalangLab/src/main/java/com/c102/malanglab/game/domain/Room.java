@@ -40,4 +40,8 @@ public class Room {
         this.mode = mode;
         this.settings = settings;
     }
+
+    public boolean isHost(String userId) {
+        return this.hostId == userId;
+    }
 }
