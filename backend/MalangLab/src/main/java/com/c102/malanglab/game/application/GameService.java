@@ -21,7 +21,7 @@ public class GameService implements GameStatusCase {
     @Override
     public RoomResponse create(RoomRequest request, String hostId) {
         // 방 생성하기
-        Room room = new Room(request.name(), hostId, request.mode(), request.settings());
+        Room room = new Room(request.getName(), hostId, request.getMode(), request.getSettings());
         // 방 생성 유효성 검사하기
         RoomValidator.validate(room);
         // 게임 저장하기
@@ -29,7 +29,7 @@ public class GameService implements GameStatusCase {
         // 방 생성하기 로그
         log.info(String.valueOf(roomCreated));
 
-        RoomResponse roomResponse = new RoomResponse(room.getId(), room.getName(), room.getHostId(), room.getMode(), room.getSettings(), room.getGuests());
+        RoomResponse roomResponse = new RoomResponse(roomCreated.getId(), roomCreated.getName(), roomCreated.getHostId(), roomCreated.getMode(), roomCreated.getSettings(), roomCreated.getGuests());
         return roomResponse;
     }
 

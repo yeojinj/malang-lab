@@ -15,6 +15,7 @@ import java.util.TimeZone;
 public class WebSocketOutBroker implements GameBroadCastPort {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
+
     @Override
     public void alertJoin(Long roomId, String userId) {
         log.info("roomId -> {}, userId 가 입장했습니다. -> {}", roomId, userId);
