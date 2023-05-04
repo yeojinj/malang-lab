@@ -15,7 +15,7 @@ import gameInfoSlice, {
   modeAction,
 } from '../../store/gameInfoSlice';
 import GameCard from '../../components/create/GameCard';
-import { makeRoomApi } from '../apis/apis';
+import { makeRoomApi } from '@/apis/apis';
 
 const modes = [
   {

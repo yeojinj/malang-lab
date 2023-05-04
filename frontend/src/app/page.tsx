@@ -2,7 +2,7 @@
 
 import GameModeItem from '@/components/main/GameModeItem';
 import { useEffect } from 'react';
-import { getTokenApi } from './apis/apis';
+import { getTokenApi } from '@/apis/apis';
 
 export interface Mode {
   name: string;

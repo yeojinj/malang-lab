@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 // axios.config
-const BASE_URL = 'http://localhost:8080/api';
+const BASE_URL = 'http://localhost:8080';
 
 axios.defaults.baseURL = BASE_URL;
+axios.defaults.withCredentials = true;
 
 const authApi = axios.create({
   baseURL: BASE_URL,
@@ -23,7 +24,7 @@ authApi.interceptors.request.use(
 // apis
 const getTokenApi = () => {
   return axios
-    .get('/token')
+    .post('/token')
     .then(res => {
       console.log('토큰 받기 성공', res);
       localStorage.setItem('token', res.data.token);
