@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Router, { useRouter } from 'next/router';
+import CustomProfile from '@/components/profile/CustomProfile';
 
 export default function JoinPage() {
   // const router = useRouter();
@@ -81,7 +82,7 @@ export default function JoinPage() {
         <section className="w-[80%] flex flex-col justify-center align-middle gap-10">
           <p className="text-center text-5xl font-bold">말랑이 생성하기</p>
           <div className="mx-auto">
-            근데 여기에 이제 konva가 들어갋지 패브릭이 들어갈지 모를 일
+            <CustomProfile />
           </div>
           <button className="button-black w-[20%]" onClick={handleClickJoin}>
             완료
