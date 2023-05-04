@@ -29,7 +29,6 @@ public class GameAdapter implements GamePort {
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
         hashOperations.put(key, "mode", String.valueOf(room.getMode()));
-        // TODO: room.getSettings() size 라운드 수랑 맞는지, list에 round 순서대로 들어가있는지 확인 필요
         for (int round = 0; round < room.getSettings().size(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
