@@ -19,6 +19,7 @@ import java.util.TimeZone;
 public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
+
     @Override
     public void alertJoinMember(Long roomId, Message<GuestDto> message) {
         simpMessageSendingOperations.convertAndSend("/topic/room." + roomId, message);

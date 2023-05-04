@@ -1,4 +1,4 @@
-import WordCarousel from '@/components/result/WordCarousel';
+import WordCloudCarousel from '@/components/result/WordCloudCarousel';
 import HiddenWord from '@/components/result/HiddenWord';
 import WordCloud from '@/components/result/WordCloud';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ export default function ResultCardPage({ params }: Props) {
     <div className="h-screen overflow-x-hidden bg-cover bg-bg-3 flex flex-col items-center justify-center">
       {params.slug === 'wordcloud' && <WordCloud />}
       {params.slug === 'hiddenword' && <HiddenWord />}
-      {params.slug === 'creativeword' && <WordCarousel />}
+      {params.slug === 'creativeword' && <WordCloudCarousel />}
       <Link
         href="/result"
         className="bg-[#44474B] font-semibold rounded text-white px-10 py-2"
