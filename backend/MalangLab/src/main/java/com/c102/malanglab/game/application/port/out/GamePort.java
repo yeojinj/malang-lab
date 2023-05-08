@@ -2,7 +2,6 @@ package com.c102.malanglab.game.application.port.out;
 
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
-import java.io.File;
 
 public interface GamePort {
 
@@ -16,7 +15,7 @@ public interface GamePort {
     boolean setNickname(Long roomId, String userId, String nickname);
 
     /** 캐릭터 이미지 설정하기 */
-    Guest setImage(Long roomId, String userId, File image);
+    Guest setImage(Long roomId, String userId, String imgPath);
 
     /** 유저 퇴장 시 삭제 */
     void removeUser(String userId);
@@ -28,4 +27,6 @@ public interface GamePort {
     int inputWord(Long roomId, String userId, String word);
 
     Room findById(Long id);
+
+    Guest findById(String id);
 }

@@ -32,4 +32,8 @@ public class Guest {
         this.id = id;
         this.nickname = nickname;
     }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }
