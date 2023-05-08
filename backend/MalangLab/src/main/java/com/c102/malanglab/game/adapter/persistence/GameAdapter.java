@@ -1,7 +1,9 @@
 package com.c102.malanglab.game.adapter.persistence;
 
 import com.c102.malanglab.game.application.port.out.GamePort;
+import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
+import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -22,14 +24,15 @@ public class GameAdapter implements GamePort {
         // PIN 번호 발급
         Long roomId = getRandomRoomId();
         // Room Entity 생성
-        Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings(), roomInfo.getGuests());
+        Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings().size(), roomInfo.getSettings(), roomInfo.getGuests());
 
         // 방 정보 Redis 저장
         String key = "room:" + roomId + ":info";
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
         hashOperations.put(key, "mode", String.valueOf(room.getMode()));
-        for (int round = 0; round < room.getSettings().size(); round++) {
+        hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
+        for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
@@ -58,6 +61,31 @@ public class GameAdapter implements GamePort {
         }
 
         return id;
+    }
+
+    @Override
+    public Room join(Long pin) {
+        return null;
+    }
+
+    @Override
+    public boolean setNickname(String nickname) {
+        return false;
+    }
+
+    @Override
+    public Guest setImage(File image) {
+        return null;
+    }
+
+    @Override
+    public void removeUser(String userId) {
+
+    }
+
+    @Override
+    public int inputWord(Long roomId, String userId, String word) {
+        return 0;
     }
 
     @Override
