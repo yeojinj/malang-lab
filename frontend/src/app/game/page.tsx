@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 
 export default function GamePage() {
   const [countShow, setCountShow] = useState(true);
-  const [finish, setFinish] = useState(true);
+  const [finish, setFinish] = useState(false);
   // const isHost = useSelector((state: RootState) => state.status.isHost);
   const isHost = true;
   const time = 60;

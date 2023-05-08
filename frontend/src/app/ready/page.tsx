@@ -9,7 +9,7 @@ import { RootState } from '@/store/store';
 
 export default function ReadyPage() {
   // const isHost = useSelector((state: RootState) => state.status.isHost);
-  const isHost = false;
+  const isHost = true;
 
   return (
     <>
