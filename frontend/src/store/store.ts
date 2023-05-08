@@ -2,12 +2,16 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 
+import roundSlice from './roundSlice';
+import statusSlice from './statusSlice';
 import gameInfoSlice from './gameInfoSlice';
 import guestSlice from './guestSlice';
 
 // redux 생성 함수
 const store = configureStore({
   reducer: {
+    round: roundSlice,
+    status: statusSlice,
     gameinfo: gameInfoSlice,
     guest : guestSlice,
   },
