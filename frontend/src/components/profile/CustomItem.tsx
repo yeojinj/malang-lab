@@ -4,8 +4,8 @@ import useImage from 'use-image';
 
 export default function CustomItem({ imagePath }) {
   const [image] = useImage(imagePath);
-  const imageRef = useRef();
-  const transformerRef = useRef();
+  const imageRef = useRef(null);
+  const transformerRef = useRef(null);
   const [selected, setSelected] = useState(false);
 
   useEffect(() => {
