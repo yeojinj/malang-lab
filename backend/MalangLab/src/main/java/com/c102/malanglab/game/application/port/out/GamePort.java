@@ -1,4 +1,4 @@
-package com.c102.malanglab.game.application.port;
+package com.c102.malanglab.game.application.port.out;
 
 import com.c102.malanglab.game.domain.Room;
 
