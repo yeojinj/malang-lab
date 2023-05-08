@@ -2,6 +2,7 @@ package com.c102.malanglab.game.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "guests")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Guest {
 
     @Id
@@ -26,4 +28,8 @@ public class Guest {
     @Column(name = "IMAGE_PATH")
     private String imagePath;
 
+    public Guest(String id, String nickname) {
+        this.id = id;
+        this.nickname = nickname;
+    }
 }
