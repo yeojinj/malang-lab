@@ -2,6 +2,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { Providers } from '@/store/provider';
 import { SocketProvider } from '../context/SocketContext';
+import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
 const inter = Inter({ subsets: ['latin'] });
 

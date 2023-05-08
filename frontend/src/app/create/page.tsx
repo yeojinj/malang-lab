@@ -1,21 +1,26 @@
 'use client';
-
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { PencilIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
+// components
 import ModeCard from '@/components/create/ModeCard';
 import RoundSetting from '@/components/create/RoundSetting';
-import React, { useState } from 'react';
-import { PencilIcon } from '@heroicons/react/24/solid';
-import { useSelector } from 'react-redux';
+import GameCard from '../../components/create/GameCard';
+// redux
 import { RootState } from '@/store/store';
-import { useDispatch } from 'react-redux';
 import gameInfoSlice, {
   addRoundAction,
   changekeywordAction,
   deleteRoundAction,
   gameAction,
   modeAction,
+  setTitleAction,
 } from '../../store/gameInfoSlice';
-import GameCard from '../../components/create/GameCard';
+import { setPinAction } from '@/store/guestSlice';
+// apis
 import { makeRoomApi } from '@/apis/apis';
+import Loading from '@/components/common/Loading';
 
 const modes = [
   {
@@ -43,12 +48,12 @@ const games = [
   },
   {
     id: 'NOTYET',
-    title2: '누가누가 말랑이 일까?',
-    title1: '단어로 뇌밍업',
+    title2: '재미있는 아이디어 확장?',
+    title1: '브레인 스토밍',
     desc: [
-      '제시어에 따른 연상단어 입력',
-      '단어를 빨리빨리! 순발력',
-      '단어를 많이많이! 사고력',
+      '주어진 문제를 해결할 방법은?',
+      '오잉? 스러운 아이디어 환영!',
+      '아이디어는 가능한 많이!',
     ],
   },
 ];
@@ -56,32 +61,43 @@ const games = [
 export default function CreatePage() {
   let gameinfo = useSelector((state: RootState) => state.gameinfo);
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false)
 
   // 1. 방 정보 설정 상태
   const [step, setStep] = useState(0);
   const [selectedMode, setMode] = useState(gameinfo.mode);
   const [selectedGame, setGame] = useState(gameinfo.name);
+  const [title, setTitle] = useState(gameinfo.title);
+
+  // 방제목 설정하기
+  const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    dispatch(setTitleAction(e.target.value))
+    console.log(e.target.value)
+  };
 
   // 게임 모드 선택하기
   const handleClickMode = (id: string) => {
     if (selectedMode === id) {
+      dispatch(modeAction(''));
       setMode('');
       return;
     }
     dispatch(modeAction(id));
     setMode(id);
-    console.log(id, 'mode');
   };
 
   // 진행할 게임 선택하기
   const handleClickGame = (id: string) => {
     if (selectedGame === id) {
       setGame('');
+      dispatch(gameAction(''));
       return;
     }
     dispatch(gameAction(id));
     setGame(id);
-    console.log(id, 'game');
   };
 
   // 다음, 이전 컴포넌트로 이동하기
@@ -115,23 +131,45 @@ export default function CreatePage() {
   };
 
   // 방 만들기
-  const handleClickCreate = () => {
-    const res = makeRoomApi(gameinfo);
-    // 여기다 이제 소켓 연결하는 함수 만들자,,
+  const handleClickCreate = async () => {
+    if(checkIsValid()) {
+      // setIsLoading(true)
+      const res = await makeRoomApi(gameinfo);
+      // setIsLoading(false)
+      // 방 만들기가 성공했을 때에만 실행
+      if (res) {
+        // 방의 pin 번호 redux에 저장
+        dispatch(setPinAction(res.data.id))
+        // 대기방으로 입장
+        // router.push('/ready')
+      }
+    }else {
+      alert('라운드 정보를 빠짐 없이 입력해주세요!')
+      return
+    }
   };
+
+  // 라운드 정보 유효성 검사
+  const checkIsValid = () => {
+    return gameinfo.settings.every((setting) => {
+      return (setting.keyword!=='' && setting.hidden!=='')
+    })
+  }
 
   return (
     <div
       className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center"
       style={{ backgroundImage: "url('/imgs/bg-3.png')" }}
     >
+      {isLoading && <Loading />}
       <section className="glass w-[70%] min-h-[90vh] border-2 mx-auto flex my-5">
         <div className="w-[70%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">
-          <div className="w-[70%] mx-auto flex border-b-[2px] border-black">
+          <div className="w-[50%] mx-auto flex border-b-[2px] border-black">
             <>
               <input
-                placeholder="말랑이의 연구소"
-                className="bg-transparent w-[93%] text-2xl font-bold text-black placeholder-black placeholder:text-2xl placeholder:text-center placeholder:font-bold text-center"
+                onChange={handleInputName}
+                placeholder={title}
+                className="bg-transparent w-[90%] text-2xl font-bold text-black placeholder-[#8A8A8A] placeholder:text-2xl placeholder:text-center placeholder:font-bold text-center"
               />
             </>
             <PencilIcon className="w-[7%]" />

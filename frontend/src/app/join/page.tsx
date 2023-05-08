@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import { fabric } from 'fabric';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNicknameAction, setPinAction } from '@/store/guestSlice';
 import { RootState } from '@/store/store';
