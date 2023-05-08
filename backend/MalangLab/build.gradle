@@ -33,6 +33,8 @@ dependencies {
 
 	/** WebSocket */
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
+
 
 	/** Message Queue */
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
@@ -40,11 +42,11 @@ dependencies {
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	/** Persistence */
-	runtimeOnly 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	/** ObjectMapper with Redis [jsr: LocalDateTime 저장] */
+	implementation 'com.fasterxml.jackson.core:jackson-core'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0'
 
@@ -54,6 +56,9 @@ dependencies {
 
 	/** Test */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	/** jasypt */
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 }
 
 tasks.named('test') {
