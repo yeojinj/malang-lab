@@ -31,6 +31,12 @@ public class ApiController {
         return new CustomResponseEntity(HttpStatus.CREATED, roomResponse).convertToResponseEntity();
     }
 
+    /**
+     * 게스트는 방에 들어가기 위해 PIN을 입력합니다
+     * GET : /game/{roomId}
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @return
+     */
     @GetMapping("/{roomId}")
     public ResponseEntity<RoomResponse> get(@PathVariable Long roomId) {
         return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.get(roomId)).convertToResponseEntity();
