@@ -1,6 +1,7 @@
 package com.c102.malanglab.game.adapter.persistence;
 
 import com.c102.malanglab.game.application.port.out.GamePort;
+import com.c102.malanglab.game.domain.GameMode;
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 import java.io.File;
@@ -28,15 +29,15 @@ public class GameAdapter implements GamePort {
 
         // 방 정보 Redis 저장
         String key = "room:" + roomId + ":info";
-        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
-        hashOperations.put(key, "mode", String.valueOf(room.getMode()));
-        hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
+        hashOperations.put(key, "mode", room.getMode());
+        hashOperations.put(key, "total-round", room.getTotalRound());
         for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
-            hashOperations.put(roundKey, "time", String.valueOf(room.getSettings().get(round).getTime()));
+            hashOperations.put(roundKey, "time", room.getSettings().get(round).getTime());
         }
         String statusKey = "room:" + roomId + ":status";
         hashOperations.put(statusKey, "start", "0");
@@ -63,26 +64,52 @@ public class GameAdapter implements GamePort {
         return id;
     }
 
+    /** 게임 참가하기 */
     @Override
-    public Room join(Long pin) {
-        return null;
+    public Room join(Long roomId) {
+        // 1. PIN 유효한지 체크
+        String key = "room:id";
+        BoundSetOperations<String, Object> boundSetOperations = redisTemplate.boundSetOps(key);
+        if (boundSetOperations.isMember(roomId)) {
+            key = "room:" + roomId + ":status";
+            HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+            // 2. 입장 가능한 방인지(게임 시작하지 않았는지) 체크
+            if (hashOperations.get(key, "start") == "0") {
+                // 3. 해당 방 정보 조회
+                key = "room:" + roomId + ":info";
+                String name = (String) hashOperations.get(key, "name");
+                String hostId = (String) hashOperations.get(key, "host-id");
+                GameMode mode = (GameMode) hashOperations.get(key, "mode");
+                int totalRound = (int) hashOperations.get(key, "total-round");
+                Room room = new Room(roomId, name, hostId, mode, totalRound, null, null);
+                return room;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
+    /** 닉네임 설정하기 */
     @Override
-    public boolean setNickname(String nickname) {
+    public boolean setNickname(Long roomId, String nickname) {
         return false;
     }
 
+    /** 캐릭터 이미지 설정하기 */
     @Override
-    public Guest setImage(File image) {
+    public Guest setImage(Long roomId, String userId, File image) {
         return null;
     }
 
+    /** 유저 퇴장 시 삭제 */
     @Override
     public void removeUser(String userId) {
 
     }
 
+    /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
     @Override
     public int inputWord(Long roomId, String userId, String word) {
         return 0;
