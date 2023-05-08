@@ -10,12 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class GameAdapter implements GamePort {
     private final RoomRepository roomRepository;
+
+    private final GuestRepository guestRepository;
 
     private final RedisTemplate redisTemplate;
 
@@ -93,8 +96,17 @@ public class GameAdapter implements GamePort {
 
     /** 닉네임 설정하기 */
     @Override
-    public boolean setNickname(Long roomId, String nickname) {
-        return false;
+    public boolean setNickname(Long roomId, String userId, String nickname) {
+        // 1. Redis 중복 검사 및 저장
+        String key = "room:" + roomId + ":nickname";
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+        if (setOperations.add(key, nickname) == 1) {
+            // 2. MariaDB 저장
+            guestRepository.save(new Guest(userId, nickname));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /** 캐릭터 이미지 설정하기 */
