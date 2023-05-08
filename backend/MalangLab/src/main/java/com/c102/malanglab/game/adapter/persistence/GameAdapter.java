@@ -1,7 +1,9 @@
 package com.c102.malanglab.game.adapter.persistence;
 
 import com.c102.malanglab.game.application.port.out.GamePort;
+import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
+import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -59,6 +61,31 @@ public class GameAdapter implements GamePort {
         }
 
         return id;
+    }
+
+    @Override
+    public Room join(Long pin) {
+        return null;
+    }
+
+    @Override
+    public boolean setNickname(String nickname) {
+        return false;
+    }
+
+    @Override
+    public Guest setImage(File image) {
+        return null;
+    }
+
+    @Override
+    public void removeUser(String userId) {
+
+    }
+
+    @Override
+    public int inputWord(Long roomId, String userId, String word) {
+        return 0;
     }
 
     @Override
