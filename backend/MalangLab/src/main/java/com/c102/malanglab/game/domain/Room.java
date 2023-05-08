@@ -34,12 +34,14 @@ public class Room {
     @JoinColumn(name = "ROOM_ID")
     private List<Guest> guests = new ArrayList<>();
 
-    public Room(Long id, String name, String hostId, GameMode mode, List<Setting> settings) {
-        this.id = id;
+    public Room(String name, String hostId, GameMode mode, List<Setting> settings) {
         this.name = name;
         this.hostId = hostId;
         this.mode = mode;
         this.settings = settings;
     }
 
+    public boolean isHost(String userId) {
+        return this.hostId == userId;
+    }
 }

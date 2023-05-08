@@ -2,7 +2,7 @@ import './styles.css';
 
 export default function CountDown() {
   return (
-    <div className="demo">
+    <div className="demo z-20">
       <div className="demo__colored-blocks">
         <div className="demo__colored-blocks-rotater">
           <div className="demo__colored-block"></div>

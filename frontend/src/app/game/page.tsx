@@ -11,13 +11,15 @@ import Timer from '@/components/game/Timer';
 import AlertBox from '@/components/common/AlertBox';
 
 export default function GamePage() {
-  const [show, setShow] = useState(false);
-  const [finish, setFinish] = useState(true);
-  const isHost = false;
+  const [countShow, setCountShow] = useState(true);
+  const [finish, setFinish] = useState(false);
+  const isHost = true;
+  const time = 60;
+  const keyword = "말랑이"
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setShow(false);
+      setCountShow(false);
     }, 3200);
     return () => clearTimeout(timeout);
   }, []);
@@ -29,31 +31,39 @@ export default function GamePage() {
       } ${finish ? 'justify-center' : ''} items-center`}
       style={{ backgroundImage: "url('/imgs/bg-1.png')" }}
     >
-      {finish ? (
+      {countShow && (
         <>
           <Blur />
-          {/* <CountDown /> */}
+          <CountDown />
+        </>
+      )}
+
+      {finish && (
+        <>
+          <Blur />
           <AlertBox text={'1라운드 종료! 화면을 확인하세요'} />
         </>
-      ) : isHost ? (
+      )}
+
+      {isHost ? (
         <>
           <div className="flex fixed top-0 w-screen">
             <GameUserNum num={60} />
-            <Timer />
+            <Timer setFinish={setFinish} time={time + 3.2} />
           </div>
           <WordNum num={1004} />
-          <h1 className="absolute font-bold text-[6rem] text-[#44474B] top-64">
-            말랑이
+          <h1 className="absolute font-bold text-[5rem] text-[#44474B] top-72">
+            {keyword}
           </h1>
           <Image src={'/imgs/word.png'} alt="word" width={800} height={500} />
         </>
       ) : (
         <>
-        <div className='flex fixed top-0 right-16 sm:right-1'>
-          <Timer />
-        </div>
+          <div className="flex fixed top-0 right-16 sm:right-1">
+            <Timer setFinish={setFinish} time={time + 3.2} />
+          </div>
           <h1 className="text-[#44474B] text-[3rem] font-semibold mt-16">
-            제시어: 말랑이
+            제시어: {keyword}
           </h1>
           <h2 className="text-[#44474B] mx-5 my-2">
             제시어를 보고 떠오르는 단어를 마구마구 입력해주세요!

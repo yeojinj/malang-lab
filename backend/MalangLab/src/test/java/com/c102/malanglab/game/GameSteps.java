@@ -2,7 +2,7 @@ package com.c102.malanglab.game;
 
 import com.c102.malanglab.game.domain.GameMode;
 import com.c102.malanglab.game.domain.Setting;
-import com.c102.malanglab.game.dto.CreateRequest;
+import com.c102.malanglab.game.dto.RoomRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 public class GameSteps {
-    public static ExtractableResponse<Response> 게임생성요청(CreateRequest request, String token) {
+    public static ExtractableResponse<Response> 게임생성요청(RoomRequest request, String token) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header(HttpHeaders.AUTHORIZATION, token)
@@ -22,8 +22,8 @@ public class GameSteps {
                 .then().log().all().extract();
     }
 
-    public static CreateRequest 게임생성요청_생성() {
-        return new CreateRequest(
+    public static RoomRequest 게임생성요청_생성() {
+        return new RoomRequest(
                 "게임 생성 테스트",
                 GameMode.SOLO,
                 List.of(
