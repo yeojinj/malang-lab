@@ -26,6 +26,9 @@ public class Room {
     @Enumerated(value = EnumType.STRING)
     private GameMode mode;
 
+    @Column(name = "TOTAL_ROUND")
+    private Integer totalRound;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "ROOM_ID")
     private List<Setting> settings = new ArrayList<>();
@@ -34,10 +37,11 @@ public class Room {
     @JoinColumn(name = "ROOM_ID")
     private List<Guest> guests = new ArrayList<>();
 
-    public Room(String name, String hostId, GameMode mode, List<Setting> settings) {
+    public Room(String name, String hostId, GameMode mode, int totalRound, List<Setting> settings) {
         this.name = name;
         this.hostId = hostId;
         this.mode = mode;
+        this.totalRound = totalRound;
         this.settings = settings;
     }
 

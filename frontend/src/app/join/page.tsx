@@ -17,22 +17,6 @@ export default function JoinPage() {
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
 
-  // fabric
-  const [canvas, setCanvas] = useState('');
-
-  // const test = new fabric.Canvas('malang')
-
-  // const initCanvas = () => {
-  //   return new fabric.Canvas('malang', {
-  //     height : 600,
-  //     width : 600,
-  //    })
-  // }
-
-  // useEffect(() => {
-  //   setCanvas(initCanvas());
-  // }, [])
-
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
   };
