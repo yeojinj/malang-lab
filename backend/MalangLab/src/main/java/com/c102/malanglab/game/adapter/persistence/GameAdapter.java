@@ -22,14 +22,15 @@ public class GameAdapter implements GamePort {
         // PIN 번호 발급
         Long roomId = getRandomRoomId();
         // Room Entity 생성
-        Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings(), roomInfo.getGuests());
+        Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings().size(), roomInfo.getSettings(), roomInfo.getGuests());
 
         // 방 정보 Redis 저장
         String key = "room:" + roomId + ":info";
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
         hashOperations.put(key, "mode", String.valueOf(room.getMode()));
-        for (int round = 0; round < room.getSettings().size(); round++) {
+        hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
+        for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
