@@ -1,8 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-export default function Timer() {
-  const MINUTES_IN_MS = 60 * 1000;
+type Props = {
+  setFinish: React.Dispatch<React.SetStateAction<boolean>>;
+  time: number;
+};
+
+export default function Timer({ setFinish, time }: Props) {
+  const MINUTES_IN_MS = time * 1000;
   const INTERVAL = 1000;
   const [timeLeft, setTimeLeft] = useState<number>(MINUTES_IN_MS);
 
@@ -13,8 +18,9 @@ export default function Timer() {
 
     if (timeLeft <= 0) {
       clearInterval(timer);
+      setFinish(true)
     }
-
+    
     return () => {
       clearInterval(timer);
     };
