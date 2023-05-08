@@ -44,7 +44,14 @@ public class GameService implements GameStatusCase {
 
     @Override
     public RoomResponse get(final Long roomId) {
-        Room room = gamePort.findById(roomId);
+        // 게임 참가하기
+        Room room = gamePort.join(roomId);
+
+        // 게임 방 존재 유무 검사하기
+        if (room == null) {
+            throw new IllegalArgumentException("요청하신 방이 존재하지 않습니다.");
+        }
+
         RoomResponse roomResponse = new RoomResponse(room.getId(), room.getName(), room.getHostId(), room.getMode(), room.getSettings(), room.getGuests());
         return roomResponse;
     }
