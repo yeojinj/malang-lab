@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import { fabric } from 'fabric';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNicknameAction, setPinAction } from '@/store/guestSlice';
 import { RootState } from '@/store/store';
@@ -17,22 +16,6 @@ export default function JoinPage() {
   const [pin, setPin] = useState('');
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
-
-  // fabric
-  const [canvas, setCanvas] = useState('');
-
-  // const test = new fabric.Canvas('malang')
-
-  // const initCanvas = () => {
-  //   return new fabric.Canvas('malang', {
-  //     height : 600,
-  //     width : 600,
-  //    })
-  // }
-
-  // useEffect(() => {
-  //   setCanvas(initCanvas());
-  // }, [])
 
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);

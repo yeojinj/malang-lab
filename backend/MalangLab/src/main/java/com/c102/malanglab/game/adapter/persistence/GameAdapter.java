@@ -4,18 +4,21 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.GameMode;
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
-import java.io.File;
+import jakarta.transaction.Transactional;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class GameAdapter implements GamePort {
     private final RoomRepository roomRepository;
+
+    private final GuestRepository guestRepository;
 
     private final RedisTemplate redisTemplate;
 
@@ -93,14 +96,27 @@ public class GameAdapter implements GamePort {
 
     /** 닉네임 설정하기 */
     @Override
-    public boolean setNickname(Long roomId, String nickname) {
-        return false;
+    public boolean setNickname(Long roomId, String userId, String nickname) {
+        // 1. Redis 중복 검사 및 저장
+        String key = "room:" + roomId + ":nickname";
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+        if (setOperations.add(key, nickname) == 1) {
+            // 2. MariaDB 저장
+            guestRepository.save(new Guest(userId, nickname));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /** 캐릭터 이미지 설정하기 */
     @Override
-    public Guest setImage(Long roomId, String userId, File image) {
-        return null;
+    @Transactional
+    public Guest setImage(Long roomId, String userId, String imgPath) {
+        // MariaDB 저장
+        Guest guest = findById(userId);
+        guest.setImagePath(imgPath);
+        return guest;
     }
 
     /** 유저 퇴장 시 삭제 */
@@ -118,5 +134,10 @@ public class GameAdapter implements GamePort {
     @Override
     public Room findById(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
+    }
+
+    @Override
+    public Guest findById(String id) {
+        return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
 }
