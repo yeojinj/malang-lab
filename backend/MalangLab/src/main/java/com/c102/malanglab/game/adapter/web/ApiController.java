@@ -15,6 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ApiController {
     private final GameStatusCase gameStatusCase;
+
+    /**
+     * 호스트는 방을 생성합니다
+     * POST : /game
+     * @RequestBody RoomRequest : 방 생성 정보
+     * @RequestHeader(HttpHeaders.AUTHORIZATION) : 호스트 아이디
+     * @return
+     */
     @PostMapping
     public ResponseEntity<RoomResponse> create(
             @RequestBody RoomRequest request,
