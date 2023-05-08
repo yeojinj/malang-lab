@@ -9,14 +9,13 @@ import { RootState } from '@/store/store';
 
 export default function ReadyPage() {
   // const isHost = useSelector((state: RootState) => state.status.isHost);
-  const isHost = true;
+  const isHost = false;
 
   return (
     <>
       {isHost ? (
         <div
-          className="min-h-screen bg-cover flex flex-col align-middle"
-          style={{ backgroundImage: "url('/imgs/bg-1.png')" }}
+          className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1"
         >
           <PinCode code={990107} />
           <div className="text-center text-[#44474B]">
@@ -33,8 +32,7 @@ export default function ReadyPage() {
         </div>
       ) : (
         <div
-          className="min-h-screen bg-cover flex flex-col align-middle pt-10 bg-repeat-y"
-          style={{ backgroundImage: "url('/imgs/bg-1.png')" }}
+          className="min-h-screen bg-cover flex flex-col align-middle pt-10 bg-repeat-y bg-bg-1"
         >
           <div className="text-center text-black">
             <h1 className="text-[2rem] font-bold">말랑이의 연구소</h1>
