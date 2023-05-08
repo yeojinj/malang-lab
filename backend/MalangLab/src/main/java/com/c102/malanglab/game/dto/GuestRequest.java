@@ -1,4 +1,4 @@
-package com.c102.malanglab.game.dto.websocket;
+package com.c102.malanglab.game.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -8,12 +8,12 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GuestDto {
+public class GuestRequest {
     private String id;
     private String nickname;
     private MultipartFile image;
 
-    public static GuestDto of(String id) {
-        return new GuestDto(id, null, null);
+    public static GuestRequest of(String id) {
+        return new GuestRequest(id, null, null);
     }
 }

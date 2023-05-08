@@ -7,12 +7,11 @@ import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.domain.Room;
 
 import com.c102.malanglab.game.dto.Message;
-import com.c102.malanglab.game.dto.websocket.GuestDto;
+import com.c102.malanglab.game.dto.GuestRequest;
 import com.c102.malanglab.game.dto.RoomRequest;
 import com.c102.malanglab.game.dto.RoomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -57,6 +56,7 @@ public class GameService implements GameStatusCase {
     }
 
 
+
     @Override
     public void start(Long roomId, String hostId) {
         // 방 조회
@@ -78,11 +78,11 @@ public class GameService implements GameStatusCase {
         gameBroadCastPort.alertJoinMember(roomId, message);
 
         // 3. 방에 참여자 목록을 가져옵니다.
-        List<GuestDto> guestList = new ArrayList<>();
+        List<GuestRequest> guestList = new ArrayList<>();
         // 4. 참여 당사자에게 참여자 리스트를 전달합니다.
         gameUniCastPort.alertGuestList(
                 userId,
-                new Message<List<GuestDto>>(Message.MessageType.GUEST_LIST, guestList)
+                new Message<List<GuestRequest>>(Message.MessageType.GUEST_LIST, guestList)
         );
     }
 
@@ -91,8 +91,8 @@ public class GameService implements GameStatusCase {
         // 1. 게임 참여자의 정보를 삭제합니다.
 
         // 2. 게임 참여자의 이탈 정보를 알립니다.
-        gameBroadCastPort.alertExitMember(roomId, new Message<GuestDto>(
-                Message.MessageType.EXIT, GuestDto.of(userId)
+        gameBroadCastPort.alertExitMember(roomId, new Message<GuestRequest>(
+                Message.MessageType.EXIT, GuestRequest.of(userId)
         ));
     }
 

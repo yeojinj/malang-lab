@@ -4,6 +4,7 @@ import com.c102.malanglab.common.response.CustomResponseEntity;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.dto.RoomRequest;
 import com.c102.malanglab.game.dto.RoomResponse;
+import com.c102.malanglab.game.dto.GuestRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,23 @@ public class ApiController {
     @GetMapping("/{roomId}")
     public ResponseEntity<RoomResponse> get(@PathVariable Long roomId) {
         return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.get(roomId)).convertToResponseEntity();
+    }
+
+    /**
+     * 게스트는 방에 들어가기 위해 PIN을 입력합니다
+     * GET : /game/{roomId}
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @return
+     */
+    @PostMapping("/{roomId}")
+    public ResponseEntity<GuestRequest> enter(@PathVariable Long roomId, @RequestBody GuestRequest guestRequest) {
+        // (1) roomId
+
+        // (2) nickname
+
+        // (3) file s3
+
+        return null;
     }
 
     @PostMapping("/{roomId}/start")
