@@ -8,7 +8,7 @@ const nextConfig = {
   },
   images: {
     domains: ['s3.ap-northeast-2.amazonaws.com']
-  }
+  },
 };
 
 // const withImages = require('next-images');
