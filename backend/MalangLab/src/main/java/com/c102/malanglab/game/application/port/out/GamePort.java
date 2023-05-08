@@ -13,10 +13,10 @@ public interface GamePort {
     Room join(Long pin);
 
     /** 닉네임 설정하기 */
-    boolean setNickname(String nickname);
+    boolean setNickname(Long roomId, String nickname);
 
     /** 캐릭터 이미지 설정하기 */
-    Guest setImage(File image);
+    Guest setImage(Long roomId, String userId, File image);
 
     /** 유저 퇴장 시 삭제 */
     void removeUser(String userId);

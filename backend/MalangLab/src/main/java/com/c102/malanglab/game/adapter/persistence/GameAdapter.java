@@ -72,13 +72,13 @@ public class GameAdapter implements GamePort {
 
     /** 닉네임 설정하기 */
     @Override
-    public boolean setNickname(String nickname) {
+    public boolean setNickname(Long roomId, String nickname) {
         return false;
     }
 
     /** 캐릭터 이미지 설정하기 */
     @Override
-    public Guest setImage(File image) {
+    public Guest setImage(Long roomId, String userId, File image) {
         return null;
     }
 
