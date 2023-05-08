@@ -1,3 +1,5 @@
+const { transform } = require('typescript')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -16,17 +18,19 @@ module.exports = {
         'bg-1': "url('/imgs/bg-1.png')",
         'bg-2': "url('/imgs/bg-2.png')",
         'bg-3': "url('/imgs/bg-3.png')",
-        'bg-4': "url('/imgs/bg-4.png')"
+        'bg-4': "url('/imgs/bg-4.png')",
       },
       colors: {
-        'black': '#44474B',
-        'lightgray': '#ACACAC',
-      }
+        black: '#44474B',
+        lightgray: '#ACACAC',
+      },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-1deg)' },
+          '50%': { transform: 'rotate(1deg)' },
+        },
+      },
     },
   },
-  plugins: [
-    require('tailwind-scrollbar'),
-    require("tailwind-scrollbar-hide")
-  ],
-}
-
+  plugins: [require('tailwind-scrollbar'), require('tailwind-scrollbar-hide')],
+};
