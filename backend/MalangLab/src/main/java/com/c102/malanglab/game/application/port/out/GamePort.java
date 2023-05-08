@@ -10,7 +10,7 @@ public interface GamePort {
     Room save(Room room);
 
     /** 게임 참가하기 */
-    Room join(Long pin);
+    Room join(Long roomId);
 
     /** 닉네임 설정하기 */
     boolean setNickname(Long roomId, String nickname);

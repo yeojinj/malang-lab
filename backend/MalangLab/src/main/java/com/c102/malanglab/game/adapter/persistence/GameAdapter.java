@@ -66,8 +66,29 @@ public class GameAdapter implements GamePort {
 
     /** 게임 참가하기 */
     @Override
-    public Room join(Long pin) {
-        return null;
+    public Room join(Long roomId) {
+        // 1. PIN 유효한지 체크
+        String key = "room:id";
+        BoundSetOperations<String, Object> boundSetOperations = redisTemplate.boundSetOps(key);
+        if (boundSetOperations.isMember(roomId)) {
+            key = "room:" + roomId + ":status";
+            HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+            // 2. 입장 가능한 방인지(게임 시작하지 않았는지) 체크
+            if (hashOperations.get(key, "start") == "0") {
+                // 3. 해당 방 정보 조회
+                key = "room:" + roomId + ":info";
+                String name = (String) hashOperations.get(key, "name");
+                String hostId = (String) hashOperations.get(key, "host-id");
+                GameMode mode = (GameMode) hashOperations.get(key, "mode");
+                int totalRound = (int) hashOperations.get(key, "total-round");
+                Room room = new Room(roomId, name, hostId, mode, totalRound, null, null);
+                return room;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     /** 닉네임 설정하기 */
