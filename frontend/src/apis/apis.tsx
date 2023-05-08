@@ -27,7 +27,7 @@ const getTokenApi = () => {
     .post('/token')
     .then(res => {
       console.log('토큰 받기 성공', res);
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('token', res.data.data.token);
       return res.data;
     })
     .catch(err => {
