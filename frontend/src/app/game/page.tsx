@@ -1,5 +1,6 @@
 'use client';
 
+import 'animate.css';
 import { useEffect, useState } from 'react';
 import Blur from '@/components/common/Blur';
 import CountDown from '@/components/game/CountDown';
@@ -29,10 +30,9 @@ export default function GamePage() {
 
   return (
     <div
-      className={`min-h-screen bg-cover flex flex-col align-middle ${
+      className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 ${
         isHost ? 'justify-center' : ''
       } ${finish ? 'justify-center' : ''} items-center`}
-      style={{ backgroundImage: "url('/imgs/bg-1.png')" }}
     >
       {countShow && (
         <>
@@ -41,7 +41,7 @@ export default function GamePage() {
         </>
       )}
 
-      {finish && (
+      {finish && !isHost && (
         <>
           <Blur />
           <AlertBox text={'1라운드 종료! 화면을 확인하세요'} />
@@ -60,10 +60,17 @@ export default function GamePage() {
             <Timer setFinish={setFinish} time={time + 3.2} />
           </div>
           <WordNum num={1004} />
-          <h1 className="absolute font-bold text-[5rem] text-[#44474B] top-72">
+          <h1 className="absolute font-bold text-[5rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
             {keyword}
           </h1>
-          <Image src={'/imgs/word.png'} alt="word" width={800} height={500} />
+          <Image
+            src={
+              'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png'
+            }
+            alt="word"
+            width={800}
+            height={500}
+          />
         </>
       ) : (
         <>
@@ -77,6 +84,13 @@ export default function GamePage() {
             제시어를 보고 떠오르는 단어를 마구마구 입력해주세요!
           </h2>
           <WordList />
+        </>
+      )}
+
+      {finish && isHost && (
+        <>
+          <Blur />
+          <AlertBox text={'1라운드 종료!'} />
         </>
       )}
     </div>

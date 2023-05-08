@@ -1,3 +1,5 @@
+const { transform } = require('typescript');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -26,19 +28,26 @@ module.exports = {
         black: '#44474B',
         lightgray: '#ACACAC',
       },
-    },
-    keyframes: {
-      bounce: {
-        '0%, 100%': {
-          transform: 'translateY(-15%)',
-          'animation-timing-function': 'cubic-bezier(0.8,0,1,1)',
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-1deg)' },
+          '50%': { transform: 'rotate(1deg)' },
         },
-        '50%': {
-          transform: 'none',
-          'animation-timing-function': 'cubic-bezier(0,0,0.2,1)',
+        bounce: {
+          '0%, 100%': {
+            transform: 'translateY(-15%)',
+            'animation-timing-function': 'cubic-bezier(0.8,0,1,1)',
+          },
+          '50%': {
+            transform: 'none',
+            'animation-timing-function': 'cubic-bezier(0,0,0.2,1)',
+          },
         },
       },
     },
+    plugins: [
+      require('tailwind-scrollbar'),
+      require('tailwind-scrollbar-hide'),
+    ],
   },
-  plugins: [require('tailwind-scrollbar'), require('tailwind-scrollbar-hide')],
 };
