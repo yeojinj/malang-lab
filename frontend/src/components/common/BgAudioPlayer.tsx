@@ -1,17 +1,27 @@
-import ReactAudioPlayer from "react-audio-player";
+'use client'
+
+import React, { useEffect, useRef, useState } from "react";
+import { SpeakerWaveIcon, SpeakerXMarkIcon } from "@heroicons/react/24/outline";
 
 export default function BgAudioPlayer({ src }) {
+    const [play, setPlay] = useState(true);
+    const playerRef = useRef<HTMLAudioElement>(null);
+
+    const handleToggleAudio = () => {
+        if (play) {
+            playerRef.current?.pause();
+            setPlay(false)
+        } else {
+            playerRef.current?.play()
+            setPlay(true)
+        }
+    }
+
     return (
-        <ReactAudioPlayer
-            src={src}
-            autoPlay={true}
-            // controls
-            loop={true}
-            onPlay={() => console.log('onPlay')}
-            onPause={() => console.log('onPause')}
-            onEnded={() => console.log('onEnded')}
-            onError={(e) => console.error('onError', e)}
-        />
+        <div className="fixed bottom-3 right-3 z-10">
+            <audio ref={playerRef} loop autoPlay src={src}/>
+            {play ? <SpeakerXMarkIcon className="w-12 white" onClick={handleToggleAudio}/> : <SpeakerWaveIcon className="w-12 white " onClick={handleToggleAudio}/> }
+        </div>
     );
 }
 
