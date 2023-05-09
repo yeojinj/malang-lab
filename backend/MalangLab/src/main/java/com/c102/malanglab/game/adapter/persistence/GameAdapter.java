@@ -5,6 +5,9 @@ import com.c102.malanglab.game.domain.GameMode;
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 import jakarta.transaction.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -89,11 +92,19 @@ public class GameAdapter implements GamePort {
                 Room room = new Room(roomId, name, hostId, mode, totalRound, null, null);
                 return room;
             } else {
-                return null;
+                throw new IllegalStateException("이미 시작한 방입니다.");
             }
         } else {
-            return null;
+            throw new IllegalStateException("존재하지 않는 방입니다.");
         }
+    }
+
+    /** 참가자 목록 조회 */
+    @Override
+    public List<Guest> getGuestList(Long roomId) {
+        List<Guest> list = new ArrayList<>();
+
+        return list;
     }
 
     /** 닉네임 설정하기 */
