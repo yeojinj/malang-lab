@@ -122,7 +122,7 @@ public class GameAdapter implements GamePort {
 
     /** 유저 퇴장 시 삭제 */
     @Override
-    public void removeUser(String userId) {
+    public void removeUser(Long roomId, String userId) {
 
     }
 

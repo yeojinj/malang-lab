@@ -18,7 +18,7 @@ public interface GamePort {
     Guest setImage(Long roomId, String userId, String imgPath);
 
     /** 유저 퇴장 시 삭제 */
-    void removeUser(String userId);
+    void removeUser(Long roomId, String userId);
 
     /** 게임 시작 시 현재 라운드 정보 조회 */
     // Round checkRound(Long roomId);
