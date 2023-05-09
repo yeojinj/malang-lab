@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
-import useImage from 'use-image';
 import CustomItem from './CustomItem';
 
 export default function CustomProfile() {
@@ -67,9 +66,9 @@ export default function CustomProfile() {
   };
 
   const handleSaveImg = () => {
-    console.log(isSelected, 'checkech');
     if (stageRef.current) {
       const dataURL = stageRef.current.toDataURL({ pixelRatio: 3 });
+      console.log(dataURL, 'dataurl');
       const link = document.createElement('a');
       link.download = 'stage.png';
       link.href = dataURL;
@@ -144,7 +143,7 @@ export default function CustomProfile() {
           );
         })}
       </div>
-      <button className="absolute" onClick={handleSaveImg}>
+      <button className="absolute" onClick={handleSave}>
         Save as image
       </button>
       <button
