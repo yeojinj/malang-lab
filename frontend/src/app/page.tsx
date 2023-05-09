@@ -22,22 +22,23 @@ export default function MainPage() {
     console.log('first enter');
     const res = getTokenApi();
   }, []);
+
   return (
     <div
-      className="w-[100vw] h-[100vh] bg-cover bg-center flex justify-center align-middle"
+      className="min-h-screen bg-cover bg-center flex justify-center items-center"
       style={{ backgroundImage: "url('/imgs/bg-2.png')" }}
     >
       {/* <BgAudioPlayer src='/audio/bgfull.wav'/> */}
-      <section className="w-[60vw] flex justify-center align-middle m-auto glass py-10">
+      <div className="w-[80vw] sm:w-[60vw] flex justify-center items-center m-auto glass py-5 my-10 sm:my-0 sm:py-10">
         <div className="w-[96%] h-[60%] flex flex-col">
-          <h1 className="text-center text-4xl font-semibold">말랑연구소</h1>
-          <div className="w-full flex justify-between mx-auto my-10">
+          <p className="text-center text-3xl sm:text-4xl font-semibold">말랑연구소</p>
+          <div className="w-full grid grid-cols-1 sm:grid-cols-3 mx-auto my-10">
             {modes.map(mode => (
               <GameModeItem key={mode.path} mode={mode} />
             ))}
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

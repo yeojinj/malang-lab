@@ -12,14 +12,15 @@ import Timer from '@/components/game/Timer';
 import AlertBox from '@/components/common/AlertBox';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export default function GamePage() {
-  const [countShow, setCountShow] = useState(true);
+  const [countShow, setCountShow] = useState(false);
   const [finish, setFinish] = useState(false);
-  // const isHost = useSelector((state: RootState) => state.status.isHost);
-  const isHost = true;
+  const isHost = useSelector((state: RootState) => state.status.isHost);
   const time = 60;
   const keyword = '말랑이';
+  const word = 'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png'
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -30,7 +31,7 @@ export default function GamePage() {
 
   return (
     <div
-      className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 ${
+      className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${
         isHost ? 'justify-center' : ''
       } ${finish ? 'justify-center' : ''} items-center`}
     >
@@ -38,18 +39,6 @@ export default function GamePage() {
         <>
           <Blur />
           <CountDown />
-        </>
-      )}
-
-      {finish && !isHost && (
-        <>
-          <Blur />
-          <AlertBox text={'1라운드 종료! 화면을 확인하세요'} />
-          <Link href={'/result'}>
-            <button className="bg-black absolute z-20 font-semibold rounded text-white px-10 py-2 bottom-48 left-[45%]">
-              결과 확인하기
-            </button>
-          </Link>
         </>
       )}
 
@@ -64,9 +53,7 @@ export default function GamePage() {
             {keyword}
           </h1>
           <Image
-            src={
-              'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png'
-            }
+            src={word}
             alt="word"
             width={800}
             height={500}
@@ -74,14 +61,14 @@ export default function GamePage() {
         </>
       ) : (
         <>
-          <div className="flex fixed top-0 right-16 sm:right-1">
+          <div className="flex sm:fixed sm:right-10 justify-center">
             <Timer setFinish={setFinish} time={time + 3.2} />
           </div>
-          <h1 className="text-[#44474B] text-[3rem] font-semibold mt-16">
-            제시어: {keyword}
+          <h1 className="text-[#44474B] text-[3rem] font-semibold sm:mt-16">
+            제시어 : {keyword}
           </h1>
-          <h2 className="text-[#44474B] mx-5 my-2">
-            제시어를 보고 떠오르는 단어를 마구마구 입력해주세요!
+          <h2 className="text-[#44474B] mx-5 my-2 font-semibold">
+            떠오르는 단어를 마구마구 입력해주세요!
           </h2>
           <WordList />
         </>
@@ -91,6 +78,18 @@ export default function GamePage() {
         <>
           <Blur />
           <AlertBox text={'1라운드 종료!'} />
+          <Link href={'/result'}>
+            <button className="bg-black absolute z-20 font-semibold rounded text-white px-10 py-2 bottom-48 left-[45%]">
+              결과 확인하기
+            </button>
+          </Link>
+        </>
+      )}
+
+      {finish && !isHost && (
+        <>
+          <Blur />
+          <AlertBox text={'1라운드 종료!\n 화면을 확인하세요'} />
         </>
       )}
     </div>

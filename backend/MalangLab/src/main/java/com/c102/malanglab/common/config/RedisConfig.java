@@ -11,6 +11,8 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.Objects;
+
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -20,11 +22,16 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
+    @Value("${spring.data.redis.password}")
+    private String redisPassword;
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setPort(redisPort);
         redisStandaloneConfiguration.setHostName(redisHost);
+        if(Objects.nonNull(redisPassword)) {
+            redisStandaloneConfiguration.setPassword(redisPassword);
+        }
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
