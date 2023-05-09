@@ -8,13 +8,12 @@ import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.BoundSetOperations;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -49,6 +48,7 @@ public class GameAdapter implements GamePort {
         String statusKey = "room:" + roomId + ":status";
         hashOperations.put(statusKey, "start", "0");
         hashOperations.put(statusKey, "turn", "0");
+        hashOperations.put(statusKey, "enter-num", "0");
 
         // 방 정보 MariaDB 저장
         Room newRoom = roomRepository.save(room);
@@ -87,8 +87,8 @@ public class GameAdapter implements GamePort {
                 key = "room:" + roomId + ":info";
                 String name = (String) hashOperations.get(key, "name");
                 String hostId = (String) hashOperations.get(key, "host-id");
-                GameMode mode = (GameMode) hashOperations.get(key, "mode");
-                int totalRound = (int) hashOperations.get(key, "total-round");
+                GameMode mode = GameMode.from((String) hashOperations.get(key, "mode"));
+                int totalRound = Integer.valueOf((String) hashOperations.get(key, "total-round"));
                 Room room = new Room(roomId, name, hostId, mode, totalRound, null, null);
                 return room;
             } else {
@@ -151,13 +151,25 @@ public class GameAdapter implements GamePort {
     /** 게임 참가자 정보 저장하기 */
     @Override
     public void addGuestList(Long roomId, String userId) {
+        // 1.sortedSet으로 참여자 순서를 기록합니다.
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        long current = hashOperations.increment("room:" + roomId + ":status", "enter-num", 1);
 
+        ZSetOperations<String, Object> zSet = redisTemplate.opsForZSet();
+
+        zSet.add("room:" + roomId + ":guests", userId, current);
     }
 
     /** 게임 참가자 정보 조회하기 */
     @Override
     public List<Guest> getGuestList(Long roomId) {
-        List<Guest> list = new ArrayList<>();
+        ZSetOperations<String, Object> zSet = redisTemplate.opsForZSet();
+        Set<ZSetOperations.TypedTuple<Object>> tuples = zSet.rangeWithScores("room:" + roomId + ":guests", 0, -1);
+
+        // 1. tuples로부터 참가자 이름을 순서대로 가져온다.
+        List<String> userIds = tuples.stream().map(t -> (String) t.getValue()).collect(Collectors.toList());
+        // 2. mysql로 유저 목록을 일괄 조회환다.
+        List<Guest> list = guestRepository.getUserList(userIds);
 
         return list;
     }
