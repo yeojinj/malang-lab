@@ -35,7 +35,7 @@ module.exports = {
         },
         bounce: {
           '0%, 100%': {
-            transform: 'translateY(-15%)',
+            transform: 'translateY(-20%)',
             'animation-timing-function': 'cubic-bezier(0.8,0,1,1)',
           },
           '50%': {
@@ -46,8 +46,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('tailwind-scrollbar'),
-    require('tailwind-scrollbar-hide'),
-  ],
+  plugins: [require('tailwind-scrollbar'), require('tailwind-scrollbar-hide')],
 };

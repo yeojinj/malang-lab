@@ -7,6 +7,7 @@ import AlertBox from '@/components/common/AlertBox';
 import Blur from '@/components/common/Blur';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 
 type Props = {
   params: {
@@ -15,7 +16,8 @@ type Props = {
 };
 
 export default function Page({ params }: Props) {
-  const isHost = false;
+  // const isHost = useSelector((state: RootState) => state.status.isHost);
+  const isHost = true;
   const award = true;
 
   return (
@@ -66,7 +68,7 @@ export default function Page({ params }: Props) {
             width={100}
             height={100}
             alt="btn"
-            className="w-16 h-20 absolute bottom-5 right-5 cursor-pointer"
+            className="w-16 h-20 absolute bottom-[50%] right-5 cursor-pointer"
           />
         </Link>
       )}

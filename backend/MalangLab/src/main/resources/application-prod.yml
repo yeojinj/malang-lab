@@ -11,7 +11,7 @@ spring:
       password: ENC(sOjFpjOAVA0PFrShaNFEcezLLYk7WGZC4ymnxfIJHw4=)
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -25,3 +25,9 @@ spring:
     redis:
       port: 6379
       host: ENC(APo4roRnbfRYNUo027T3DSUR0vu5x22288tInpytFt8=)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
