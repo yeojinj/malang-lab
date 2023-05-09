@@ -69,7 +69,7 @@ export default function JoinPage() {
 
   return (
     <div
-      className="w-[100vw] h-[100vh] bg-cover bg-center flex justify-center align-middle"
+      className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle"
       style={{ backgroundImage: "url('/imgs/bg-2.png')" }}
     >
       {step === 0 && (
@@ -108,8 +108,10 @@ export default function JoinPage() {
       )}
       {/* 캐릭터 생성하기 */}
       {step === 2 && (
-        <section className="w-[80%] flex flex-col justify-center align-middle gap-10">
-          <p className="text-center text-5xl font-bold">말랑이 생성하기</p>
+        <section className="w-[80%] flex flex-col justify-center align-middle gap-2 lg:gap-10">
+          <p className="text-center text-2xl lg:text-5xl font-bold">
+            말랑이 생성하기
+          </p>
           <div className="mx-auto">
             <CustomSection isCompleted={isCompleted} />
           </div>

@@ -54,7 +54,7 @@ export default function CustomSection({ isCompleted }) {
   const stageRef = useRef<any>(null);
 
   return (
-    <section className="flex gap-2 relative">
+    <section className="flex flex-col-reverse lg:grid grid-cols-2 gap-2 relative lg:m-5 ">
       <CustomItem onClick={handleClick} />
       <Stage
         width={300}
@@ -80,7 +80,7 @@ export default function CustomSection({ isCompleted }) {
         </Layer>
       </Stage>
       <button
-        className="absolute text-3xl top-[87%] right-0"
+        className="absolute text-3xl top-2 right-2 lg:top-[87%] lg:right-0"
         onClick={handleReset}
       >
         🗑️
