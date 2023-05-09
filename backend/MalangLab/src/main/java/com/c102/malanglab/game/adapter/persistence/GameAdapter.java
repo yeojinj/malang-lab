@@ -4,7 +4,7 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.GameMode;
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
-import java.io.File;
+import jakarta.transaction.Transactional;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -34,20 +34,21 @@ public class GameAdapter implements GamePort {
         String key = "room:" + roomId + ":info";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
-        hashOperations.put(key, "mode", room.getMode());
-        hashOperations.put(key, "total-round", room.getTotalRound());
+        hashOperations.put(key, "mode", String.valueOf(room.getMode()));
+        hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
         for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
-            hashOperations.put(roundKey, "time", room.getSettings().get(round).getTime());
+            hashOperations.put(roundKey, "time", String.valueOf(room.getSettings().get(round).getTime()));
         }
         String statusKey = "room:" + roomId + ":status";
         hashOperations.put(statusKey, "start", "0");
         hashOperations.put(statusKey, "turn", "0");
 
         // 방 정보 MariaDB 저장
-        return roomRepository.save(room);
+        Room newRoom = roomRepository.save(room);
+        return newRoom;
     }
 
     /** Room Id 랜덤 생성, 중복 체크 후 Redis 저장 */
@@ -111,13 +112,17 @@ public class GameAdapter implements GamePort {
 
     /** 캐릭터 이미지 설정하기 */
     @Override
-    public Guest setImage(Long roomId, String userId, File image) {
-        return null;
+    @Transactional
+    public Guest setImage(Long roomId, String userId, String imgPath) {
+        // MariaDB 저장
+        Guest guest = findById(userId);
+        guest.setImagePath(imgPath);
+        return guest;
     }
 
     /** 유저 퇴장 시 삭제 */
     @Override
-    public void removeUser(String userId) {
+    public void removeUser(Long roomId, String userId) {
 
     }
 
@@ -130,5 +135,10 @@ public class GameAdapter implements GamePort {
     @Override
     public Room findById(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
+    }
+
+    @Override
+    public Guest findById(String id) {
+        return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
 }

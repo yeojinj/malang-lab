@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
-@Table(name = "guests")
+@Table(name = "guest")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -31,5 +31,9 @@ public class Guest {
     public Guest(String id, String nickname) {
         this.id = id;
         this.nickname = nickname;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

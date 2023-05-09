@@ -3,7 +3,7 @@ import { Image as KonvaImage, Transformer } from 'react-konva';
 import useImage from 'use-image';
 
 export default function CustomItem({ imagePath, isSelected, onSelect }) {
-  const [image] = useImage(imagePath);
+  const [image] = useImage(imagePath, 'anonymous');
   const imageRef = useRef(null);
   const transformerRef = useRef(null);
 

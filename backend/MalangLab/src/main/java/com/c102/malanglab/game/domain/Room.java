@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "rooms")
+@Table(name = "room")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
