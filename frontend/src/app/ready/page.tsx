@@ -8,8 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 export default function ReadyPage() {
-  // const isHost = useSelector((state: RootState) => state.status.isHost);
-  const isHost = true;
+  const isHost = useSelector((state: RootState) => state.status.isHost);
 
   return (
     <>

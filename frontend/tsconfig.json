@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/result/HiddenCarousel.jsx"
-, "webpack.config.js"  ],
+, "webpack.config.js", "src/components/game/EffectSound.js"  ],
   "exclude": ["node_modules"]
 }

@@ -3,6 +3,8 @@ package com.c102.malanglab.game.application.port.out;
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 
+import java.util.List;
+
 public interface GamePort {
 
     /** 방 만들기 */
@@ -10,7 +12,6 @@ public interface GamePort {
 
     /** 게임 참가하기 */
     Room join(Long roomId);
-
     /** 닉네임 설정하기 */
     boolean setNickname(Long roomId, String userId, String nickname);
 
@@ -19,6 +20,12 @@ public interface GamePort {
 
     /** 유저 퇴장 시 삭제 */
     void removeUser(Long roomId, String userId);
+
+    /** 게임 참가자 정보 저장하기 */
+    void addGuestList(Long roomId, String userId);
+
+    /** 게임 참가자 정보 조회하기 */
+    List<Guest> getGuestList(Long roomId);
 
     /** 게임 시작 시 현재 라운드 정보 조회 */
     // Round checkRound(Long roomId);

@@ -1,11 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { useRef } from 'react';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 
-export default function GuestAward() {
+export default function GuestAward({ text }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleClickDownload = () => {
@@ -29,7 +28,7 @@ export default function GuestAward() {
           className="h-[400px] w-[300px] mx-auto my-5"
         />
         <div className="text-center font-bold text-2xl">
-          <span className="text-[#006DFF]">많랑이</span> 획득!
+          <span className="text-[#006DFF]">{text}</span> 획득!
         </div>
         <img
           src={'/imgs/barcode.png'}
