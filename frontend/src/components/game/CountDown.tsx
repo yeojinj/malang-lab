@@ -10,7 +10,7 @@ export default function CountDown() {
           <div className="demo__colored-block"></div>
         </div>
         <div className="demo__colored-blocks-inner"></div>
-        <div className="demo__text">Ready</div>
+        <div className="demo__text text-[70px] sm:text-[100px]">Ready</div>
       </div>
       <div className="demo__inner">
         <svg className="demo__numbers" viewBox="0 0 100 100">

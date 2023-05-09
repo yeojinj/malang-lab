@@ -45,7 +45,7 @@ export default function GuestsList({ host }: Props) {
 
   return (
     <div
-      className={`w-screen h-[70vh] ${
+      className={`w-screen h-[68vh] ${
         host ? 'sm:h-[32vh]' : 'sm:h-[67vh]'
       } my-5 overflow-y-auto scrollbar-hide`}
       ref={scrollRef}
