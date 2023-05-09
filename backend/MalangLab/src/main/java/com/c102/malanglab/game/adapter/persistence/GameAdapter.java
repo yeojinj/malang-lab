@@ -5,6 +5,9 @@ import com.c102.malanglab.game.domain.GameMode;
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 import jakarta.transaction.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -89,12 +92,13 @@ public class GameAdapter implements GamePort {
                 Room room = new Room(roomId, name, hostId, mode, totalRound, null, null);
                 return room;
             } else {
-                return null;
+                throw new IllegalStateException("이미 시작한 방입니다.");
             }
         } else {
-            return null;
+            throw new IllegalStateException("존재하지 않는 방입니다.");
         }
     }
+
 
     /** 닉네임 설정하기 */
     @Override
@@ -142,6 +146,20 @@ public class GameAdapter implements GamePort {
         // 2. MariaDB 삭제
         //  2-1. guest 테이블에서 유저 삭제
         guestRepository.deleteById(userId);
+    }
+
+    /** 게임 참가자 정보 저장하기 */
+    @Override
+    public void addGuestList(Long roomId, String userId) {
+
+    }
+
+    /** 게임 참가자 정보 조회하기 */
+    @Override
+    public List<Guest> getGuestList(Long roomId) {
+        List<Guest> list = new ArrayList<>();
+
+        return list;
     }
 
     /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
