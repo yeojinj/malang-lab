@@ -18,7 +18,7 @@ export default function GamePage() {
   const [finish, setFinish] = useState(false);
   // const isHost = useSelector((state: RootState) => state.status.isHost);
   const isHost = false;
-  const time = 60;
+  const time = 5;
   const keyword = '말랑이';
 
   useEffect(() => {

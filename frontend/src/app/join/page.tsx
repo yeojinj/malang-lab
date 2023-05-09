@@ -1,13 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import Router, { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { setNicknameAction, setPinAction } from '@/store/guestSlice';
+import { useRouter } from 'next/navigation';
+// redux
 import { RootState } from '@/store/store';
-
+import { setNicknameAction, setPinAction } from '@/store/guestSlice';
+// Components
 import CustomProfile from '@/components/profile/CustomProfile';
+// apis
 import { checkPinApi } from '@/apis/apis';
+import PinForm from '@/components/join/PinForm';
+import NicknameForm from '@/components/join/NicknameForm';
 
 export default function JoinPage() {
   const dispatch = useDispatch();
@@ -18,21 +22,17 @@ export default function JoinPage() {
   const [nickname, setNickname] = useState('');
   const [imageUrl, setImageUrl] = useState('');
 
-  const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPin(e.target.value);
-  };
-
   const handleClickPin = async () => {
     if (pin === '') {
       alert('PIN 번호를 입력해주세요!');
       return;
     }
+    //404599
 
     // 유효한 세션인지 확인 한후
     const isValid = await checkPinApi(Number(pin));
     if (isValid) {
       // 소켓 연결!!!
-
 
       // 리덕스에 저장
       dispatch(setPinAction(pin));
@@ -44,20 +44,14 @@ export default function JoinPage() {
   };
 
   // step2 - 닉네임 입력하기
-  const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  };
+
 
   const handleClickNickname = () => {
     // 사용가능한 닉네임인지 확인하기
-    let isValid = true;
-
-    if (isValid) {
-      // 닉네임 저장하기
-      dispatch(setNicknameAction(nickname));
-      // 다음 단계로 넘어가기
-      setStep(step => step + 1);
-    }
+    // 닉네임 저장하기
+    dispatch(setNicknameAction(nickname));
+    // 다음 단계로 넘어가기
+    setStep(step => step + 1);
   };
 
   // step 3 - 캐릭터 생성하기
@@ -72,38 +66,11 @@ export default function JoinPage() {
       style={{ backgroundImage: "url('/imgs/bg-2.png')" }}
     >
       {step === 0 && (
-        <section className="w-[70%] sm:w-[50%] md:w-[40%] lg:w-[30%] flex flex-col justify-center align-middle gap-5">
-          <p className="text-center text-5xl font-bold mb-5">참여하기</p>
-          <input
-            type="number"
-            placeholder="PIN 번호"
-            onChange={handleChangePin}
-            className="block w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
-          />
-          <button className="button-black w-[60%]" onClick={handleClickPin}>
-            참여하기
-          </button>
-        </section>
+        <PinForm handleClickPin={handleClickPin} setPin={setPin} />
       )}
       {/* 닉네임 설정하기 */}
       {step === 1 && (
-        <section className="w-[70%] sm:w-[50%] md:w-[40%] lg:w-[30%] flex flex-col justify-center align-middle gap-5">
-          <p className="text-center text-4xl lg:text-5xl font-bold mb-5">
-            닉네임 설정하기
-          </p>
-          <input
-            type="text"
-            placeholder="닉네임 입력"
-            onChange={handleChangeNickname}
-            className="block w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
-          />
-          <button
-            className="button-black w-[60%]"
-            onClick={handleClickNickname}
-          >
-            완료
-          </button>
-        </section>
+        <NicknameForm handleClickNickname={handleClickNickname} setNickname={setNickname} />
       )}
       {/* 캐릭터 생성하기 */}
       {step === 2 && (
