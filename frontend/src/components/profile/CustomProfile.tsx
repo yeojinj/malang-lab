@@ -23,6 +23,7 @@ export default function CustomProfile() {
     'sunglasses',
     'circleglasses',
     'flower',
+    'hair',
   ];
 
   // 아이템 추가
