@@ -30,7 +30,7 @@ export default function Timer({ setFinish, time }: Props) {
   const second = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
 
   return (
-    <div className="text-[3rem] sm:text-[4rem] lg:text-[5rem] font-bold text-white mr-10">
+    <div className="text-[3rem] sm:text-[4rem] lg:text-[5rem] font-bold text-white">
       {minutes} : {second}
     </div>
   );
