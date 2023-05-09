@@ -18,6 +18,7 @@ import gameInfoSlice, {
   setTitleAction,
 } from '../../store/gameInfoSlice';
 import { setPinAction } from '@/store/guestSlice';
+import { updateStatus } from '@/store/statusSlice';
 // apis
 import { makeRoomApi } from '@/apis/apis';
 import Loading from '@/components/common/Loading';
@@ -142,8 +143,10 @@ export default function CreatePage() {
         dispatch(setPinAction(res.data.id))
         // 대기방으로 입장
         // router.push('/ready')
+        // host 상태 업데이트
+        dispatch(updateStatus())
       }
-    }else {
+    } else {
       alert('라운드 정보를 빠짐 없이 입력해주세요!')
       return
     }
