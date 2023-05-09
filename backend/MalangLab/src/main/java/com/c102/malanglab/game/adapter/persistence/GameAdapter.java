@@ -99,13 +99,6 @@ public class GameAdapter implements GamePort {
         }
     }
 
-    /** 참가자 목록 조회 */
-    @Override
-    public List<Guest> getGuestList(Long roomId) {
-        List<Guest> list = new ArrayList<>();
-
-        return list;
-    }
 
     /** 닉네임 설정하기 */
     @Override
@@ -153,6 +146,20 @@ public class GameAdapter implements GamePort {
         // 2. MariaDB 삭제
         //  2-1. guest 테이블에서 유저 삭제
         guestRepository.deleteById(userId);
+    }
+
+    /** 게임 참가자 정보 저장하기 */
+    @Override
+    public void addGuestList(Long roomId, String userId) {
+
+    }
+
+    /** 게임 참가자 정보 조회하기 */
+    @Override
+    public List<Guest> getGuestList(Long roomId) {
+        List<Guest> list = new ArrayList<>();
+
+        return list;
     }
 
     /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
