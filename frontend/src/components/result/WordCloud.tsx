@@ -6,129 +6,79 @@ import 'tippy.js/animations/scale.css';
 const mockItems = [
   {
     text: '말랑',
-    value: 200,
+    value: 1,
   },
   {
-    text: '몰랑',
-    value: 100,
+    text: '말랑',
+    value: 2,
   },
   {
-    text: '맬랑',
-    value: 100,
+    text: '말랑',
+    value: 3,
   },
   {
-    text: '취뽀',
-    value: 100,
+    text: '말랑',
+    value: 4,
   },
   {
-    text: '취뽀',
-    value: 100,
+    text: '말랑',
+    value: 1,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 2,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 3,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 4,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 1,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 2,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 3,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 4,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 1,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 2,
   },
   {
-    text: 'told',
-    value: 64,
+    text: '말랑',
+    value: 3,
   },
   {
-    text: 'told',
-    value: 64,
-  },
-  {
-    text: 'told',
-    value: 64,
-  },
-  {
-    text: 'told',
-    value: 64,
-  },
-  {
-    text: 'told',
-    value: 64,
-  },
-  {
-    text: 'told',
-    value: 64,
-  },
-  {
-    text: 'told',
-    value: 64,
-  },
-  {
-    text: 'mistake',
-    value: 11,
-  },
-  {
-    text: 'thought',
-    value: 16,
-  },
-  {
-    text: 'bad',
-    value: 17,
-  },
-  {
-    text: 'bad',
-    value: 17,
-  },
-  {
-    text: 'bad',
-    value: 17,
-  },
-  {
-    text: 'bad',
-    value: 17,
-  },
-  {
-    text: 'bad',
-    value: 17,
-  },
-  {
-    text: 'bad',
-    value: 17,
-  },
-  {
-    text: 'bad',
-    value: 17,
+    text: '말랑',
+    value: 4,
   },
 ];
 export default function WordCloud() {
   return (
-    <div className="">
-      <ReactWordcloud words={mockItems} size={[400, 400]} />
+    <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10">
+      <ReactWordcloud
+        words={mockItems}
+        size={[500, 500]}
+        options={{
+          fontSizes: [20, 80],
+        }}
+      />
     </div>
   );
 }

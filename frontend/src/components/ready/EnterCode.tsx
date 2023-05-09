@@ -20,7 +20,7 @@ export default function PinCode({ code }: Props) {
         <div className="flex">
           <Image
             className="mx-5 my-3"
-            src={'/imgs/character.png'}
+            src={'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png'}
             alt="character"
             width={120}
             height={120}
