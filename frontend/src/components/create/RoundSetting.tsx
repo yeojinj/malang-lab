@@ -1,17 +1,13 @@
 import React from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { changeHiddenAction, changeTimeAction, Setting } from '@/store/gameInfoSlice';
-import malangs from '../../../public/imgs/mini-together.png';
-import Image from 'next/image';
-import { useDispatch } from 'react-redux';
-import { changekeywordAction } from '@/store/gameInfoSlice';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { changeHiddenAction, changeTimeAction, Setting, changekeywordAction } from '@/store/gameInfoSlice';
 
 type Props = {
+    idx: number;
     setting: Setting;
     handleClickDelete: (idx: number) => void;
-    idx: number;
 }
 
 export default function RoundSetting({ setting, handleClickDelete, idx }: Props) {
@@ -39,7 +35,7 @@ export default function RoundSetting({ setting, handleClickDelete, idx }: Props)
             <div className='text-black font-bold text-xl text-center mb-2'>Round {idx + 1}</div>
             <div className='relative w-[80%] mx-auto'>
                 <div className='absolute -top-5 right-1'>
-                    <Image src={malangs} alt="" className='w-[50px]' />
+                    <img src='https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/mini-together.png' alt="" className='w-[50px]' />
                 </div>
                 <input onChange={(e) => handleChangeKeyword(e, idx)} placeholder='제시어 입력' value={settings[idx].keyword} className='w-[100%] rounded-md h-12 m-auto pl-5 placeholder:text-lightgray border-lightgray border-2' />
             </div>

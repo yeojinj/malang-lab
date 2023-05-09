@@ -23,7 +23,7 @@ authApi.interceptors.request.use(
   },
 );
 
-// apis
+// 토큰 생성하기
 const getTokenApi = () => {
   return axios
     .post('/token')
@@ -38,6 +38,7 @@ const getTokenApi = () => {
     });
 };
 
+// 방 생성하기
 const makeRoomApi = async (payload: GameInfo) => {
   console.log(payload, 'makeRoomPayload');
   try {
@@ -51,4 +52,19 @@ const makeRoomApi = async (payload: GameInfo) => {
   }
 };
 
-export { getTokenApi, makeRoomApi };
+// PIN 번호 확인하기
+const checkPinApi = async (payload: number) => {
+  console.log(payload, 'checkPinPayload')
+  try {
+    const res = await authApi.get(`/game/${payload}`)
+    console.log('PIN 번호 확인 완료', res)
+    return res
+  } catch (err) {
+    console.log('PIN 번호 확인 실패', err)
+    return false
+  }
+}
+
+// 닉네임 및 캐릭터 확인하기
+
+export { getTokenApi, makeRoomApi, checkPinApi };
