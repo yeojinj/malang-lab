@@ -42,8 +42,7 @@ const getTokenApi = () => {
 const makeRoomApi = async (payload: GameInfo) => {
   console.log(payload, 'makeRoomPayload');
   try {
-    const res = await authApi
-      .post('/game', payload);
+    const res = await authApi.post('/game', payload);
     console.log('방 만들기 성공', res);
     return res.data;
   } catch (err) {
@@ -54,16 +53,16 @@ const makeRoomApi = async (payload: GameInfo) => {
 
 // PIN 번호 확인하기
 const checkPinApi = async (payload: number) => {
-  console.log(payload, 'checkPinPayload')
+  console.log(payload, 'checkPinPayload');
   try {
-    const res = await authApi.get(`/game/${payload}`)
-    console.log('PIN 번호 확인 완료', res)
-    return res
+    const res = await authApi.get(`/game/${payload}`);
+    console.log('PIN 번호 확인 완료', res);
+    return res;
   } catch (err) {
-    console.log('PIN 번호 확인 실패', err)
-    return false
+    console.log('PIN 번호 확인 실패', err);
+    return false;
   }
-}
+};
 
 // 닉네임 및 캐릭터 확인하기
 

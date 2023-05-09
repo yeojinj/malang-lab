@@ -25,10 +25,11 @@ spring:
     redis:
       port: 6379
       host: localhost
+      password:
 cloud:
   aws:
     s3:
-      bucket: stackers.bucket
+      bucket: static.malang-lab.com
     region:
       static: ap-northeast-2
       auto: false
