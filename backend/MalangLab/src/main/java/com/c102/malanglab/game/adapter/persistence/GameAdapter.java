@@ -34,20 +34,21 @@ public class GameAdapter implements GamePort {
         String key = "room:" + roomId + ":info";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
-        hashOperations.put(key, "mode", room.getMode());
-        hashOperations.put(key, "total-round", room.getTotalRound());
+        hashOperations.put(key, "mode", room.getMode().toString());
+        hashOperations.put(key, "total-round", room.getTotalRound().toString());
         for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
-            hashOperations.put(roundKey, "time", room.getSettings().get(round).getTime());
+            hashOperations.put(roundKey, "time", room.getSettings().get(round).getTime().toString());
         }
         String statusKey = "room:" + roomId + ":status";
         hashOperations.put(statusKey, "start", "0");
         hashOperations.put(statusKey, "turn", "0");
 
         // 방 정보 MariaDB 저장
-        return roomRepository.save(room);
+        Room newRoom = roomRepository.save(room);
+        return newRoom;
     }
 
     /** Room Id 랜덤 생성, 중복 체크 후 Redis 저장 */
