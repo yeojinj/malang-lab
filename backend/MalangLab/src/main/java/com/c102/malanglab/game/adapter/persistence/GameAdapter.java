@@ -34,20 +34,21 @@ public class GameAdapter implements GamePort {
         String key = "room:" + roomId + ":info";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
-        hashOperations.put(key, "mode", room.getMode());
-        hashOperations.put(key, "total-round", room.getTotalRound());
+        hashOperations.put(key, "mode", String.valueOf(room.getMode()));
+        hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
         for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
-            hashOperations.put(roundKey, "time", room.getSettings().get(round).getTime());
+            hashOperations.put(roundKey, "time", String.valueOf(room.getSettings().get(round).getTime()));
         }
         String statusKey = "room:" + roomId + ":status";
         hashOperations.put(statusKey, "start", "0");
         hashOperations.put(statusKey, "turn", "0");
 
         // 방 정보 MariaDB 저장
-        return roomRepository.save(room);
+        Room newRoom = roomRepository.save(room);
+        return newRoom;
     }
 
     /** Room Id 랜덤 생성, 중복 체크 후 Redis 저장 */
@@ -121,7 +122,7 @@ public class GameAdapter implements GamePort {
 
     /** 유저 퇴장 시 삭제 */
     @Override
-    public void removeUser(String userId) {
+    public void removeUser(Long roomId, String userId) {
 
     }
 
