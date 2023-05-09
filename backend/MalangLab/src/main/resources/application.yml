@@ -25,3 +25,15 @@ spring:
     redis:
       port: 6379
       host: localhost
+cloud:
+  aws:
+    s3:
+      bucket: stackers.bucket
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ENC(unXu+pIUrzXUv7abvtqr803jUsWrrzJ+jyZzcU5iKQs=)
+      secret-key: ENC(ASwAeKvdZ6IffS3T3vRYpjI06gS2/63FnWpXENeU6ucpjcp7/Ftki7LabKNR5+ddHLBaGYw11sA=)

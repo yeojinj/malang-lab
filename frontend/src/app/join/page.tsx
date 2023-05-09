@@ -1,57 +1,45 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import { fabric } from 'fabric';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNicknameAction, setPinAction } from '@/store/guestSlice';
 import { RootState } from '@/store/store';
 
 import CustomProfile from '@/components/profile/CustomProfile';
+import { checkPinApi } from '@/apis/apis';
 
 export default function JoinPage() {
   const dispatch = useDispatch();
   const guest = useSelector((state: RootState) => state.guest);
-  console.log(guest);
   // const router = useRouter();
   const [pin, setPin] = useState('');
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
-
-  // fabric
-  const [canvas, setCanvas] = useState('');
-
-  // const test = new fabric.Canvas('malang')
-
-  // const initCanvas = () => {
-  //   return new fabric.Canvas('malang', {
-  //     height : 600,
-  //     width : 600,
-  //    })
-  // }
-
-  // useEffect(() => {
-  //   setCanvas(initCanvas());
-  // }, [])
+  const [imageUrl, setImageUrl] = useState('');
 
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
   };
 
-  const handleClickPin = () => {
+  const handleClickPin = async () => {
     if (pin === '') {
       alert('PIN 번호를 입력해주세요!');
       return;
     }
 
-    let isValid = true;
     // 유효한 세션인지 확인 한후
+    const isValid = await checkPinApi(Number(pin));
     if (isValid) {
       // 소켓 연결!!!
+
+
       // 리덕스에 저장
       dispatch(setPinAction(pin));
       // 다음 페이지로 이동
       setStep(step => step + 1);
+    } else {
+      alert('유효한 PIN 번호가 아닙니다!')
     }
   };
 

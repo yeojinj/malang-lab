@@ -16,9 +16,11 @@ export const guestSlice = createSlice({
   name: 'guest',
   initialState,
   reducers: {
+    // pin setting
     setPinAction(state, action) {
       state.pin = action.payload;
     },
+    // nickname setting
     setNicknameAction(state, action) {
       state.nickname = action.payload;
     },

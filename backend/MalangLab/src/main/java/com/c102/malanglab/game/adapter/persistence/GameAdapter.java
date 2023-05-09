@@ -1,18 +1,24 @@
 package com.c102.malanglab.game.adapter.persistence;
 
 import com.c102.malanglab.game.application.port.out.GamePort;
+import com.c102.malanglab.game.domain.GameMode;
+import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
+import jakarta.transaction.Transactional;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class GameAdapter implements GamePort {
     private final RoomRepository roomRepository;
+
+    private final GuestRepository guestRepository;
 
     private final RedisTemplate redisTemplate;
 
@@ -22,14 +28,15 @@ public class GameAdapter implements GamePort {
         // PIN 번호 발급
         Long roomId = getRandomRoomId();
         // Room Entity 생성
-        Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings(), roomInfo.getGuests());
+        Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings().size(), roomInfo.getSettings(), roomInfo.getGuests());
 
         // 방 정보 Redis 저장
         String key = "room:" + roomId + ":info";
-        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
         hashOperations.put(key, "mode", String.valueOf(room.getMode()));
-        for (int round = 0; round < room.getSettings().size(); round++) {
+        hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
+        for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
@@ -40,7 +47,8 @@ public class GameAdapter implements GamePort {
         hashOperations.put(statusKey, "turn", "0");
 
         // 방 정보 MariaDB 저장
-        return roomRepository.save(room);
+        Room newRoom = roomRepository.save(room);
+        return newRoom;
     }
 
     /** Room Id 랜덤 생성, 중복 체크 후 Redis 저장 */
@@ -60,8 +68,77 @@ public class GameAdapter implements GamePort {
         return id;
     }
 
+    /** 게임 참가하기 */
+    @Override
+    public Room join(Long roomId) {
+        // 1. PIN 유효한지 체크
+        String key = "room:id";
+        BoundSetOperations<String, Object> boundSetOperations = redisTemplate.boundSetOps(key);
+        if (boundSetOperations.isMember(roomId)) {
+            key = "room:" + roomId + ":status";
+            HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+            // 2. 입장 가능한 방인지(게임 시작하지 않았는지) 체크
+            if (hashOperations.get(key, "start") == "0") {
+                // 3. 해당 방 정보 조회
+                key = "room:" + roomId + ":info";
+                String name = (String) hashOperations.get(key, "name");
+                String hostId = (String) hashOperations.get(key, "host-id");
+                GameMode mode = (GameMode) hashOperations.get(key, "mode");
+                int totalRound = (int) hashOperations.get(key, "total-round");
+                Room room = new Room(roomId, name, hostId, mode, totalRound, null, null);
+                return room;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /** 닉네임 설정하기 */
+    @Override
+    public boolean setNickname(Long roomId, String userId, String nickname) {
+        // 1. Redis 중복 검사 및 저장
+        String key = "room:" + roomId + ":nickname";
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+        if (setOperations.add(key, nickname) == 1) {
+            // 2. MariaDB 저장
+            guestRepository.save(new Guest(userId, nickname));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /** 캐릭터 이미지 설정하기 */
+    @Override
+    @Transactional
+    public Guest setImage(Long roomId, String userId, String imgPath) {
+        // MariaDB 저장
+        Guest guest = findById(userId);
+        guest.setImagePath(imgPath);
+        return guest;
+    }
+
+    /** 유저 퇴장 시 삭제 */
+    @Override
+    public void removeUser(Long roomId, String userId) {
+
+    }
+
+    /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
+    @Override
+    public int inputWord(Long roomId, String userId, String word) {
+        return 0;
+    }
+
     @Override
     public Room findById(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
+    }
+
+    @Override
+    public Guest findById(String id) {
+        return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
 }
