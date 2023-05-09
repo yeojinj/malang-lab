@@ -2,7 +2,7 @@
 
 import Confetti from '@/components/award/Confetti';
 import GuestAward from '@/components/award/GuestAward';
-import Ribbon from '@/components/award/Ribbon';
+import HostAward from '@/components/award/HostAward';
 import AlertBox from '@/components/common/AlertBox';
 import Blur from '@/components/common/Blur';
 import Image from 'next/image';
@@ -15,13 +15,41 @@ type Props = {
   };
 };
 
+const awardData = [
+  {
+    hostText: "단어를 가장 많이 입력한 말랑이!",
+    imgPath: "cat",
+    guestText: "많랑이",
+  },
+  {
+    hostText: "히든 단어를 가장 빨리 찾은 말랑이!",
+    imgPath: "cat",
+    guestText: "빨랑이",
+  },
+  {
+    hostText: "맨 마지막까지 최선을 다한 말랑이!",
+    imgPath: "cat",
+    guestText: "승부살랑이",
+  },
+  {
+    hostText: "입력을 가장 적게한 말랑이!",
+    imgPath: "cat",
+    guestText: "아메발랑이",
+  },
+  {
+    hostText: "가장 많이 나온 단어를 먼저 쓴 말랑이!",
+    imgPath: "cat",
+    guestText: "텔레랑이",
+  }
+]
+
 export default function Page({ params }: Props) {
   // const isHost = useSelector((state: RootState) => state.status.isHost);
   const isHost = true;
   const award = true;
 
   return (
-    <div>
+    <div className='whitespace-pre-wrap'>
       <div
         className={`w-[100vw] h-[100vh] bg-bg-2 bg-cover bg-center flex justify-center align-middle items-center relative ${
           isHost ? '-z-10' : ''
@@ -30,32 +58,20 @@ export default function Page({ params }: Props) {
         {!isHost && !award && (
           <>
             <Blur />
-            <AlertBox text={'수상자 발표! 화면을 확인하세요'} />
+            <AlertBox text={'수상자 발표!\n 화면을 확인하세요'} />
           </>
         )}
         {isHost ? (
           <>
             <Confetti />
-            <div>
-              <p className="text-black font-bold text-[2rem]">
-                히든 단어를 가장 먼저 맞춘 말랑이!
-              </p>
-              <Image
-                src={'/imgs/cat.png'}
-                width={500}
-                height={500}
-                alt="award"
-                className="h-[400px] w-[300px] relative left-24 mt-10 mb-32"
-              />
-              <Ribbon />
-            </div>
+            <HostAward text={'히든 단어를 가장 먼저 맞춘 말랑이!'} imgPath={'cat'} />
           </>
         ) : (
           <>
             {award && (
               <>
                 <Confetti />
-                <GuestAward />
+                <GuestAward text={'많랑이'}/>
               </>
             )}
           </>
