@@ -25,6 +25,7 @@ spring:
     redis:
       port: 6379
       host: localhost
+      password:
 cloud:
   aws:
     s3:
