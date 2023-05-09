@@ -3,26 +3,35 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
-import useImage from 'use-image';
 import CustomItem from './CustomItem';
 
 export default function CustomProfile() {
   // 아이템 데이터
   const leftdata = [
-    'tulip',
-    'blue-malang',
-    'yellow-malang',
-    'character',
-    'mini-together',
-    'together-malang',
+    'malang1',
+    'malang2',
+    'malang3',
+    'malang4',
+    'malang5',
+    'malang6',
+    'malang7',
+    'malang8',
+    'malang9',
+    'malang10',
   ];
   const rightdata = [
-    'sunglasses',
-    'circleglasses',
-    'flower',
-    'sunglasses',
-    'circleglasses',
-    'flower',
+    'item1',
+    'item2',
+    'item3',
+    'item4',
+    'item5',
+    'item6',
+    'item7',
+    'item8',
+    'item9',
+    'item10',
+    'item11',
+    'item13',
   ];
 
   // 아이템 추가
@@ -57,9 +66,9 @@ export default function CustomProfile() {
   };
 
   const handleSaveImg = () => {
-    console.log(isSelected, 'checkech');
     if (stageRef.current) {
       const dataURL = stageRef.current.toDataURL({ pixelRatio: 3 });
+      console.log(dataURL, 'dataurl');
       const link = document.createElement('a');
       link.download = 'stage.png';
       link.href = dataURL;
@@ -80,7 +89,7 @@ export default function CustomProfile() {
             >
               <button onClick={e => handleClick(img)}>
                 <Image
-                  src={`/imgs/${img}.png`}
+                  src={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/profile/${img}.png`}
                   alt={img}
                   width={75}
                   height={75}
@@ -104,7 +113,7 @@ export default function CustomProfile() {
             return (
               <CustomItem
                 key={idx}
-                imagePath={`/imgs/${img}.png`}
+                imagePath={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/profile/${img}.png`}
                 isSelected={idx == isSelected}
                 onSelect={() => {
                   setIsSelected(idx);
@@ -124,7 +133,7 @@ export default function CustomProfile() {
             >
               <button onClick={e => handleClick(img)}>
                 <Image
-                  src={`/imgs/${img}.png`}
+                  src={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/profile/${img}.png`}
                   alt={img}
                   width={75}
                   height={75}

@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Getter
 @Entity
 @ToString
-@Table(name = "settings")
+@Table(name = "setting")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Setting {
