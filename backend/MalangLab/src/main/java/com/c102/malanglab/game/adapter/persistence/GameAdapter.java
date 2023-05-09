@@ -78,11 +78,13 @@ public class GameAdapter implements GamePort {
         // 1. PIN 유효한지 체크
         String key = "room:id";
         BoundSetOperations<String, Object> boundSetOperations = redisTemplate.boundSetOps(key);
-        if (boundSetOperations.isMember(roomId)) {
+        Boolean isIdValid = boundSetOperations.isMember(roomId);
+        if (isIdValid) {
             key = "room:" + roomId + ":status";
             HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
             // 2. 입장 가능한 방인지(게임 시작하지 않았는지) 체크
-            if ("0".equals(hashOperations.get(key, "start"))) {
+            String isStart = String.valueOf(hashOperations.get(key, "start"));
+            if ("0".equals(isStart)) {
                 // 3. 해당 방 정보 조회
                 key = "room:" + roomId + ":info";
                 String name = (String) hashOperations.get(key, "name");
@@ -106,7 +108,8 @@ public class GameAdapter implements GamePort {
         // 1. Redis 중복 검사 및 저장
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-        if (setOperations.add(key, nickname) == 1) {
+        Boolean isExist = setOperations.add(key, nickname) == 1;
+        if (isExist) {
             // 2. MariaDB 저장
             guestRepository.save(new Guest(userId, nickname));
             return true;
@@ -138,7 +141,8 @@ public class GameAdapter implements GamePort {
         //  1-3. 유저가 대기실에 있는지 게임 중인지 검증 -> 게임 중이었을 경우 시상에서 제외
         key = "room:" + roomId + ":status";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
-        if ("1".equals(hashOperations.get(key, "start"))) {
+        String isStart = String.valueOf(hashOperations.get(key, "start"));
+        if ("1".equals(isStart)) {
             key = "room:" + roomId + ":exit";
             ListOperations<String, String> listOperations = redisTemplate.opsForList();
             listOperations.rightPush(key, userId);
