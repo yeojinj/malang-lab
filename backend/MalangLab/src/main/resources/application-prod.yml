@@ -26,7 +26,18 @@ spring:
       port: 6379
       host: ENC(APo4roRnbfRYNUo027T3DSUR0vu5x22288tInpytFt8=)
       password: ENC(ofuv+U0GHQFknWY/ELPzXXP3FYh8H/FR24jmE4qphYA=)
-
+cloud:
+  aws:
+    s3:
+      bucket: static.malang-lab.com
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ENC(unXu+pIUrzXUv7abvtqr803jUsWrrzJ+jyZzcU5iKQs=)
+      secret-key: ENC(ASwAeKvdZ6IffS3T3vRYpjI06gS2/63FnWpXENeU6ucpjcp7/Ftki7LabKNR5+ddHLBaGYw11sA=)
 management:
   endpoints:
     web:

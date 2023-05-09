@@ -9,6 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Component;
@@ -78,7 +79,7 @@ public class GameAdapter implements GamePort {
             key = "room:" + roomId + ":status";
             HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
             // 2. 입장 가능한 방인지(게임 시작하지 않았는지) 체크
-            if (hashOperations.get(key, "start") == "0") {
+            if ("0".equals(hashOperations.get(key, "start"))) {
                 // 3. 해당 방 정보 조회
                 key = "room:" + roomId + ":info";
                 String name = (String) hashOperations.get(key, "name");
@@ -123,7 +124,24 @@ public class GameAdapter implements GamePort {
     /** 유저 퇴장 시 삭제 */
     @Override
     public void removeUser(Long roomId, String userId) {
+        // 1. Redis 삭제
+        //  1-1. Set에서 삭제
+        String key = "room:" + roomId + ":nickname";
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+        setOperations.remove(key, userId);
+        //  1-2. TODO: Sorted Set에서 삭제
 
+        //  1-3. 유저가 대기실에 있는지 게임 중인지 검증 -> 게임 중이었을 경우 시상에서 제외
+        key = "room:" + roomId + ":status";
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        if ("1".equals(hashOperations.get(key, "start"))) {
+            key = "room:" + roomId + ":exit";
+            ListOperations<String, String> listOperations = redisTemplate.opsForList();
+            listOperations.rightPush(key, userId);
+        }
+        // 2. MariaDB 삭제
+        //  2-1. guest 테이블에서 유저 삭제
+        guestRepository.deleteById(userId);
     }
 
     /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
