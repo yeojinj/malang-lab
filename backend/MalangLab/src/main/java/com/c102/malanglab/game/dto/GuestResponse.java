@@ -14,7 +14,7 @@ public class GuestResponse {
     private String id;
     private String nickname;
     private String imagePath;
-    private String roomId;
+    private Long roomId;
 
     public static GuestResponse of(String id) {
         return new GuestResponse(id, null, null, null);

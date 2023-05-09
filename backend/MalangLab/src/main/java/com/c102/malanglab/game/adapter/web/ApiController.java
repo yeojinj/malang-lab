@@ -51,13 +51,7 @@ public class ApiController {
      */
     @PostMapping("/{roomId}")
     public ResponseEntity<GuestRequest> enter(@PathVariable Long roomId, @RequestBody GuestRequest guestRequest) {
-        // (1) roomId
-
-        // (2) nickname
-
-        // (3) file s3
-
-        return null;
+        return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.register(roomId, guestRequest)).convertToResponseEntity();
     }
 
     @PostMapping("/{roomId}/start")

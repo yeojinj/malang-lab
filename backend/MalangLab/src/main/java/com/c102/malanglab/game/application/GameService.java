@@ -4,12 +4,10 @@ import com.c102.malanglab.game.application.port.out.GameBroadCastPort;
 import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
+import com.c102.malanglab.game.application.port.out.S3Port;
 import com.c102.malanglab.game.domain.Room;
 
-import com.c102.malanglab.game.dto.Message;
-import com.c102.malanglab.game.dto.GuestRequest;
-import com.c102.malanglab.game.dto.RoomRequest;
-import com.c102.malanglab.game.dto.RoomResponse;
+import com.c102.malanglab.game.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,7 @@ public class GameService implements GameStatusCase {
     private final GamePort gamePort;
     private final GameBroadCastPort gameBroadCastPort;
     private final GameUniCastPort gameUniCastPort;
+    private final S3Port s3Port;
 
     @Override
     public RoomResponse create(RoomRequest request, String hostId) {
@@ -55,7 +54,23 @@ public class GameService implements GameStatusCase {
         return roomResponse;
     }
 
+    @Override
+    public GuestResponse register(final Long roomId, final GuestRequest guestRequest) {
+        // 닉네임 중복 검사
+        Boolean check = gamePort.setNickname(roomId, guestRequest.getId(), guestRequest.getNickname());
+        if (!check) {
+            throw new IllegalArgumentException("중복된 닉네임이 존재합니다.");
+        }
 
+        // S3 업로드
+        String url = s3Port.setImgPath(guestRequest.getImage());
+
+        GuestResponse guestResponse = new GuestResponse(guestRequest.getId(),
+                                                        guestRequest.getNickname(),
+                                                        url,
+                                                        roomId);
+        return guestResponse;
+    }
 
     @Override
     public void start(Long roomId, String hostId) {
