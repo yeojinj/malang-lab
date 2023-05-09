@@ -1,22 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNicknameAction, setPinAction } from '@/store/guestSlice';
 import { RootState } from '@/store/store';
 
-import CustomProfile from '@/components/profile/CustomProfile';
+import CustomSection from '@/components/profile/CustomSection';
 import { checkPinApi } from '@/apis/apis';
 
 export default function JoinPage() {
   const dispatch = useDispatch();
   const guest = useSelector((state: RootState) => state.guest);
-  // const router = useRouter();
+  const router = useRouter();
   const [pin, setPin] = useState('');
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
@@ -33,13 +33,12 @@ export default function JoinPage() {
     if (isValid) {
       // 소켓 연결!!!
 
-
       // 리덕스에 저장
       dispatch(setPinAction(pin));
       // 다음 페이지로 이동
       setStep(step => step + 1);
     } else {
-      alert('유효한 PIN 번호가 아닙니다!')
+      alert('유효한 PIN 번호가 아닙니다!');
     }
   };
 
@@ -61,9 +60,11 @@ export default function JoinPage() {
   };
 
   // step 3 - 캐릭터 생성하기
-  const handleClickJoin = () => {
+  const handleClickJoin = async () => {
+    console.log('check');
+    await setIsCompleted(true);
     // 진짜 참여하기
-    // router.push('/ready');
+    router.push('/ready');
   };
 
   return (
@@ -110,7 +111,7 @@ export default function JoinPage() {
         <section className="w-[80%] flex flex-col justify-center align-middle gap-10">
           <p className="text-center text-5xl font-bold">말랑이 생성하기</p>
           <div className="mx-auto">
-            <CustomProfile />
+            <CustomSection isCompleted={isCompleted} />
           </div>
           <button className="button-black w-[20%]" onClick={handleClickJoin}>
             완료
