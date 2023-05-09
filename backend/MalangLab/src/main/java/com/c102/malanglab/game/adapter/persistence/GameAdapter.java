@@ -34,13 +34,13 @@ public class GameAdapter implements GamePort {
         String key = "room:" + roomId + ":info";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         hashOperations.put(key, "name", room.getName());
-        hashOperations.put(key, "mode", room.getMode().toString());
-        hashOperations.put(key, "total-round", room.getTotalRound().toString());
+        hashOperations.put(key, "mode", String.valueOf(room.getMode()));
+        hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
         for (int round = 0; round < room.getTotalRound(); round++) {
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
-            hashOperations.put(roundKey, "time", room.getSettings().get(round).getTime().toString());
+            hashOperations.put(roundKey, "time", String.valueOf(room.getSettings().get(round).getTime()));
         }
         String statusKey = "room:" + roomId + ":status";
         hashOperations.put(statusKey, "start", "0");
