@@ -1,27 +1,6 @@
-import axios from 'axios';
+import { axios, authApi } from './axios.config';
 import { GameInfo, Setting } from '@/store/gameInfoSlice';
 import { useRouter } from 'next/router';
-
-// axios.config
-const BASE_URL = 'https://api.malang-lab.com';
-
-axios.defaults.baseURL = BASE_URL;
-axios.defaults.withCredentials = true;
-
-const authApi = axios.create({
-  baseURL: BASE_URL,
-});
-
-authApi.interceptors.request.use(
-  request => {
-    const ACCESS_TOKEN = localStorage.getItem('token');
-    request.headers.Authorization = ACCESS_TOKEN || null;
-    return request;
-  },
-  error => {
-    return Promise.reject(error);
-  },
-);
 
 // 토큰 생성하기
 const getTokenApi = () => {
