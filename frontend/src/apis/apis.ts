@@ -1,30 +1,9 @@
+import { axios, authApi } from './axios.config';
 import { Guest } from './../store/guestSlice';
-import axios from 'axios';
 import { GameInfo, Setting } from '@/store/gameInfoSlice';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-
-// axios.config
-const BASE_URL = 'https://api.malang-lab.com';
-
-axios.defaults.baseURL = BASE_URL;
-axios.defaults.withCredentials = true;
-
-const authApi = axios.create({
-  baseURL: BASE_URL,
-});
-
-authApi.interceptors.request.use(
-  request => {
-    const ACCESS_TOKEN = localStorage.getItem('token');
-    request.headers.Authorization = ACCESS_TOKEN || null;
-    return request;
-  },
-  error => {
-    return Promise.reject(error);
-  },
-);
 
 // 토큰 생성하기
 const getTokenApi = () => {
@@ -33,7 +12,7 @@ const getTokenApi = () => {
     .then(res => {
       console.log('토큰 받기 성공', res);
       localStorage.setItem('token', res.data.data.token);
-      return res.data;
+      return res.data.data.token;
     })
     .catch(err => {
       console.log('토큰 받기 실패', err);
@@ -94,7 +73,7 @@ const setGuestInfo = async (payload: Guest) => {
 }));
 
   for (let key of formData.keys()) {
-    console.log(key, formData.get(key), "👩");
+    console.log(key, formData.get(key), '👩');
   }
 
   try {
