@@ -2,16 +2,15 @@ package com.c102.malanglab.game.adapter.web;
 
 import com.c102.malanglab.game.application.port.out.GameBroadCastPort;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
+import com.c102.malanglab.game.dto.GuestResponse;
 import com.c102.malanglab.game.dto.Message;
-import com.c102.malanglab.game.dto.websocket.GuestDto;
+import com.c102.malanglab.game.dto.GuestRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.TimeZone;
 
 @Slf4j
 @Controller
@@ -21,13 +20,13 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
 
 
     @Override
-    public void alertJoinMember(Long roomId, Message<GuestDto> message) {
+    public void alertJoinMember(Long roomId, Message<GuestRequest> message) {
         simpMessageSendingOperations.convertAndSend("/topic/room." + roomId, message);
 
     }
 
     @Override
-    public void alertExitMember(Long roomId, Message<GuestDto> message) {
+    public void alertExitMember(Long roomId, Message<GuestRequest> message) {
         simpMessageSendingOperations.convertAndSend("/topic/room." + roomId, message);
     }
 
@@ -42,7 +41,7 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
     }
 
     @Override
-    public void alertGuestList(String userId, Message<List<GuestDto>> message) {
+    public void alertGuestList(String userId, Message<List<GuestResponse>> message) {
         simpMessageSendingOperations.convertAndSend("/queue/" + userId, message);
     }
 }

@@ -4,6 +4,7 @@ import com.c102.malanglab.common.response.CustomResponseEntity;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.dto.RoomRequest;
 import com.c102.malanglab.game.dto.RoomResponse;
+import com.c102.malanglab.game.dto.GuestRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,17 +32,36 @@ public class ApiController {
         return new CustomResponseEntity(HttpStatus.CREATED, roomResponse).convertToResponseEntity();
     }
 
+    /**
+     * 게스트는 방에 들어가기 위해 PIN을 입력합니다
+     * GET : /game/{roomId}
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @return
+     */
     @GetMapping("/{roomId}")
     public ResponseEntity<RoomResponse> get(@PathVariable Long roomId) {
         return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.get(roomId)).convertToResponseEntity();
+    }
+
+    /**
+     * 게스트는 방에 들어가기 위해 PIN을 입력합니다
+     * GET : /game/{roomId}
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @return
+     */
+    @PostMapping("/{roomId}")
+    public ResponseEntity<GuestRequest> register(@PathVariable Long roomId, GuestRequest guestRequest) {
+        return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.register(roomId, guestRequest)).convertToResponseEntity();
     }
 
     @PostMapping("/{roomId}/start")
     public ResponseEntity<Boolean> start(
             @PathVariable Long roomId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String userId) {
-
-        gameStatusCase.start(roomId, userId);
+        if(!gameStatusCase.isGameManager(roomId, userId)) {
+            throw new IllegalStateException("게임을 시작할 권한을 가지고 있지 않습니다.");
+        }
+        gameStatusCase.start(roomId);
         return new CustomResponseEntity(HttpStatus.OK, true).convertToResponseEntity();
     }
 }

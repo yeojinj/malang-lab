@@ -16,7 +16,7 @@ export default function ReadyPage() {
         <div
           className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1"
         >
-          <PinCode code={990107} />
+          <PinCode />
           <div className="text-center text-[#44474B]">
             <h1 className="text-[2rem] font-bold">말랑이의 연구소</h1>
             <h2 className="my-5">
