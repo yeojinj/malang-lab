@@ -6,7 +6,6 @@ import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 import jakarta.transaction.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -108,8 +107,8 @@ public class GameAdapter implements GamePort {
         // 1. Redis 중복 검사 및 저장
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-        Boolean isExist = setOperations.add(key, nickname) == 1;
-        if (isExist) {
+        Boolean isExist = (setOperations.add(key, nickname) == 0);
+        if (!isExist) {
             // 2. MariaDB 저장
             guestRepository.save(new Guest(userId, nickname));
             return true;
@@ -136,8 +135,10 @@ public class GameAdapter implements GamePort {
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         setOperations.remove(key, userId);
-        //  1-2. TODO: Sorted Set에서 삭제
-
+        //  1-2. Sorted Set에서 삭제
+        key = "room:" + roomId + ":guests";
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.remove(key, userId);
         //  1-3. 유저가 대기실에 있는지 게임 중인지 검증 -> 게임 중이었을 경우 시상에서 제외
         key = "room:" + roomId + ":status";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
