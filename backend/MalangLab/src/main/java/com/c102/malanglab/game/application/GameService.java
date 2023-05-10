@@ -7,6 +7,7 @@ import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.application.port.out.S3Port;
 import com.c102.malanglab.game.domain.Room;
 
+import com.c102.malanglab.game.domain.Round;
 import com.c102.malanglab.game.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,8 +73,18 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void start(Long roomId) {
-        // 게임 시작
-        gameBroadCastPort.start(roomId, null);
+        // 게임 현재 라운드 가져오기
+        Round round = gamePort.checkRound(roomId);
+
+        RoundResponse roundDto = RoundResponse.builder()
+                .round(round.getSetting().getRound())
+                .keyword(round.getSetting().getKeyword())
+                .timeLimit(round.getSetting().getTime())
+                .isLast(round.getIsLast())
+                .build();
+
+        // 게임 시작 시, 라운드 정보 돌려주기
+        gameBroadCastPort.start(roomId, new Message<RoundResponse>(Message.MessageType.ROUND_START, roundDto));
     }
 
 
