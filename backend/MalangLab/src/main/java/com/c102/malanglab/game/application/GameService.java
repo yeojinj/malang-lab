@@ -9,6 +9,7 @@ import com.c102.malanglab.game.domain.Room;
 
 import com.c102.malanglab.game.domain.Round;
 import com.c102.malanglab.game.dto.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -61,9 +62,14 @@ public class GameService implements GameStatusCase {
             throw new IllegalArgumentException("중복된 닉네임이 존재합니다.");
         }
 
+        // 이미지 파일 검사
+        if (guestRequest.getImage().isEmpty()) {
+            throw new IllegalArgumentException("이미지 파일이 전달되지 않아 업로드에 실패했습니다.");
+        }
+
         // S3 업로드
         String url = s3Port.setImgPath(guestRequest.getImage(), "room/" + roomId + "/");
-        gamePort.setImage(roomId, guestRequest.getId(), url);
+        gamePort.addGuest(roomId, guestRequest.getId(), guestRequest.getNickname(), url);
         GuestResponse guestResponse = new GuestResponse(guestRequest.getId(),
                                                         guestRequest.getNickname(),
                                                         url,
