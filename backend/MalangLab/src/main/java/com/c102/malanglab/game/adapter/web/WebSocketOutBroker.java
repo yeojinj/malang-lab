@@ -5,6 +5,7 @@ import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.dto.GuestResponse;
 import com.c102.malanglab.game.dto.Message;
 import com.c102.malanglab.game.dto.GuestRequest;
+import com.c102.malanglab.game.dto.RoundResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -36,7 +37,7 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
     }
 
     @Override
-    public void start(Long roomId, Object data) {
+    public void start(Long roomId, Message<RoundResponse> data) {
         simpMessageSendingOperations.convertAndSend("/topic/room." + roomId, data);
     }
 

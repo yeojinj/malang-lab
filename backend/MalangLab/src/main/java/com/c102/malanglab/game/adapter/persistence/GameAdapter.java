@@ -1,9 +1,7 @@
 package com.c102.malanglab.game.adapter.persistence;
 
 import com.c102.malanglab.game.application.port.out.GamePort;
-import com.c102.malanglab.game.domain.GameMode;
-import com.c102.malanglab.game.domain.Guest;
-import com.c102.malanglab.game.domain.Room;
+import com.c102.malanglab.game.domain.*;
 import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -198,5 +196,31 @@ public class GameAdapter implements GamePort {
     public boolean isGameManager(Long roomId, String userId) {
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         return userId.equals(hashOperations.get("room:" + roomId + ":info", "host-id"));
+    }
+
+    @Override
+    public Round checkRound(Long roomId) {
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        int currentTurn = hashOperations.increment("room:" + roomId + ":status", "turn", 1).intValue();
+        int totalTurn = Integer.valueOf(hashOperations.get("room:" + roomId + ":info", "total-round"));
+        boolean isGameStart = Integer.valueOf(hashOperations.get("room:" + roomId + ":status", "start")) > 0;
+        boolean isLast = false;
+        if(!isGameStart) {
+            hashOperations.put("room:" + roomId + ":status", "start", "1");
+        } else if(currentTurn == totalTurn) {
+           isLast = true;
+        }
+
+        return Round.builder()
+            .setting(
+                new Setting(
+                    String.valueOf(hashOperations.get("room:" + roomId + ":info:" + currentTurn, "keyword")),
+                    String.valueOf(hashOperations.get("room:" + roomId + ":info:" + currentTurn, "hidden")),
+                    Integer.valueOf(hashOperations.get("room:" + roomId + ":info:" + currentTurn, "time")),
+                    currentTurn
+                )
+            )
+            .isLast(isLast)
+            .build();
     }
 }
