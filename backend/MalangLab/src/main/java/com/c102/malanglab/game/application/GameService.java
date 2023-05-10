@@ -5,21 +5,15 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.application.port.out.S3Port;
-import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 
 import com.c102.malanglab.game.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-
-
 
 @Slf4j
 @Service
@@ -59,7 +53,7 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
-    public GuestResponse register(final Long roomId, final GuestRequest guestRequest) {
+    public GuestResponse register(Long roomId, GuestRequest guestRequest) {
         // 닉네임 중복 검사
         Boolean check = gamePort.setNickname(roomId, guestRequest.getId(), guestRequest.getNickname());
         if (!check) {
@@ -67,8 +61,8 @@ public class GameService implements GameStatusCase {
         }
 
         // S3 업로드
-        String url = s3Port.setImgPath(guestRequest.getImage());
-
+        String url = s3Port.setImgPath(guestRequest.getImage(), "room/" + roomId + "/");
+        gamePort.setImage(roomId, guestRequest.getId(), url);
         GuestResponse guestResponse = new GuestResponse(guestRequest.getId(),
                                                         guestRequest.getNickname(),
                                                         url,
