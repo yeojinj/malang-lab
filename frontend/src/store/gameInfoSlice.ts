@@ -38,6 +38,10 @@ export const gameInfoSlice = createSlice({
   name: 'gameinfo',
   initialState,
   reducers: {
+    // pin 번호
+    setPincodeAction(state, action) {
+      state.id = action.payload
+    },
     // 방 제목 입력
     setTitleAction(state, action) {
       state.title = action.payload
@@ -79,15 +83,13 @@ export const gameInfoSlice = createSlice({
         time: 30,
         round: state.settings.length+1,
       });
-    },
-    setPinAction(state, action) {
-      state.id = action.payload
     }
   },
 });
 
 // Action & Slice export
 export const {
+  setPincodeAction,
   setTitleAction,
   addRoundAction,
   modeAction,
