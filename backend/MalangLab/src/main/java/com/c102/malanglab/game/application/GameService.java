@@ -86,7 +86,7 @@ public class GameService implements GameStatusCase {
                 .build();
 
         // 게임 시작 시, 라운드 정보 돌려주기
-        gameBroadCastPort.start(roomId, new Message<RoundResponse>(Message.MessageType.ROUND_INFO, roundDto));
+        gameBroadCastPort.start(roomId, new Message<RoundResponse>(Message.MessageType.ROUND_START, roundDto));
     }
 
 

@@ -45,4 +45,9 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
     public void alertGuestList(String userId, Message<List<GuestResponse>> message) {
         simpMessageSendingOperations.convertAndSend("/queue/" + userId, message);
     }
+
+    @Override
+    public void alertRoomManager(String roomId, Object message) {
+        simpMessageSendingOperations.convertAndSend("/queue/manager/room." + roomId, message);
+    }
 }
