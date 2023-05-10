@@ -72,9 +72,26 @@ const setGuestInfo = async (payload: Guest) => {
   console.log(payload, 'setGuestInfo');
   const formData: any = new FormData();
   const { pin, nickname, imageUrl } = payload;
+
   formData.append('id', localStorage.getItem('token'))
   formData.append('nickname', nickname)
-  formData.append('image', imageUrl);
+
+  function b64toBlob(dataURI) {
+    // 인코딩된 문자열 데이터를 디코딩
+    var byteString = atob(dataURI.split(',')[1]);
+    // ArrayBuffer는 자바스크립트에서 구현된 버퍼, 고정된 크기의 메모리 공간에 바이너리 데이터를 저장하는 객체
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: 'image/png' });
+}
+
+  formData.append('image', new File([b64toBlob(imageUrl)], "capture.png", {
+    type: 'image/png'
+}));
 
   for (let key of formData.keys()) {
     console.log(key, formData.get(key), "👩");
@@ -86,6 +103,7 @@ const setGuestInfo = async (payload: Guest) => {
         'Content-Type': 'multipart/form-data',
       },
     });
+    console.log(res)
     return res;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
