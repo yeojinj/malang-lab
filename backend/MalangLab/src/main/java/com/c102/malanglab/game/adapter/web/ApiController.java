@@ -58,8 +58,10 @@ public class ApiController {
     public ResponseEntity<Boolean> start(
             @PathVariable Long roomId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String userId) {
-
-        gameStatusCase.start(roomId, userId);
+        if(!gameStatusCase.isGameManager(roomId, userId)) {
+            throw new IllegalStateException("게임을 시작할 권한을 가지고 있지 않습니다.");
+        }
+        gameStatusCase.start(roomId);
         return new CustomResponseEntity(HttpStatus.OK, true).convertToResponseEntity();
     }
 }
