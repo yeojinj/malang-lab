@@ -26,6 +26,10 @@ spring:
       port: 6379
       host: localhost
       password:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 cloud:
   aws:
     s3:
