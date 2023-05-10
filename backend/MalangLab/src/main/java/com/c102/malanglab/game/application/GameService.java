@@ -5,21 +5,17 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.application.port.out.S3Port;
-import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 
+import com.c102.malanglab.game.domain.Round;
 import com.c102.malanglab.game.dto.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-
-
 
 @Slf4j
 @Service
@@ -59,16 +55,21 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
-    public GuestResponse register(final Long roomId, final GuestRequest guestRequest) {
+    public GuestResponse register(Long roomId, GuestRequest guestRequest) {
         // 닉네임 중복 검사
         Boolean check = gamePort.setNickname(roomId, guestRequest.getId(), guestRequest.getNickname());
         if (!check) {
             throw new IllegalArgumentException("중복된 닉네임이 존재합니다.");
         }
 
-        // S3 업로드
-        String url = s3Port.setImgPath(guestRequest.getImage());
+        // 이미지 파일 검사
+        if (guestRequest.getImage().isEmpty()) {
+            throw new IllegalArgumentException("이미지 파일이 전달되지 않아 업로드에 실패했습니다.");
+        }
 
+        // S3 업로드
+        String url = s3Port.setImgPath(guestRequest.getImage(), "room/" + roomId + "/");
+        gamePort.addGuest(roomId, guestRequest.getId(), guestRequest.getNickname(), url);
         GuestResponse guestResponse = new GuestResponse(guestRequest.getId(),
                                                         guestRequest.getNickname(),
                                                         url,
@@ -78,8 +79,18 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void start(Long roomId) {
-        // 게임 시작
-        gameBroadCastPort.start(roomId, null);
+        // 게임 현재 라운드 가져오기
+        Round round = gamePort.checkRound(roomId);
+
+        RoundResponse roundDto = RoundResponse.builder()
+                .round(round.getSetting().getRound())
+                .keyword(round.getSetting().getKeyword())
+                .timeLimit(round.getSetting().getTime())
+                .isLast(round.getIsLast())
+                .build();
+
+        // 게임 시작 시, 라운드 정보 돌려주기
+        gameBroadCastPort.start(roomId, new Message<RoundResponse>(Message.MessageType.ROUND_START, roundDto));
     }
 
 

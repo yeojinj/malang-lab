@@ -21,9 +21,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <body className="text-black">
         <Providers>
-          {/* <SocketProvider brokerURL="socket url"> */}
-          {children}
-          {/* </SocketProvider> */}
+          <SocketProvider>{children}</SocketProvider>
         </Providers>
       </body>
     </html>
