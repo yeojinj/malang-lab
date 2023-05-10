@@ -8,26 +8,26 @@ const guests = [
     name: '냠냠이',
     image: '/imgs/character.png',
   },
-  {
-    name: '문어지지마',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '지냠이',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '냠냠이',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '문어지지마',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '지냠이',
-    image: '/imgs/character.png',
-  },
+  // {
+  //   name: '문어지지마',
+  //   image: '/imgs/character.png',
+  // },
+  // {
+  //   name: '지냠이',
+  //   image: '/imgs/character.png',
+  // },
+  // {
+  //   name: '냠냠이',
+  //   image: '/imgs/character.png',
+  // },
+  // {
+  //   name: '문어지지마',
+  //   image: '/imgs/character.png',
+  // },
+  // {
+  //   name: '지냠이',
+  //   image: '/imgs/character.png',
+  // },
 ];
 
 type Props = {

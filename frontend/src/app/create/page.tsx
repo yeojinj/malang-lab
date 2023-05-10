@@ -10,6 +10,7 @@ import GameCard from '../../components/create/GameCard';
 // redux
 import { RootState } from '@/store/store';
 import gameInfoSlice, {
+  setPincodeAction,
   addRoundAction,
   changekeywordAction,
   deleteRoundAction,
@@ -140,9 +141,9 @@ export default function CreatePage() {
       // 방 만들기가 성공했을 때에만 실행
       if (res) {
         // 방의 pin 번호 redux에 저장
-        dispatch(setPinAction(res.data.id))
+        dispatch(setPincodeAction(res.data.id))
         // 대기방으로 입장
-        // router.push('/ready')
+        router.push('/ready')
         // host 상태 업데이트
         dispatch(updateStatus())
       }
