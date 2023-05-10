@@ -5,6 +5,8 @@ import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.dto.RoomRequest;
 import com.c102.malanglab.game.dto.RoomResponse;
 import com.c102.malanglab.game.dto.GuestRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,7 +52,12 @@ public class ApiController {
      * @return
      */
     @PostMapping("/{roomId}")
-    public ResponseEntity<GuestRequest> register(@PathVariable Long roomId, GuestRequest guestRequest) {
+    public ResponseEntity<GuestRequest> register(@PathVariable Long roomId, @Valid GuestRequest guestRequest) {
+        // 이미지 파일 검사
+        if (guestRequest.getImage().isEmpty()) {
+            throw new IllegalArgumentException("이미지 파일이 전달되지 않아 업로드에 실패했습니다.");
+        }
+
         return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.register(roomId, guestRequest)).convertToResponseEntity();
     }
 

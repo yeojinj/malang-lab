@@ -116,11 +116,8 @@ public class GameAdapter implements GamePort {
 
     /** 캐릭터 이미지 설정하기 */
     @Override
-    @Transactional
-    public Guest addGuest(Long roomId, String userId, String nickname, String imgPath) {
+    public Guest addGuest(Guest guest) {
         // MariaDB 저장
-        Room room = findById(roomId);
-        Guest guest = new Guest(userId, nickname, imgPath, room);
         guestRepository.save(guest);
         return guest;
     }

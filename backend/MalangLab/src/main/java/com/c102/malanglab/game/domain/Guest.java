@@ -27,22 +27,19 @@ public class Guest {
     private String imagePath;
 
     @ManyToOne
-    @JoinColumn(name = "ROOM_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "ROOM_ID", updatable = false)
     private Room room;
 
-    public Guest(String userId, String nickname, String imgPath, Room room) {
-        this.id = userId;
+    public Guest(String id, String nickname, String url) {
+        this.id = id;
         this.nickname = nickname;
-        this.imagePath = imgPath;
-        this.setRoom(room);
+        this.imagePath = url;
     }
 
-    // room - guest 연관관계 편의 메소드
     public void setRoom(Room room) {
-        if (this.room != null) {
-            this.room.getGuests().remove(this);
-        }
         this.room = room;
-        room.getGuests().add(this);
+        if(!room.getGuests().contains(this)) {
+            room.getGuests().add(this);
+        }
     }
 }
