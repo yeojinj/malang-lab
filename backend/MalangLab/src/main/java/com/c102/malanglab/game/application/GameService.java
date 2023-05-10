@@ -45,6 +45,11 @@ public class GameService implements GameStatusCase {
         return roomResponse;
     }
 
+    @Override
+    public boolean isGameManager(Long roomId, String userId) {
+        return gamePort.isGameManager(roomId, userId);
+    }
+
 
     @Override
     public RoomResponse get(final Long roomId) {
@@ -72,13 +77,9 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
-    public void start(Long roomId, String hostId) {
+    public void start(Long roomId) {
         // 방 조회
         Room room = gamePort.findById(roomId);
-        // 관리자인지 검증
-        if(room.isHost(hostId)) {
-            throw new IllegalStateException("게임 시작권한이 없습니다.");
-        }
         // 게임 시작
         gameBroadCastPort.start(roomId, null);
     }

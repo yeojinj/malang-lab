@@ -36,4 +36,7 @@ public interface GamePort {
     Room findById(Long id);
 
     Guest findById(String id);
+
+    /** 게임 매니저 여부 조회 */
+    boolean isGameManager(Long roomId, String userId);
 }
