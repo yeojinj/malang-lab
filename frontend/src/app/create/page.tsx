@@ -212,7 +212,7 @@ export default function CreatePage() {
                 </div>
               </div>
               <button
-                className="bg-white w-[80px] h-[40px] rounded-md mx-auto mt-5"
+                className="bg-white w-[80px] h-[40px] rounded-md mx-auto mt-5 hover:text-white hover:bg-black hover:button-shadow"
                 onClick={handleClickStep}
               >
                 다음
@@ -233,7 +233,7 @@ export default function CreatePage() {
                     </div>
                   ))}
                   <button
-                    className="bg-white w-20 mt-2 mx-auto"
+                    className="bg-white w-[60px] min-h-[35px] rounded-[5px] mx-auto hover:bg-black hover:text-white button-shadow"
                     onClick={handleClickAdd}
                   >
                     추가
@@ -241,13 +241,13 @@ export default function CreatePage() {
                 </div>
                 <div className="flex justify-center absolute bottom-7 left-[50%] translate-x-[-50%]">
                   <button
-                    className="bg-white w-[80px] h-12 rounded-[5px] mr-3"
+                    className="bg-white w-[80px] font-bold h-12 rounded-[5px] mr-3 hover:scale-[1.02] hover:button-shadow"
                     onClick={handleClickStep}
                   >
                     이전
                   </button>
                   <button
-                    className="button-black w-[200px] mx-0"
+                    className="button-black font-bold w-[200px] mx-0 hover:scale-[1.02] hover:button-shadow"
                     onClick={handleClickCreate}
                   >
                     방 만들기
