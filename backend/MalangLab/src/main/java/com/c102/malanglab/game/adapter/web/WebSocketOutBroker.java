@@ -2,6 +2,7 @@ package com.c102.malanglab.game.adapter.web;
 
 import com.c102.malanglab.game.application.port.out.GameBroadCastPort;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
+import com.c102.malanglab.game.dto.GuestResponse;
 import com.c102.malanglab.game.dto.Message;
 import com.c102.malanglab.game.dto.GuestRequest;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
     }
 
     @Override
-    public void alertGuestList(String userId, Message<List<GuestRequest>> message) {
+    public void alertGuestList(String userId, Message<List<GuestResponse>> message) {
         simpMessageSendingOperations.convertAndSend("/queue/" + userId, message);
     }
 }

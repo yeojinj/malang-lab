@@ -78,8 +78,6 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void start(Long roomId) {
-        // 방 조회
-        Room room = gamePort.findById(roomId);
         // 게임 시작
         gameBroadCastPort.start(roomId, null);
     }
@@ -91,26 +89,19 @@ public class GameService implements GameStatusCase {
         Room room = gamePort.join(roomId);
         gamePort.addGuestList(room.getId(), userId);
 
+        // 2. 방에 참여자 목록을 가져옵니다.
+        List<GuestResponse> guestList = gamePort.getGuestList(room.getId()).stream()
+                .map(g -> new GuestResponse(g.getId(), g.getNickname(), g.getImagePath(), room.getId()))
+                .collect(Collectors.toList());
 
-//        // 2. 방에 참여자 목록을 가져옵니다.
-//        List<GuestDto> guestList = gamePort.getGuestList(room.getId()).stream()
-//                .map(g -> new GuestDto(g.getId(), g.getNickname(), g.getImagePath()))
-//                .collect(Collectors.toList());
-//
-//        // 3. 게임 참여자의 참여 정보를 알립니다.
-//        gameBroadCastPort.alertJoinMember(room.getId(), message);
-//
-//
-//        // 3. 방에 참여자 목록을 가져옵니다.
-//        List<GuestRequest> guestList = new ArrayList<>();
-//        // 4. 참여 당사자에게 참여자 리스트를 전달합니다.
-//        gameUniCastPort.alertGuestList(
-//                userId,
-//                new Message<List<GuestRequest>>(Message.MessageType.GUEST_LIST, guestList)
-//        );
-//
-//        // 4. 참여 당사자에게 참여자 리스트를 전달합니다.
-//        gameUniCastPort.alertGuestList(userId, new Message<List<GuestDto>>(Message.MessageType.GUEST_LIST, guestList));
+        // 3. 게임 참여자의 참여 정보를 알립니다.
+        gameBroadCastPort.alertJoinMember(room.getId(), message);
+
+        // 4. 참여 당사자에게 참여자 리스트를 전달합니다.
+        gameUniCastPort.alertGuestList(
+                userId,
+                new Message<List<GuestResponse>>(Message.MessageType.GUEST_LIST, guestList)
+        );
 
     }
 
