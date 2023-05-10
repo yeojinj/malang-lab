@@ -7,6 +7,8 @@ import { Client, IMessage } from '@stomp/stompjs';
 interface SocketProps {
   client: Client | null;
   makeClient: (brokerURL: string) => void;
+  subscribe: (address, callback) => void;
+  publish: (destination, type, message) => void;
 }
 
 const SocketContext = createContext<SocketProps | undefined>(undefined);
@@ -19,11 +21,16 @@ export const useSocket = () => {
 // --------------------------- Provider ------------------------------
 
 export function SocketProvider({ children }) {
-  // state
+  // STATE
   const [client, setClient] = useState<Client | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const headers = {
+    Authorization: accessToken,
+  };
 
-  // action
+  // ACTION
   const makeClient = (brokerURL: string) => {
+    // 클라이언트 생성
     const newClient = new Client({
       brokerURL: brokerURL,
       reconnectDelay: 5000,
@@ -31,20 +38,60 @@ export function SocketProvider({ children }) {
         console.log(str);
       },
     });
+
+    // 클라이언트 토큰 가져오기
+    const token = localStorage.getItem('token');
+    setAccessToken(token);
+
+    // 클라이언트 소켓 연결
     newClient.onConnect = () => {
       console.log('connected');
-      // newClient.subscribe('/topic/room.195048', console.log);
     };
     newClient.activate();
     setClient(newClient);
   };
 
-  // const wsSubscribe = () => client.subscribe('/topic/room.195048', console.log);
+  // 구독
+  const subscribe = (address, callback) => {
+    client.subscribe(address, callback);
+  };
 
-  // const wsPublish = () => client.publish();
+  // 메세지 전송
+  const publish = (destination, type, message) => {
+    const body = JSON.stringify({
+      type,
+      message,
+    });
+    client.publish({ destination, body, headers });
+  };
+
   return (
-    <SocketContext.Provider value={{ client, makeClient }}>
+    <SocketContext.Provider value={{ client, makeClient, subscribe, publish }}>
       {children}
     </SocketContext.Provider>
   );
 }
+
+// // 구독
+// const address = `/topic/room.${pin}`;
+// const callback = message => {
+//   if (message.body) {
+//     alert('메세지 받음' + message.body);
+//     const quote = JSON.parse(message.body);
+//     alert('메세지파싱함' + quote);
+//     return quote;
+//   } else {
+//     alert('got empty message');
+//   }
+// };
+// subscribe(address, callback);
+
+// // 메세지 전송
+// const destination = `/topic/room.${pin}`;
+// const type = 'JOIN';
+// const message = {
+//   id: '',
+//   nickname: '',
+//   imagePath: '',
+// };
+// publish(destination, type, message);
