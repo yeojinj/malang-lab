@@ -64,4 +64,13 @@ public class ApiController {
         gameStatusCase.start(roomId);
         return new CustomResponseEntity(HttpStatus.OK, true).convertToResponseEntity();
     }
+
+    @GetMapping("/{roomId}/user/out")
+    public ResponseEntity<Void> userOut(
+            @PathVariable Long roomId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
+    ) {
+        gameStatusCase.exitMember(roomId, userId);
+        return new CustomResponseEntity(HttpStatus.NO_CONTENT, null).convertToResponseEntity();
+    }
 }
