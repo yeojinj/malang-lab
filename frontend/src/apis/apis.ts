@@ -33,7 +33,7 @@ const getTokenApi = () => {
     .then(res => {
       console.log('토큰 받기 성공', res);
       localStorage.setItem('token', res.data.data.token);
-      return res.data;
+      return res.data.data.token;
     })
     .catch(err => {
       console.log('토큰 받기 실패', err);
