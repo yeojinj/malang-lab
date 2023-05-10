@@ -11,8 +11,10 @@ import { setNicknameAction, setPinAction } from '@/store/guestSlice';
 import { checkPinApi } from '@/apis/apis';
 import PinForm from '@/components/join/PinForm';
 import NicknameForm from '@/components/join/NicknameForm';
+import { useSocket } from '@/context/SocketContext';
 
 export default function JoinPage() {
+  const { client } = useSocket();
   const router = useRouter();
   const dispatch = useDispatch();
   const guest = useSelector((state: RootState) => state.guest);
@@ -32,7 +34,7 @@ export default function JoinPage() {
     const isValid = await checkPinApi(Number(pin));
     if (isValid) {
       // 소켓 연결!!!
-
+      client.subscribe(`/topic/room.${pin}`, console.log);
       // 리덕스에 저장
       dispatch(setPinAction(pin));
       // 다음 페이지로 이동
@@ -52,7 +54,6 @@ export default function JoinPage() {
 
   // step 3 - 캐릭터 생성하기
   const handleClickJoin = async () => {
-    console.log('check');
     await setIsCompleted(true);
     // 진짜 참여하기
     router.push('/ready');
