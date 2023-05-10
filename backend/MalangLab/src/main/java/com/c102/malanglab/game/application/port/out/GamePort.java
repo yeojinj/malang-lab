@@ -13,11 +13,12 @@ public interface GamePort {
 
     /** 게임 참가하기 */
     Room join(Long roomId);
+
     /** 닉네임 설정하기 */
     boolean setNickname(Long roomId, String userId, String nickname);
 
     /** 캐릭터 이미지 설정하기 */
-    Guest setImage(Long roomId, String userId, String imgPath);
+    Guest addGuest(Long roomId, String userId, String nickname, String imgPath);
 
     /** 유저 퇴장 시 삭제 */
     void removeUser(Long roomId, String userId);
