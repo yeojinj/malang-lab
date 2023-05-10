@@ -23,8 +23,8 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String uploadFile(MultipartFile multipartFile) {
-        String fileName = createFilename(multipartFile.getOriginalFilename());
+    public String uploadFile(MultipartFile multipartFile, String filePath) {
+        String fileName = filePath + createFilename(multipartFile.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setContentType(multipartFile.getContentType());

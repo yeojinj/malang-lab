@@ -43,6 +43,7 @@
     "react-spring-carousel": "^2.0.19",
     "react-wordcloud": "^1.2.7",
     "redux": "^4.2.1",
+    "sockjs-client": "^1.6.1",
     "tailwind-scrollbar": "^3.0.0",
     "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss": "3.3.2",

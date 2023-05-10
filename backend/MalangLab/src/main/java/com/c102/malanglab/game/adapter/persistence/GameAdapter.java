@@ -4,7 +4,6 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.*;
 import jakarta.transaction.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,6 +29,8 @@ public class GameAdapter implements GamePort {
         Long roomId = getRandomRoomId();
         // Room Entity 생성
         Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings().size(), roomInfo.getSettings(), roomInfo.getGuests());
+        // 방 정보 MariaDB 저장
+        Room newRoom = roomRepository.save(room);
 
         // 방 정보 Redis 저장
         String key = "room:" + roomId + ":info";
@@ -38,6 +39,7 @@ public class GameAdapter implements GamePort {
         hashOperations.put(key, "mode", String.valueOf(room.getMode()));
         hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
         for (int round = 0; round < room.getTotalRound(); round++) {
+            // 라운드 정보 Redis 저장
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
@@ -48,8 +50,6 @@ public class GameAdapter implements GamePort {
         hashOperations.put(statusKey, "turn", "0");
         hashOperations.put(statusKey, "enter-num", "0");
 
-        // 방 정보 MariaDB 저장
-        Room newRoom = roomRepository.save(room);
         return newRoom;
     }
 
@@ -106,10 +106,8 @@ public class GameAdapter implements GamePort {
         // 1. Redis 중복 검사 및 저장
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-        Boolean isExist = setOperations.add(key, nickname) == 1;
-        if (isExist) {
-            // 2. MariaDB 저장
-            guestRepository.save(new Guest(userId, nickname));
+        Boolean isExist = (setOperations.add(key, nickname) == 0);
+        if (!isExist) {
             return true;
         } else {
             return false;
@@ -119,10 +117,11 @@ public class GameAdapter implements GamePort {
     /** 캐릭터 이미지 설정하기 */
     @Override
     @Transactional
-    public Guest setImage(Long roomId, String userId, String imgPath) {
+    public Guest addGuest(Long roomId, String userId, String nickname, String imgPath) {
         // MariaDB 저장
-        Guest guest = findById(userId);
-        guest.setImagePath(imgPath);
+        Room room = findById(roomId);
+        Guest guest = new Guest(userId, nickname, imgPath, room);
+        guestRepository.save(guest);
         return guest;
     }
 
@@ -134,8 +133,10 @@ public class GameAdapter implements GamePort {
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         setOperations.remove(key, userId);
-        //  1-2. TODO: Sorted Set에서 삭제
-
+        //  1-2. Sorted Set에서 삭제
+        key = "room:" + roomId + ":guests";
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.remove(key, userId);
         //  1-3. 유저가 대기실에 있는지 게임 중인지 검증 -> 게임 중이었을 경우 시상에서 제외
         key = "room:" + roomId + ":status";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
