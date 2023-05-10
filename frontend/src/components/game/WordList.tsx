@@ -6,6 +6,7 @@ import { useRef, useState, useEffect } from 'react';
 
 export default function WordList() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<HTMLAudioElement>(null);
   const [word, setWord] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
 
@@ -13,6 +14,7 @@ export default function WordList() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
+    playerRef.current?.play();
   }, [words]);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -28,6 +30,7 @@ export default function WordList() {
 
   return (
     <div className="mt-3 sm:mt-10 w-screen flex flex-col items-center ">
+      <audio ref={playerRef} src={'/audio/wordeffect.mp3'} />
       <div
         className="w-[80vw] h-[50vh] sm:h-[40vh] overflow-y-auto scrollbar-hide mb-8"
         ref={scrollRef}
