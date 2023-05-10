@@ -11,19 +11,28 @@ export default function WordList() {
   const [words, setWords] = useState<string[]>([]);
 
   useEffect(() => {
+    // 가장 밑으로 스크롤
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
+    // 효과음
     playerRef.current?.play();
   }, [words]);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (word.trim() !== '') {
+      if (word.trim() === '') {
+        alert('단어를 입력해주세요.');
+      } else if (words.includes(word)) {
+        alert('중복된 단어입니다!');
+        setWord('')
+      } else if (word.length > 13) {
+        alert('13자 이내로 입력해주세요.')
+        setWord(word.slice(0,13))
+      }
+      else {
         setWords([...words, word]);
         setWord('');
-      } else {
-        alert('단어를 입력해주세요.');
       }
     }
   };
