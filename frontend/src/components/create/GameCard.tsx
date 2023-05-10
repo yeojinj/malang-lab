@@ -19,7 +19,7 @@ type Props = {
 
 export default function GameCard({ game, handleClickGame, selectedGame }: Props) {
     return (
-        <div className={`relative rounded-md p-5 hover:bg-black hover:text-white 
+        <div className={`relative rounded-md p-5 hover:bg-black hover:text-white hover:scale-[1.01] hover:button-shadow
         ${selectedGame === game.id ? 'text-white bg-black' : 'bg-white text-black'} 
         ${game.id === 'NOTYET' ? 'pointer-events-none' : ''}`}
             onClick={() => handleClickGame(game.id)}>
