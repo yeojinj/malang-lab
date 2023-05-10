@@ -4,6 +4,7 @@ import com.c102.malanglab.game.application.port.out.GameBroadCastPort;
 import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
+import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 
 import com.c102.malanglab.game.dto.Message;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -66,22 +69,25 @@ public class GameService implements GameStatusCase {
     @Override
     public void joinMember(Long roomId, String userId, Message message) {
         // 1. 게임이 현재 실행중인지 확인합니다.
+        Room room = gamePort.join(roomId);
+        gamePort.addGuestList(room.getId(), userId);
 
-        // 2. 게임 참여자의 참여 정보를 알립니다.
-        gameBroadCastPort.alertJoinMember(roomId, message);
+        // 2. 방에 참여자 목록을 가져옵니다.
+        List<GuestDto> guestList = gamePort.getGuestList(room.getId()).stream()
+                .map(g -> new GuestDto(g.getId(), g.getNickname(), g.getImagePath()))
+                .collect(Collectors.toList());
 
-        // 3. 방에 참여자 목록을 가져옵니다.
-        List<GuestDto> guestList = new ArrayList<>();
+        // 3. 게임 참여자의 참여 정보를 알립니다.
+        gameBroadCastPort.alertJoinMember(room.getId(), message);
+
         // 4. 참여 당사자에게 참여자 리스트를 전달합니다.
-        gameUniCastPort.alertGuestList(
-                userId,
-                new Message<List<GuestDto>>(Message.MessageType.GUEST_LIST, guestList)
-        );
+        gameUniCastPort.alertGuestList(userId, new Message<List<GuestDto>>(Message.MessageType.GUEST_LIST, guestList));
     }
 
     @Override
     public void exitMember(Long roomId, String userId) {
         // 1. 게임 참여자의 정보를 삭제합니다.
+        gamePort.removeUser(roomId, userId);
 
         // 2. 게임 참여자의 이탈 정보를 알립니다.
         gameBroadCastPort.alertExitMember(roomId, new Message<GuestDto>(
