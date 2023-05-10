@@ -1,12 +1,13 @@
+'use client';
+
 import Image from 'next/image';
 import { QRCodeSVG } from 'qrcode.react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-type Props = {
-  code: number;
-};
-
-export default function PinCode({ code }: Props) {
-  const url = 'http://localhost:3000/';
+export default function PinCode() {
+  const url = `http://localhost:3000`;
+  const code = useSelector((state: RootState) => state.gameinfo.id)
 
   return (
     <div className='flex mt-3 mb-10 justify-center'>

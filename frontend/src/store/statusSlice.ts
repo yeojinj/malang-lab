@@ -13,7 +13,7 @@ export const statusSlice = createSlice({
   initialState,
   reducers: {
     // 방 만들기 버튼을 눌렀을 때 상태 갱신
-    updateStatus: state => {
+    updateStatus: (state) => {
       state.isHost = true;
     },
   },
