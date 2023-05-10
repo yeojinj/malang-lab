@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-type Guest = {
+export type Guest = {
   pin: string;
   nickname: string;
   imageUrl: string;
@@ -20,6 +20,10 @@ export const guestSlice = createSlice({
     setPinAction(state, action) {
       state.pin = action.payload;
     },
+    // image setting
+    setImageAction(state, action) {
+      state.imageUrl = action.payload;
+    },
     // nickname setting
     setNicknameAction(state, action) {
       state.nickname = action.payload;
@@ -27,5 +31,6 @@ export const guestSlice = createSlice({
   },
 });
 
-export const { setPinAction, setNicknameAction } = guestSlice.actions;
+export const { setPinAction, setNicknameAction, setImageAction } =
+  guestSlice.actions;
 export default guestSlice.reducer;
