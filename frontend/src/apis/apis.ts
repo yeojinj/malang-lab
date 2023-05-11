@@ -2,7 +2,7 @@ import { axios, authApi } from './axios.config';
 import { Guest } from './../store/guestSlice';
 import { GameInfo, Setting } from '@/store/gameInfoSlice';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 
 // 토큰 생성하기
@@ -72,18 +72,14 @@ const setGuestInfo = async (payload: Guest) => {
     type: 'image/png'
 }));
 
-  for (let key of formData.keys()) {
-    console.log(key, formData.get(key), '👩');
-  }
-
   try {
     const res = await authApi.post(`/game/${pin}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(res)
-    return res;
+    console.log(res.data.data.imagePath)
+    return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
   }
