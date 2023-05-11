@@ -12,10 +12,12 @@ export const readyInfoSlice = createSlice({
   initialState,
   reducers: {
     setReadyMember(state, action) {
-      state = [...state, action.payload]
-    }
+      console.log(action, 'action!!!!!!!!!!!');
+      state.push(action.payload);
+      console.log(state, 'state!!!!!!!!!!!!!');
+    },
   },
 });
 
-export const {setReadyMember} = readyInfoSlice.actions;
+export const { setReadyMember } = readyInfoSlice.actions;
 export default readyInfoSlice.reducer;
