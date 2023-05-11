@@ -256,6 +256,19 @@ public class GameAdapter implements GamePort {
     }
 
     @Override
+    public Long totalWordCount(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = (String) hashOperations.get(key, "turn");
+
+        // 2. 총 단어 수 조회 및 반환
+        key = "room:" + roomId + ":" + turn + ":word-cnt";
+        Long totalWordCount = hashOperations.size(key);
+        return totalWordCount;
+    }
+
+    @Override
     public Room findById(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
     }

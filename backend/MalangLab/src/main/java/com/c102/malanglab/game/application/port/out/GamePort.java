@@ -38,6 +38,9 @@ public interface GamePort {
     /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
     int inputWord(Long roomId, String userId, String word, Long time);
 
+    /** 현재 라운드에 입력된 총 단어 수 */
+    Long totalWordCount(Long roomId);
+
     Room findById(Long id);
 
     Guest findById(String id);
