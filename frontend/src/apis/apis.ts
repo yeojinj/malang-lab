@@ -90,7 +90,7 @@ const setGuestInfo = async (payload: Guest) => {
 };
 
 // 키워드 입력
-const inputWord = async (payload: WordInfo) => {
+const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
   // const pin = useSelector((state: RootState) => state.guest.pin);
   const pin = 195048
@@ -102,7 +102,7 @@ const inputWord = async (payload: WordInfo) => {
   } catch (err) {
     console.log('단어 입력 실패', err);
   }
-  
+
 };
 
-export { getTokenApi, makeRoomApi, checkPinApi, setGuestInfo, inputWord };
+export { getTokenApi, makeRoomApi, checkPinApi, setGuestInfo, inputWordApi };

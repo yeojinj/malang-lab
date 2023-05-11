@@ -6,7 +6,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useSocket } from '@/context/SocketContext';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { inputWord } from '@/apis/apis';
+import { inputWordApi } from '@/apis/apis';
 import { WordInfo } from '@/store/Types';
 
 export default function WordList() {
@@ -24,7 +24,7 @@ export default function WordList() {
   }
 
   const handlePostWord = async () => {
-    const res = await inputWord(wordinfo);
+    const res = await inputWordApi(wordinfo);
   }
 
   useEffect(() => {
