@@ -48,7 +48,7 @@ const checkPinApi = async (payload: number) => {
 };
 
 // 닉네임 및 캐릭터 설정하기
-const setGuestInfo = async (payload: Guest) => {
+const checkGuestInfoApi = async (payload: Guest) => {
   console.log(payload, 'setGuestInfo');
   const formData: any = new FormData();
   const { pin, nickname, imageUrl } = payload;
@@ -66,6 +66,7 @@ const setGuestInfo = async (payload: Guest) => {
     for (var i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
+    
     return new Blob([ab], { type: 'image/png' });
   }
 
@@ -105,4 +106,4 @@ const inputWordApi = async (payload: WordInfo) => {
 
 };
 
-export { getTokenApi, makeRoomApi, checkPinApi, setGuestInfo, inputWordApi };
+export { getTokenApi, makeRoomApi, checkPinApi, checkGuestInfoApi, inputWordApi };
