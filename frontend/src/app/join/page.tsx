@@ -23,7 +23,6 @@ export default function JoinPage() {
       style={{ backgroundImage: "url('/imgs/bg-2.png')" }}
     >
       {step === 0 && <PinForm setStep={setStep} />}
-
       {/* 캐릭터 생성하기 */}
       {step === 1 && <CustomSection setStep={setStep} />}
       {/* 닉네임 설정하기 */}
