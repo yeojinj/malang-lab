@@ -9,6 +9,7 @@ import { RootState } from '@/store/store';
 
 export default function ReadyPage() {
   const isHost = useSelector((state: RootState) => state.status.isHost);
+  const title = useSelector((state: RootState) => state.gameinfo.title)
 
   return (
     <>
@@ -18,7 +19,7 @@ export default function ReadyPage() {
         >
           <PinCode />
           <div className="text-center text-[#44474B]">
-            <h1 className="text-[2rem] font-bold">말랑이의 연구소</h1>
+            <h1 className="text-[2rem] font-bold">{title}</h1>
             <h2 className="my-5">
               준비가 완료되면 시작하기 버튼을 눌러주세요!
             </h2>
