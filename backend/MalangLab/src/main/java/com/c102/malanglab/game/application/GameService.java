@@ -134,6 +134,32 @@ public class GameService implements GameStatusCase {
         ));
     }
 
+    @Override
+    public void inputWord(Long roomId, String userId, WordRequest wordRequest) {
+
+        // 단어 입력 persistence 처리를 합니다.
+        // - 중복 단어 (0)
+        // - 입력 성공 (1)
+        // - 히든 단어 입력 성공 (2)
+        int result = gamePort.inputWord(roomId, userId, wordRequest.getWord(), wordRequest.getTime());
+
+        switch(result){
+            case 0:
+                // 중복 단어 입력 시 예외 처리를 합니다.
+                throw new IllegalArgumentException("중복 입력입니다.");
+            case 1: case 2:
+                // 방장에게 데이터 베이스 확인 요청을 보냅니다.
+                gameUniCastPort.alertRoomManager(
+                        Long.toString(roomId),
+                        new Message<Object>(Message.MessageType.CHECK_DB, null)
+                );
+                return;
+            default:
+                return;
+        }
+
+    }
+
 //    @Scheduled(fixedDelay = 1000)
 //    public void sendServerTime() {
 //        gameBroadCastPort.alertServerTime(System.currentTimeMillis());
