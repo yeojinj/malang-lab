@@ -2,7 +2,6 @@ package com.c102.malanglab.game.adapter.persistence;
 
 import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.*;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -103,7 +102,7 @@ public class GameAdapter implements GamePort {
     /** 닉네임 설정하기 */
     @Override
     public boolean setNickname(Long roomId, String userId, String nickname) {
-        // 1. Redis 중복 검사 및 저장
+        // Redis 중복 검사 및 저장
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         Boolean isExist = (setOperations.add(key, nickname) == 0);
@@ -151,7 +150,7 @@ public class GameAdapter implements GamePort {
     /** 게임 참가자 정보 저장하기 */
     @Override
     public void addGuestList(Long roomId, String userId) {
-        // 1.sortedSet으로 참여자 순서를 기록합니다.
+        // 1. Sorted Set으로 참여자 순서를 기록합니다.
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         long current = hashOperations.increment("room:" + roomId + ":status", "enter-num", 1);
 
@@ -174,28 +173,6 @@ public class GameAdapter implements GamePort {
         return list;
     }
 
-    /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
-    @Override
-    public int inputWord(Long roomId, String userId, String word) {
-        return 0;
-    }
-
-    @Override
-    public Room findById(Long id) {
-        return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
-    }
-
-    @Override
-    public Guest findById(String id) {
-        return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
-    }
-
-    @Override
-    public boolean isGameManager(Long roomId, String userId) {
-        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
-        return userId.equals(hashOperations.get("room:" + roomId + ":info", "host-id"));
-    }
-
     @Override
     public Round checkRound(Long roomId) {
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
@@ -206,7 +183,7 @@ public class GameAdapter implements GamePort {
         if(!isGameStart) {
             hashOperations.put("room:" + roomId + ":status", "start", "1");
         } else if(currentTurn == totalTurn) {
-           isLast = true;
+            isLast = true;
         }
 
         return Round.builder()
