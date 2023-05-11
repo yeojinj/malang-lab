@@ -30,10 +30,10 @@ public interface GamePort {
     List<Guest> getGuestList(Long roomId);
 
     /** 게임 시작 시 현재 라운드 정보 조회 */
-    // Round checkRound(Long roomId);
+    Round checkRound(Long roomId);
 
     /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
-    int inputWord(Long roomId, String userId, String word);
+    int inputWord(Long roomId, String userId, String word, Long time);
 
     Room findById(Long id);
 
@@ -41,7 +41,4 @@ public interface GamePort {
 
     /** 게임 매니저 여부 조회 */
     boolean isGameManager(Long roomId, String userId);
-
-    /** 게임 라운드 정보 가져오기 */
-    Round checkRound(Long roomId);
 }
