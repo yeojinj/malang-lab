@@ -5,16 +5,18 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.application.port.out.S3Port;
+import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 
 import com.c102.malanglab.game.domain.Round;
 import com.c102.malanglab.game.dto.*;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -55,25 +57,30 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
+    @Transactional
     public GuestResponse register(Long roomId, GuestRequest guestRequest) {
+        Room room = gamePort.findById(roomId);
+        if(Objects.isNull(room)) {
+            throw new IllegalArgumentException("존재하지 않는 방입니다.");
+        }
+
         // 닉네임 중복 검사
-        Boolean check = gamePort.setNickname(roomId, guestRequest.getId(), guestRequest.getNickname());
+        Boolean check = gamePort.setNickname(room.getId(), guestRequest.getId(), guestRequest.getNickname());
         if (!check) {
             throw new IllegalArgumentException("중복된 닉네임이 존재합니다.");
         }
-
-        // 이미지 파일 검사
-        if (guestRequest.getImage().isEmpty()) {
-            throw new IllegalArgumentException("이미지 파일이 전달되지 않아 업로드에 실패했습니다.");
-        }
-
         // S3 업로드
         String url = s3Port.setImgPath(guestRequest.getImage(), "room/" + roomId + "/");
-        gamePort.addGuest(roomId, guestRequest.getId(), guestRequest.getNickname(), url);
-        GuestResponse guestResponse = new GuestResponse(guestRequest.getId(),
-                                                        guestRequest.getNickname(),
-                                                        url,
-                                                        roomId);
+
+        Guest newGuest = new Guest(guestRequest.getId(), guestRequest.getNickname(), url);
+        room.addGuest(newGuest);
+
+        GuestResponse guestResponse = new GuestResponse(
+                guestRequest.getId(),
+                newGuest.getNickname(),
+                newGuest.getImagePath(),
+                room.getId());
+
         return guestResponse;
     }
 

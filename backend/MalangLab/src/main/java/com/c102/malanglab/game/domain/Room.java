@@ -44,11 +44,6 @@ public class Room {
         this.settings = settings;
     }
 
-    public boolean isHost(String userId) {
-        return this.hostId == userId;
-    }
-
-    // room - guest 연관관계 편의 메소드
     public void addGuest(Guest guest) {
         this.guests.add(guest);
         if (guest.getRoom() != this) {

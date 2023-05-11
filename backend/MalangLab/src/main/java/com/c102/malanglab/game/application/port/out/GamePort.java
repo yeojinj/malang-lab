@@ -18,7 +18,7 @@ public interface GamePort {
     boolean setNickname(Long roomId, String userId, String nickname);
 
     /** 캐릭터 이미지 설정하기 */
-    Guest addGuest(Long roomId, String userId, String nickname, String imgPath);
+    Guest addGuest(Guest guest);
 
     /** 유저 퇴장 시 삭제 */
     void removeUser(Long roomId, String userId);
