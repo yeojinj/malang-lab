@@ -49,4 +49,10 @@ public interface GameStatusCase {
      */
     void exitMember(final Long roomId, final String userId);
 
+    /**
+     * 참가자가 단어를 입력합니다.
+     * @param roomId
+     * @param userId
+     */
+    void inputWord(final Long roomId, final String userId, final WordRequest wordRequest);
 }

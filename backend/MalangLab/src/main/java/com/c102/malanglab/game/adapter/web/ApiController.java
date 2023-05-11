@@ -5,6 +5,7 @@ import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.dto.RoomRequest;
 import com.c102.malanglab.game.dto.RoomResponse;
 import com.c102.malanglab.game.dto.GuestRequest;
+import com.c102.malanglab.game.dto.WordRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -79,5 +80,24 @@ public class ApiController {
     ) {
         gameStatusCase.exitMember(roomId, userId);
         return new CustomResponseEntity(HttpStatus.NO_CONTENT, null).convertToResponseEntity();
+    }
+
+    /**
+     * 게스트는 단어를 입력합니다.
+     * POST : /game/{roomId}/word
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @RequestHeader userId : 유저 아이디 토큰
+     * @RequestBody wordRequest : 입력 요청 단어
+     * @return
+     */
+    @PostMapping("/{roomId}/word")
+    public ResponseEntity<Void> inputWord(
+            @PathVariable Long roomId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId,
+            @RequestBody @Valid WordRequest wordRequest
+            ) {
+
+        gameStatusCase.inputWord(roomId, userId, wordRequest);
+        return new CustomResponseEntity(HttpStatus.OK, null).convertToResponseEntity();
     }
 }
