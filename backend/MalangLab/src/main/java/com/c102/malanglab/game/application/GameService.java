@@ -136,6 +136,7 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void inputWord(Long roomId, String userId, WordRequest wordRequest) {
+        gamePort.inputWord(roomId, userId, wordRequest.getWord(), wordRequest.getTime());
         /*
         단어 입력
 

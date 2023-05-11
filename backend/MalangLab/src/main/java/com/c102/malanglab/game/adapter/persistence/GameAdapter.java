@@ -212,14 +212,14 @@ public class GameAdapter implements GamePort {
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         key = "room:" + roomId + ":" + userId + ":" + turn + ":word";
         Boolean isWordExist = (setOperations.add(key, word) == 0);
-        if (!isWordExist) {
+        if (isWordExist) {
             return 0;
         }
 
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         // 3. 히든 단어 체크
         boolean isHidden = false;
-        key = "room:" + roomId + ":info:" + (turn + 1);
+        key = "room:" + roomId + ":info:" + turn;
         String hiddenWord = (String) hashOperations.get(key, "hidden");
         if (hiddenWord.equals(word)) {
             isHidden = true;
