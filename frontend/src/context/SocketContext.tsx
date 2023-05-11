@@ -9,6 +9,7 @@ interface SocketProps {
   makeClient: (brokerURL: string) => void;
   subscribe: (address, callback) => void;
   publish: (destination, type, message) => void;
+  publishUpdate: (destination, type) => void;
 }
 
 const SocketContext = createContext<SocketProps | undefined>(undefined);
@@ -65,8 +66,16 @@ export function SocketProvider({ children }) {
     client.publish({ destination, body, headers });
   };
 
+  // DB 업데이트 신호
+  const publishUpdate = (destination, type) => {
+    const body = JSON.stringify({
+      type,
+    });
+    client.publish({ destination, body, headers });
+  };
+
   return (
-    <SocketContext.Provider value={{ client, makeClient, subscribe, publish }}>
+    <SocketContext.Provider value={{ client, makeClient, subscribe, publish, publishUpdate }}>
       {children}
     </SocketContext.Provider>
   );

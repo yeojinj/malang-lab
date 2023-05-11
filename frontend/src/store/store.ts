@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import statusSlice from './statusSlice';
 import gameInfoSlice from './gameInfoSlice';
 import guestSlice from './guestSlice';
+import readyInfoSlice from './readyInfoSlice';
 
 // redux 생성 함수
 const store = configureStore({
@@ -12,6 +13,7 @@ const store = configureStore({
     status: statusSlice,
     gameinfo: gameInfoSlice,
     guest : guestSlice,
+    readyInfo : readyInfoSlice,
   },
 });
 
