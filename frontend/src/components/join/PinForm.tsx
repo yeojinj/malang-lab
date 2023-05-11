@@ -32,6 +32,8 @@ export default function PinForm({ setStep }: Props) {
       const topic = `/topic/room.${pin}`;
       const queue = `/queue/room.${pin}`;
       subscribe(topic, topicCallback);
+      // console.log("=====================",res)
+
       subscribe(queue, queueCallback);
 
       // 리덕스에 저장

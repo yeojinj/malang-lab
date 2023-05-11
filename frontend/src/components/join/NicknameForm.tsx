@@ -88,7 +88,7 @@ export default function NicknameForm() {
                 className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
             />
             <button
-                className="button-black w-[80%] sm:w-[60%]]"
+                className="button-black w-[80%] sm:w-[60%]] h-12 mx-auto"
                 onClick={handleClickComplete}
             >
                 완료
