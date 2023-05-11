@@ -33,7 +33,7 @@ public interface GamePort {
     Round checkRound(Long roomId);
 
     /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
-    int inputWord(Long roomId, String userId, String word);
+    int inputWord(Long roomId, String userId, String word, Long time);
 
     Room findById(Long id);
 
