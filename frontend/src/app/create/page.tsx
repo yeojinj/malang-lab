@@ -23,6 +23,9 @@ import { updateStatus } from '@/store/statusSlice';
 // apis
 import { makeRoomApi } from '@/apis/apis';
 import Loading from '@/components/common/Loading';
+import { HandleTopic } from '@/libs/handleTopic';
+import { HandleQueue } from '@/libs/handleQueue';
+import { useSocket } from '@/context/SocketContext';
 
 const modes = [
   {
@@ -66,6 +69,10 @@ export default function CreatePage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const { subscribe } = useSocket();
+  const handleTopic = HandleTopic(dispatch);
+  const handleQueue = HandleQueue(dispatch);
 
   // 1. 방 정보 설정 상태
   const [step, setStep] = useState(0);
@@ -142,6 +149,11 @@ export default function CreatePage() {
       if (res) {
         // 방의 pin 번호 redux에 저장
         dispatch(setPincodeAction(res.data.id));
+        // topic, queue 구독
+        const topic = `/topic/manager/room.${res.data.id}`;
+        const queue = `/queue/manager/room.${res.data.id}`;
+        subscribe(topic, handleTopic);
+        subscribe(queue, handleQueue);
         // 대기방으로 입장
         router.push('/ready');
         // host 상태 업데이트
