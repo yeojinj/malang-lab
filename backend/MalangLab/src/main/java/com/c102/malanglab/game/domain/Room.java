@@ -33,8 +33,7 @@ public class Room {
     @JoinColumn(name = "ROOM_ID")
     private List<Setting> settings = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ROOM_ID")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "room")
     private List<Guest> guests = new ArrayList<>();
 
     public Room(String name, String hostId, GameMode mode, int totalRound, List<Setting> settings) {
@@ -45,7 +44,11 @@ public class Room {
         this.settings = settings;
     }
 
-    public boolean isHost(String userId) {
-        return this.hostId == userId;
+    public void addGuest(Guest guest) {
+        this.guests.add(guest);
+        if (guest.getRoom() != this) {
+            guest.setRoom(this);
+        }
     }
+
 }

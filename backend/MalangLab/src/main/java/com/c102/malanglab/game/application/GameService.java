@@ -5,6 +5,7 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.application.port.out.S3Port;
+import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 
 import com.c102.malanglab.game.domain.Round;
@@ -12,11 +13,11 @@ import com.c102.malanglab.game.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-
-
 
 @Slf4j
 @Service
@@ -56,20 +57,30 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
-    public GuestResponse register(final Long roomId, final GuestRequest guestRequest) {
+    @Transactional
+    public GuestResponse register(Long roomId, GuestRequest guestRequest) {
+        Room room = gamePort.findById(roomId);
+        if(Objects.isNull(room)) {
+            throw new IllegalArgumentException("존재하지 않는 방입니다.");
+        }
+
         // 닉네임 중복 검사
-        Boolean check = gamePort.setNickname(roomId, guestRequest.getId(), guestRequest.getNickname());
+        Boolean check = gamePort.setNickname(room.getId(), guestRequest.getId(), guestRequest.getNickname());
         if (!check) {
             throw new IllegalArgumentException("중복된 닉네임이 존재합니다.");
         }
-
         // S3 업로드
-        String url = s3Port.setImgPath(guestRequest.getImage());
+        String url = s3Port.setImgPath(guestRequest.getImage(), "room/" + roomId + "/");
 
-        GuestResponse guestResponse = new GuestResponse(guestRequest.getId(),
-                                                        guestRequest.getNickname(),
-                                                        url,
-                                                        roomId);
+        Guest newGuest = new Guest(guestRequest.getId(), guestRequest.getNickname(), url);
+        room.addGuest(newGuest);
+
+        GuestResponse guestResponse = new GuestResponse(
+                guestRequest.getId(),
+                newGuest.getNickname(),
+                newGuest.getImagePath(),
+                room.getId());
+
         return guestResponse;
     }
 
@@ -121,6 +132,42 @@ public class GameService implements GameStatusCase {
         gameBroadCastPort.alertExitMember(roomId, new Message<GuestRequest>(
                 Message.MessageType.EXIT, GuestRequest.of(userId)
         ));
+    }
+
+    @Override
+    public void inputWord(Long roomId, String userId, WordRequest wordRequest) {
+
+        // 단어 입력 persistence 처리를 합니다.
+        // - 중복 단어 (0)
+        // - 입력 성공 (1)
+        // - 히든 단어 입력 성공 (2)
+        int result = gamePort.inputWord(roomId, userId, wordRequest.getWord(), wordRequest.getTime());
+
+        switch(result){
+            case 0:
+                // 중복 단어 입력 시 예외 처리를 합니다.
+                throw new IllegalArgumentException("중복 입력입니다.");
+            case 1: case 2:
+                // 방장에게 데이터 베이스 확인 요청을 보냅니다.
+                gameUniCastPort.alertRoomManager(
+                        Long.toString(roomId),
+                        new Message<Object>(Message.MessageType.CHECK_DB, null)
+                );
+                return;
+            default:
+                return;
+        }
+
+    }
+
+    @Override
+    public Long totalWordCount(Long roomId, String userId) {
+        if (!gamePort.isGameManager(roomId, userId)) {
+            throw new IllegalArgumentException("호스트가 아닌 게스트의 요청입니다.");
+        }
+
+        Long result = gamePort.totalWordCount(roomId);
+        return result;
     }
 
 //    @Scheduled(fixedDelay = 1000)

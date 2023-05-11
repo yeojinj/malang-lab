@@ -18,7 +18,7 @@ export default function ModeCard({
 }: Props) {
   return (
     <div
-      className={`relative  rounded-md p-5 hover:bg-black hover:text-white ${
+      className={`relative rounded-md p-5 hover:bg-black hover:text-white hover:scale-[1.01] hover:button-shadow ${
         selectedMode === mode.id ? 'text-white bg-black' : 'bg-white text-black'
       } ${mode.id === 'TEAM' ? 'pointer-events-none' : ''}`}
       onClick={() => handleClickMode(mode.id)}

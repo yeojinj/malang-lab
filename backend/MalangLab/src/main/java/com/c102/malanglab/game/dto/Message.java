@@ -13,7 +13,7 @@ public class Message<T> {
     private T body;
 
     public enum MessageType {
-        JOIN, EXIT, GUEST_LIST, ROUND_START, @JsonEnumDefaultValue UNKNOWN;
+        JOIN, EXIT, GUEST_LIST, ROUND_START, CHECK_DB, @JsonEnumDefaultValue UNKNOWN;
 
         @JsonCreator
         public static MessageType from(String type) {

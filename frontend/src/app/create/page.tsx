@@ -65,7 +65,7 @@ export default function CreatePage() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   // 1. 방 정보 설정 상태
   const [step, setStep] = useState(0);
@@ -76,8 +76,8 @@ export default function CreatePage() {
   // 방제목 설정하기
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-    dispatch(setTitleAction(e.target.value))
-    console.log(e.target.value)
+    dispatch(setTitleAction(e.target.value));
+    console.log(e.target.value);
   };
 
   // 게임 모드 선택하기
@@ -134,31 +134,31 @@ export default function CreatePage() {
 
   // 방 만들기
   const handleClickCreate = async () => {
-    if(checkIsValid()) {
+    if (checkIsValid()) {
       // setIsLoading(true)
       const res = await makeRoomApi(gameinfo);
       // setIsLoading(false)
       // 방 만들기가 성공했을 때에만 실행
       if (res) {
         // 방의 pin 번호 redux에 저장
-        dispatch(setPincodeAction(res.data.id))
+        dispatch(setPincodeAction(res.data.id));
         // 대기방으로 입장
-        router.push('/ready')
+        router.push('/ready');
         // host 상태 업데이트
-        dispatch(updateStatus())
+        dispatch(updateStatus());
       }
     } else {
-      alert('라운드 정보를 빠짐 없이 입력해주세요!')
-      return
+      alert('라운드 정보를 빠짐 없이 입력해주세요!');
+      return;
     }
   };
 
   // 라운드 정보 유효성 검사
   const checkIsValid = () => {
-    return gameinfo.settings.every((setting) => {
-      return (setting.keyword!=='' && setting.hidden!=='')
-    })
-  }
+    return gameinfo.settings.every(setting => {
+      return setting.keyword !== '' && setting.hidden !== '';
+    });
+  };
 
   return (
     <div
@@ -212,7 +212,7 @@ export default function CreatePage() {
                 </div>
               </div>
               <button
-                className="bg-white w-[80px] h-[40px] rounded-md mx-auto mt-5"
+                className="bg-white w-[80px] h-[40px] rounded-md mx-auto mt-5 hover:text-white hover:bg-black hover:button-shadow"
                 onClick={handleClickStep}
               >
                 다음
@@ -233,7 +233,7 @@ export default function CreatePage() {
                     </div>
                   ))}
                   <button
-                    className="bg-white w-20 mt-2 mx-auto"
+                    className="bg-white w-[60px] min-h-[35px] rounded-[5px] mx-auto hover:bg-black hover:text-white button-shadow"
                     onClick={handleClickAdd}
                   >
                     추가
@@ -241,13 +241,13 @@ export default function CreatePage() {
                 </div>
                 <div className="flex justify-center absolute bottom-7 left-[50%] translate-x-[-50%]">
                   <button
-                    className="bg-white w-[80px] h-12 rounded-[5px] mr-3"
+                    className="bg-white w-[80px] font-bold h-12 rounded-[5px] mr-3 hover:scale-[1.02] hover:button-shadow"
                     onClick={handleClickStep}
                   >
                     이전
                   </button>
                   <button
-                    className="button-black w-[200px] mx-0"
+                    className="button-black font-bold w-[200px] mx-0 hover:scale-[1.02] hover:button-shadow"
                     onClick={handleClickCreate}
                   >
                     방 만들기

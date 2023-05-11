@@ -23,8 +23,9 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String uploadFile(MultipartFile multipartFile) {
-        String fileName = createFilename(multipartFile.getOriginalFilename());
+    public String uploadFile(MultipartFile multipartFile, String filePath) {
+        String fileName = filePath + createFilename(multipartFile.getOriginalFilename());
+        String fileUrl = "";
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setContentType(multipartFile.getContentType());
@@ -32,11 +33,12 @@ public class S3Uploader {
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
+            fileUrl = amazonS3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
         }
 
-        return fileName;
+        return fileUrl;
     }
 
     private String createFilename(String fileName) {

@@ -3,6 +3,7 @@ package com.c102.malanglab.game.domain;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,12 +14,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "guest")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Guest {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid")
     @Column(name = "GUEST_ID")
     private String id;
 
@@ -28,12 +26,20 @@ public class Guest {
     @Column(name = "IMAGE_PATH")
     private String imagePath;
 
-    public Guest(String id, String nickname) {
+    @ManyToOne
+    @JoinColumn(name = "ROOM_ID", updatable = false)
+    private Room room;
+
+    public Guest(String id, String nickname, String url) {
         this.id = id;
         this.nickname = nickname;
+        this.imagePath = url;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setRoom(Room room) {
+        this.room = room;
+        if(!room.getGuests().contains(this)) {
+            room.getGuests().add(this);
+        }
     }
 }

@@ -2,9 +2,7 @@ package com.c102.malanglab.game.adapter.persistence;
 
 import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.*;
-import jakarta.transaction.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,6 +28,8 @@ public class GameAdapter implements GamePort {
         Long roomId = getRandomRoomId();
         // Room Entity 생성
         Room room = new Room(roomId, roomInfo.getName(), roomInfo.getHostId(), roomInfo.getMode(), roomInfo.getSettings().size(), roomInfo.getSettings(), roomInfo.getGuests());
+        // 방 정보 MariaDB 저장
+        Room newRoom = roomRepository.save(room);
 
         // 방 정보 Redis 저장
         String key = "room:" + roomId + ":info";
@@ -38,6 +38,7 @@ public class GameAdapter implements GamePort {
         hashOperations.put(key, "mode", String.valueOf(room.getMode()));
         hashOperations.put(key, "total-round", String.valueOf(room.getTotalRound()));
         for (int round = 0; round < room.getTotalRound(); round++) {
+            // 라운드 정보 Redis 저장
             String roundKey = key + ":" + (round + 1);
             hashOperations.put(roundKey, "keyword", room.getSettings().get(round).getKeyword());
             hashOperations.put(roundKey, "hidden", room.getSettings().get(round).getHidden());
@@ -48,8 +49,6 @@ public class GameAdapter implements GamePort {
         hashOperations.put(statusKey, "turn", "0");
         hashOperations.put(statusKey, "enter-num", "0");
 
-        // 방 정보 MariaDB 저장
-        Room newRoom = roomRepository.save(room);
         return newRoom;
     }
 
@@ -103,13 +102,11 @@ public class GameAdapter implements GamePort {
     /** 닉네임 설정하기 */
     @Override
     public boolean setNickname(Long roomId, String userId, String nickname) {
-        // 1. Redis 중복 검사 및 저장
+        // Redis 중복 검사 및 저장
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-        Boolean isExist = setOperations.add(key, nickname) == 1;
-        if (isExist) {
-            // 2. MariaDB 저장
-            guestRepository.save(new Guest(userId, nickname));
+        Boolean isExist = (setOperations.add(key, nickname) == 0);
+        if (!isExist) {
             return true;
         } else {
             return false;
@@ -118,11 +115,9 @@ public class GameAdapter implements GamePort {
 
     /** 캐릭터 이미지 설정하기 */
     @Override
-    @Transactional
-    public Guest setImage(Long roomId, String userId, String imgPath) {
+    public Guest addGuest(Guest guest) {
         // MariaDB 저장
-        Guest guest = findById(userId);
-        guest.setImagePath(imgPath);
+        guestRepository.save(guest);
         return guest;
     }
 
@@ -134,8 +129,10 @@ public class GameAdapter implements GamePort {
         String key = "room:" + roomId + ":nickname";
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         setOperations.remove(key, userId);
-        //  1-2. TODO: Sorted Set에서 삭제
-
+        //  1-2. Sorted Set에서 삭제
+        key = "room:" + roomId + ":guests";
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.remove(key, userId);
         //  1-3. 유저가 대기실에 있는지 게임 중인지 검증 -> 게임 중이었을 경우 시상에서 제외
         key = "room:" + roomId + ":status";
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
@@ -153,20 +150,20 @@ public class GameAdapter implements GamePort {
     /** 게임 참가자 정보 저장하기 */
     @Override
     public void addGuestList(Long roomId, String userId) {
-        // 1.sortedSet으로 참여자 순서를 기록합니다.
+        // 1. Sorted Set으로 참여자 순서를 기록합니다.
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         long current = hashOperations.increment("room:" + roomId + ":status", "enter-num", 1);
 
-        ZSetOperations<String, Object> zSet = redisTemplate.opsForZSet();
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
 
-        zSet.add("room:" + roomId + ":guests", userId, current);
+        zSetOperations.add("room:" + roomId + ":guests", userId, current);
     }
 
     /** 게임 참가자 정보 조회하기 */
     @Override
     public List<Guest> getGuestList(Long roomId) {
-        ZSetOperations<String, Object> zSet = redisTemplate.opsForZSet();
-        Set<ZSetOperations.TypedTuple<Object>> tuples = zSet.rangeWithScores("room:" + roomId + ":guests", 0, -1);
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        Set<ZSetOperations.TypedTuple<Object>> tuples = zSetOperations.rangeWithScores("room:" + roomId + ":guests", 0, -1);
 
         // 1. tuples로부터 참가자 이름을 순서대로 가져온다.
         List<String> userIds = tuples.stream().map(t -> (String) t.getValue()).collect(Collectors.toList());
@@ -176,26 +173,10 @@ public class GameAdapter implements GamePort {
         return list;
     }
 
-    /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
-    @Override
-    public int inputWord(Long roomId, String userId, String word) {
-        return 0;
-    }
-
-    @Override
-    public Room findById(Long id) {
-        return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
-    }
-
-    @Override
-    public Guest findById(String id) {
-        return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
-    }
-
     @Override
     public boolean isGameManager(Long roomId, String userId) {
-        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
-        return userId.equals(hashOperations.get("room:" + roomId + ":info", "host-id"));
+        String hostId = findById(roomId).getHostId();
+        return userId.equals(hostId);
     }
 
     @Override
@@ -208,7 +189,7 @@ public class GameAdapter implements GamePort {
         if(!isGameStart) {
             hashOperations.put("room:" + roomId + ":status", "start", "1");
         } else if(currentTurn == totalTurn) {
-           isLast = true;
+            isLast = true;
         }
 
         return Round.builder()
@@ -222,5 +203,78 @@ public class GameAdapter implements GamePort {
             )
             .isLast(isLast)
             .build();
+    }
+
+    /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
+    @Override
+    public int inputWord(Long roomId, String userId, String word, Long time) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = (String) hashOperations.get(key, "turn");
+
+        // 2. 중복 단어인지 체크
+        // 해당 방에서 해당 사용자가 라운드마다 입력한 단어 Set에 검사와 동시에 add
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+        key = "room:" + roomId + ":" + userId + ":" + turn + ":word";
+        Boolean isWordExist = (setOperations.add(key, word) == 0);
+        if (isWordExist) {
+            return 0;
+        }
+
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        // 3. 히든 단어 체크
+        boolean isHidden = false;
+        key = "room:" + roomId + ":info:" + turn;
+        String hiddenWord = (String) hashOperations.get(key, "hidden");
+        if (hiddenWord.equals(word)) {
+            isHidden = true;
+            // 해당 방에서 라운드마다 히든 단어 찾은 사람, 찾은 시간 Sorted Set add
+            key = "room:" + roomId + ":" + turn + ":hidden:user-time";
+            zSetOperations.add(key, userId, time);
+        }
+
+        // 4. Redis 저장
+        // 해당 방에서 해당 사용자가 라운드마다 입력한 단어, 입력한 시간 Sorted Set add
+        key = "room:" + roomId + ":" + userId + ":" + turn + ":word-time";
+        zSetOperations.add(key, word, time);
+
+        // 해당 방에서 라운드마다 입력된 단어, 가중치 Sorted Set add
+        key = "room:" + roomId + ":" + turn + ":word-cnt";
+        zSetOperations.incrementScore(key, word, 1);
+
+        // 해당 방에서 해당 라운드에 해당 단어마다 입력한 사람, 시간 Sorted Set add
+        key = "room:" + roomId + ":" + turn + ":" + word + ":user-time";
+        zSetOperations.add(key, userId, time);
+
+        // 해당 방에서 사용자마다 입력한 단어 수 Sorted Set add
+        key = "room:" + roomId + ":user-word-cnt";
+        zSetOperations.incrementScore(key, userId, 1);
+
+        if(isHidden) return 2;
+        else return 1;
+    }
+
+    @Override
+    public Long totalWordCount(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = (String) hashOperations.get(key, "turn");
+
+        // 2. 총 단어 수 조회 및 반환
+        key = "room:" + roomId + ":" + turn + ":word-cnt";
+        Long totalWordCount = hashOperations.size(key);
+        return totalWordCount;
+    }
+
+    @Override
+    public Room findById(Long id) {
+        return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
+    }
+
+    @Override
+    public Guest findById(String id) {
+        return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
 }
