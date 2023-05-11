@@ -1,14 +1,17 @@
 import { setGuestInfo } from "@/apis/apis";
-import { setNicknameAction } from "@/store/guestSlice";
+import { setImageAction, setNicknameAction } from "@/store/guestSlice";
 import { RootState } from "@/store/store";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { isGeneratorFunction } from "util/types";
 
 export default function NicknameForm() {
+    const router = useRouter()
     const dispatch = useDispatch()
     const [nickname, setNickname] = useState('')
-    const guest = useSelector((state:RootState) => state.guest)
+    const guest = useSelector((state: RootState) => state.guest)
 
     // step3 - 닉네임 입력하기
     const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,12 +19,22 @@ export default function NicknameForm() {
     };
 
     // 닉네임 저장하기
-    const handleClickNickname = async () => {
+    const handleClickComplete = async () => {
         dispatch(setNicknameAction(nickname));
     };
+
+    const setGuestInfoFunction = async () => {
+        const imagePath = await setGuestInfo(guest)
+        dispatch(setImageAction(imagePath))
+        return imagePath
+    }
+
     useEffect(() => {
-        if(guest.nickname.trim()) {
-            setGuestInfo(guest)
+        if (guest.nickname.trim()) {
+            if(setGuestInfoFunction()) {
+                
+                router.push('/ready')
+            }
         }
     }, [guest.nickname])
 
@@ -38,7 +51,7 @@ export default function NicknameForm() {
             />
             <button
                 className="button-black w-[80%] sm:w-[60%]]"
-                onClick={handleClickNickname}
+                onClick={handleClickComplete}
             >
                 완료
             </button>

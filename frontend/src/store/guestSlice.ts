@@ -23,6 +23,7 @@ export const guestSlice = createSlice({
     // image setting
     setImageAction(state, action) {
       state.imageUrl = action.payload;
+      console.log(state.imageUrl, '❤')
     },
     // nickname setting
     setNicknameAction(state, action) {
