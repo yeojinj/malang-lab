@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { isGeneratorFunction } from "util/types";
 
 export default function NicknameForm() {
     const router = useRouter()
