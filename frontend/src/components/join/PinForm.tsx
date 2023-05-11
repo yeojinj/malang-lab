@@ -1,6 +1,6 @@
 import { checkPinApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
-import { queueCallback } from '@/libs/handleQueue';
+import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
 import { setPinAction } from '@/store/guestSlice';
 import { useState } from 'react';
@@ -33,7 +33,7 @@ export default function PinForm({ setStep }: Props) {
       const topic = `/topic/room.${pin}`;
       const queue = `/queue/room.${pin}`;
       subscribe(topic, handleTopic);
-      subscribe(queue, queueCallback);
+      subscribe(queue, HandleQueue);
 
       // 리덕스에 저장
       dispatch(setPinAction(pin));
