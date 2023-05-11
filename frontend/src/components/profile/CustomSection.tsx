@@ -47,6 +47,7 @@ export default function CustomSection({ setStep }: Props) {
         MimeType: 'image/png',
         pixelRatio: 3
       });
+      
       dispatch(setImageAction(dataURL))
       // 닉네임 설정으로 이동하기
       setStep(2)
