@@ -1,7 +1,6 @@
 'use client';
 
 import { configureStore } from '@reduxjs/toolkit';
-
 import statusSlice from './statusSlice';
 import gameInfoSlice from './gameInfoSlice';
 import guestSlice from './guestSlice';
@@ -12,8 +11,8 @@ const store = configureStore({
   reducer: {
     status: statusSlice,
     gameinfo: gameInfoSlice,
-    guest : guestSlice,
-    readyInfo : readyInfoSlice,
+    guest: guestSlice,
+    readyInfo: readyInfoSlice,
   },
 });
 
