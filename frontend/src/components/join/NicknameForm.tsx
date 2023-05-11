@@ -31,6 +31,7 @@ export default function NicknameForm() {
     useEffect(() => {
         if (guest.nickname.trim()) {
             if(setGuestInfoFunction()) {
+                
                 router.push('/ready')
             }
         }
