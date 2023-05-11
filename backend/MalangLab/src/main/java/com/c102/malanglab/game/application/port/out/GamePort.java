@@ -11,23 +11,26 @@ public interface GamePort {
     /** 방 만들기 */
     Room save(Room room);
 
-    /** 게임 참가하기 */
+    /** 게임 참가 */
     Room join(Long roomId);
 
-    /** 닉네임 설정하기 */
+    /** 닉네임 설정 */
     boolean setNickname(Long roomId, String userId, String nickname);
 
-    /** 캐릭터 이미지 설정하기 */
+    /** 캐릭터 이미지 설정 */
     Guest addGuest(Guest guest);
 
     /** 유저 퇴장 시 삭제 */
     void removeUser(Long roomId, String userId);
 
-    /** 게임 참가자 정보 저장하기 */
+    /** 게임 참가자 정보 저장 */
     void addGuestList(Long roomId, String userId);
 
-    /** 게임 참가자 정보 조회하기 */
+    /** 게임 참가자 정보 조회 */
     List<Guest> getGuestList(Long roomId);
+
+    /** 게임 호스트인지 체크 */
+    boolean isGameManager(Long roomId, String userId);
 
     /** 게임 시작 시 현재 라운드 정보 조회 */
     Round checkRound(Long roomId);
@@ -38,7 +41,4 @@ public interface GamePort {
     Room findById(Long id);
 
     Guest findById(String id);
-
-    /** 게임 매니저 여부 조회 */
-    boolean isGameManager(Long roomId, String userId);
 }

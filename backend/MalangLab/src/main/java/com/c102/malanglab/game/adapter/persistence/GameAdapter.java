@@ -174,6 +174,12 @@ public class GameAdapter implements GamePort {
     }
 
     @Override
+    public boolean isGameManager(Long roomId, String userId) {
+        String hostId = findById(roomId).getHostId();
+        return userId.equals(hostId);
+    }
+
+    @Override
     public Round checkRound(Long roomId) {
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         int currentTurn = hashOperations.increment("room:" + roomId + ":status", "turn", 1).intValue();
@@ -257,11 +263,5 @@ public class GameAdapter implements GamePort {
     @Override
     public Guest findById(String id) {
         return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
-    }
-
-    @Override
-    public boolean isGameManager(Long roomId, String userId) {
-        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
-        return userId.equals(hashOperations.get("room:" + roomId + ":info", "host-id"));
     }
 }
