@@ -134,6 +134,29 @@ public class GameService implements GameStatusCase {
         ));
     }
 
+    @Override
+    public void inputWord(Long roomId, String userId, WordRequest wordRequest) {
+        /*
+        단어 입력
+
+        1. 클라이언트 에서는 단어를 입력합니다
+        - 클라이언트에서 입력 단어 길이 제한, 중복 제한을 먼저 합니다
+
+
+        2. 입력한 단어를 API (/game/{roomId}/word)를 통해 컨트롤러로 전송합니다
+
+        3. Server의 컨트롤러에서는 요청된 데이터를 persistence 처리 합니다
+                - 중복 단어 (0)
+                - 입력 성공 (1)
+                - 히든 단어 입력 성공 (2)
+
+        4. Persistence 처리된 결과에 따라 호스트에게 단어가 입력 되었음을
+        WebSocket으로 알린다
+
+        5. Persistence 처리된 결과를 Server는 Client에게 Response로 return 한다
+        */
+    }
+
 //    @Scheduled(fixedDelay = 1000)
 //    public void sendServerTime() {
 //        gameBroadCastPort.alertServerTime(System.currentTimeMillis());

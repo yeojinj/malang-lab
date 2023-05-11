@@ -1,5 +1,8 @@
 import { checkPinApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
+import { queueCallback } from '@/libs/handleQueue';
+import { roomCallback } from '@/libs/handleRoom';
+import { topicCallback } from '@/libs/hasndleTopic';
 import { setPinAction } from '@/store/guestSlice';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -26,6 +29,14 @@ export default function PinForm({ setStep }: Props) {
     // 유효한 세션인지 확인 한후
     const isValid = await checkPinApi(Number(pin));
     if (isValid) {
+      // room, topic, queue 구독
+      const room = `/room.${pin}`;
+      const topic = `/topic/room.${pin}`;
+      const queue = `/queue/room.${pin}`;
+      subscribe(room, roomCallback);
+      subscribe(topic, topicCallback);
+      subscribe(queue, queueCallback);
+
       // 리덕스에 저장
       dispatch(setPinAction(pin));
 

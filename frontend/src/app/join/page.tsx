@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 // redux
@@ -23,7 +23,6 @@ export default function JoinPage() {
       style={{ backgroundImage: "url('/imgs/bg-2.png')" }}
     >
       {step === 0 && <PinForm setStep={setStep} />}
-
       {/* 캐릭터 생성하기 */}
       {step === 1 && <CustomSection setStep={setStep} />}
       {/* 닉네임 설정하기 */}
