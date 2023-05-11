@@ -4,6 +4,7 @@ import { GameInfo, Setting } from '@/store/gameInfoSlice';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
+import { WordInfo } from '@/store/Types';
 
 // 토큰 생성하기
 const getTokenApi = () => {
@@ -52,8 +53,8 @@ const checkGuestInfoApi = async (payload: Guest) => {
   const formData: any = new FormData();
   const { pin, nickname, imageUrl } = payload;
 
-  formData.append('id', localStorage.getItem('token'))
-  formData.append('nickname', nickname)
+  formData.append('id', localStorage.getItem('token'));
+  formData.append('nickname', nickname);
 
   function b64toBlob(dataURI) {
     // 인코딩된 문자열 데이터를 디코딩
@@ -61,17 +62,20 @@ const checkGuestInfoApi = async (payload: Guest) => {
     // ArrayBuffer는 자바스크립트에서 구현된 버퍼, 고정된 크기의 메모리 공간에 바이너리 데이터를 저장하는 객체
     var ab = new ArrayBuffer(byteString.length);
     var ia = new Uint8Array(ab);
-    
+
     for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
+      ia[i] = byteString.charCodeAt(i);
     }
     
     return new Blob([ab], { type: 'image/png' });
-}
+  }
 
-  formData.append('image', new File([b64toBlob(imageUrl)], "capture.png", {
-    type: 'image/png'
-}));
+  formData.append(
+    'image',
+    new File([b64toBlob(imageUrl)], 'capture.png', {
+      type: 'image/png',
+    }),
+  );
 
   try {
     const res = await authApi.post(`/game/${pin}`, formData, {
@@ -79,11 +83,27 @@ const checkGuestInfoApi = async (payload: Guest) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(res.data.data.imagePath)
+    console.log(res.data.data.imagePath);
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
   }
 };
 
-export { getTokenApi, makeRoomApi, checkPinApi, checkGuestInfoApi };
+// 키워드 입력
+const inputWordApi = async (payload: WordInfo) => {
+  console.log(payload, 'postWord');
+  // const pin = useSelector((state: RootState) => state.guest.pin);
+  const pin = 195048
+
+  try {
+    const res = await authApi.post(`/game/${pin}/word`, payload);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('단어 입력 실패', err);
+  }
+
+};
+
+export { getTokenApi, makeRoomApi, checkPinApi, checkGuestInfoApi, inputWordApi };
