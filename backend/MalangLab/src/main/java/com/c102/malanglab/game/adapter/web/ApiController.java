@@ -97,7 +97,7 @@ public class ApiController {
             @RequestBody @Valid WordRequest wordRequest
             ) {
 
-
+        gameStatusCase.inputWord(roomId, userId, wordRequest);
         return new CustomResponseEntity(HttpStatus.OK, null).convertToResponseEntity();
     }
 }
