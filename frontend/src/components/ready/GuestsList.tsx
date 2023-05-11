@@ -2,33 +2,8 @@
 
 import GuestGrid from './GuestGrid';
 import { useRef, useState, useEffect } from 'react';
-
-const guests = [
-  {
-    name: '냠냠이',
-    image: '/imgs/character.png',
-  },
-  // {
-  //   name: '문어지지마',
-  //   image: '/imgs/character.png',
-  // },
-  // {
-  //   name: '지냠이',
-  //   image: '/imgs/character.png',
-  // },
-  // {
-  //   name: '냠냠이',
-  //   image: '/imgs/character.png',
-  // },
-  // {
-  //   name: '문어지지마',
-  //   image: '/imgs/character.png',
-  // },
-  // {
-  //   name: '지냠이',
-  //   image: '/imgs/character.png',
-  // },
-];
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 type Props = {
   host: boolean;
@@ -36,6 +11,7 @@ type Props = {
 
 export default function GuestsList({ host }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const readyInfo = useSelector((state: RootState) => state.readyInfo)
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -50,7 +26,7 @@ export default function GuestsList({ host }: Props) {
       } my-5 overflow-y-auto scrollbar-hide`}
       ref={scrollRef}
     >
-      <GuestGrid guests={guests} />
+      <GuestGrid guests={readyInfo} />
     </div>
   );
 }
