@@ -100,4 +100,21 @@ public class ApiController {
         gameStatusCase.inputWord(roomId, userId, wordRequest);
         return new CustomResponseEntity(HttpStatus.OK, null).convertToResponseEntity();
     }
+
+    /**
+     * 호스트는 단어의 수를 가져옵니다
+     * POST : /game/{roomId}/wordcount
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @RequestHeader userId : 유저 아이디 토큰
+     * @return
+     */
+    @GetMapping("/{roomId}/wordcount")
+    public ResponseEntity<Long> totalWordCount(
+            @PathVariable Long roomId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
+    ) {
+
+        Long result = gameStatusCase.totalWordCount(roomId, userId);
+        return new CustomResponseEntity(HttpStatus.OK, result).convertToResponseEntity();
+    }
 }

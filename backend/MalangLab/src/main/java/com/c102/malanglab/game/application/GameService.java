@@ -160,6 +160,16 @@ public class GameService implements GameStatusCase {
 
     }
 
+    @Override
+    public Long totalWordCount(Long roomId, String userId) {
+        if (!gamePort.isGameManager(roomId, userId)) {
+            throw new IllegalArgumentException("호스트가 아닌 게스트의 요청입니다.");
+        }
+
+        Long result = gamePort.totalWordCount(roomId);
+        return result;
+    }
+
 //    @Scheduled(fixedDelay = 1000)
 //    public void sendServerTime() {
 //        gameBroadCastPort.alertServerTime(System.currentTimeMillis());
