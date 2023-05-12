@@ -277,4 +277,12 @@ public class GameAdapter implements GamePort {
     public Guest findById(String id) {
         return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
+
+    @Override
+    public Object totalWordResult(Long roomId) {
+        // TODO: 만들어 주세요!
+        return null;
+    }
+
+
 }

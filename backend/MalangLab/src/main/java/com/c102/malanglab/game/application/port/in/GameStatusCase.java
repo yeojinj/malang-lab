@@ -64,4 +64,13 @@ public interface GameStatusCase {
      * @return
      */
     Long totalWordCount(final Long roomId, final String userId);
+
+    /**
+     * 라운드 입력 단어 결과를 가져옵니다.
+     * TODO: 리턴 자료형 수정
+     * @param roomId
+     * @param userId
+     * @return
+     */
+    Object totalWordResult(final Long roomId, final String userId);
 }

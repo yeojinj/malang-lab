@@ -44,4 +44,7 @@ public interface GamePort {
     Room findById(Long id);
 
     Guest findById(String id);
+
+    /** 현재 라운드에 입력된 총 단어 결과 **/
+    Object totalWordResult(Long roomId);
 }
