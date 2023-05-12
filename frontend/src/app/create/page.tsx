@@ -150,8 +150,8 @@ export default function CreatePage() {
         // 방의 pin 번호 redux에 저장
         dispatch(setPincodeAction(res.data.id));
         // topic, queue 구독
-        const topic = `/topic/manager/room.${res.data.id}`;
-        const queue = `/queue/manager/room.${res.data.id}`;
+        const topic = `/topic/room.${res.data.id}`;
+        const queue = `/queue/manager.room.${res.data.id}`;
         subscribe(topic, handleTopic);
         subscribe(queue, handleQueue);
         // 대기방으로 입장

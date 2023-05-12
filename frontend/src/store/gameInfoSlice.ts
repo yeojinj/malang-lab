@@ -16,6 +16,7 @@ export type GameInfo = {
   name: string;
   mode: string;
   settings: Setting[];
+  present: number;
 };
 
 const initialState: GameInfo = {
@@ -32,6 +33,7 @@ const initialState: GameInfo = {
       round: 1,
     },
   ],
+  present: 0,
 };
 
 export const gameInfoSlice = createSlice({
@@ -84,6 +86,10 @@ export const gameInfoSlice = createSlice({
         round: state.settings.length + 1,
       });
     },
+    // 라운드 시작할 때
+    updatePresentAction(state) {
+      state.present += 1;
+    },
   },
 });
 
@@ -98,5 +104,6 @@ export const {
   changekeywordAction,
   changeHiddenAction,
   changeTimeAction,
+  updatePresentAction,
 } = gameInfoSlice.actions;
 export default gameInfoSlice.reducer;
