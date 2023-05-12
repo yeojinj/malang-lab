@@ -23,5 +23,10 @@ public class S3Adpater implements S3Port {
         s3Uploader.removeFile(path);
     }
 
+    @Override
+    public void removeAll(Long roomId) {
+        s3Uploader.removeAll(roomId);
+    }
+
 
 }

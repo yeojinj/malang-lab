@@ -6,4 +6,6 @@ public interface S3Port {
     String setImgPath(MultipartFile image, String path);
 
     void removeImgPath(String path);
+
+    void removeAll(Long roomId);
 }

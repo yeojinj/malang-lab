@@ -2,6 +2,8 @@ package com.c102.malanglab.game.application.port.in;
 
 import com.c102.malanglab.game.dto.*;
 
+import java.util.concurrent.ExecutionException;
+
 public interface GameStatusCase {
 
     /**
@@ -16,6 +18,11 @@ public interface GameStatusCase {
      * @param roomId
      */
     RoomResponse get(final Long roomId);
+
+    /**
+     * 게임을 삭제합니다.
+     */
+    void destory(final Long roomId);
 
     /**
      * 게스트는 닉네임과 사진을 등록합니다

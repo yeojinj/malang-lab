@@ -3,9 +3,8 @@ package com.c102.malanglab.game.adapter.s3;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -68,5 +67,13 @@ public class S3Uploader {
         } catch(Exception e) {
             log.error("이미지를 제거하는 데 문제가 발생했습니다 -> {}", e.getMessage());
         }
+    }
+
+    public void removeAll(Long roomId) {
+        ListObjectsV2Result result = amazonS3Client.listObjectsV2(bucket, "room/" + roomId + "/");
+        for(S3ObjectSummary summary : result.getObjectSummaries()) {
+            amazonS3Client.deleteObject(bucket, summary.getKey());
+        }
+        amazonS3Client.deleteObject(bucket, "room/" + roomId + "/");
     }
 }

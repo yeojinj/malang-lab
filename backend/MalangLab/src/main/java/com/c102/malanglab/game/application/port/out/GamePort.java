@@ -20,6 +20,8 @@ public interface GamePort {
     /** 캐릭터 이미지 설정 */
     Guest addGuest(Guest guest);
 
+    /** 방 제거 */
+    void removeRoom(Long roomId);
     /** 유저 퇴장 시 삭제 */
     void removeUser(Long roomId, String userId);
 
