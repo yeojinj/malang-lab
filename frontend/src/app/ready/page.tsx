@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
 export default function ReadyPage() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function ReadyPage() {
 
   return (
     <>
+      <BgAudioPlayer src='/audio/bgfull.wav' />
       {isHost ? (
         <div className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1">
           <PinCode />
