@@ -1,4 +1,4 @@
-import { axios, authApi } from './axios.config';
+import { axios, authApi, BASE_URL } from './axios.config';
 import { Guest } from './../store/guestSlice';
 import { GameInfo, Setting } from '@/store/gameInfoSlice';
 import { useDispatch } from 'react-redux';
@@ -117,16 +117,16 @@ const inputWordApi = async (payload: WordInfo) => {
 };
 
 // 참여자 퇴장
-// 키워드 입력
 const userOutApi = async (payload: string) => {
   console.log(payload, 'pin');
 
-  try {
-    const res = await authApi.get(`/game/${payload}/word`);
-    console.log(res.data);
-    return res.data;
-  } catch (err) {
-    console.log('참여자 퇴장 실패', err);
+  // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
+  if (payload) {
+    const token = localStorage.getItem('token');
+    // 나가기
+    navigator.sendBeacon(`${BASE_URL}/game/${payload}/user/out`, token);
+    // 토큰 삭제
+    localStorage.removeItem('token');
   }
 };
 
