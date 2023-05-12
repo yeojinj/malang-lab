@@ -20,6 +20,8 @@ public interface GamePort {
     /** 캐릭터 이미지 설정 */
     Guest addGuest(Guest guest);
 
+    /** 방 제거 */
+    void removeRoom(Long roomId);
     /** 유저 퇴장 시 삭제 */
     void removeUser(Long roomId, String userId);
 
@@ -43,8 +45,10 @@ public interface GamePort {
 
     Room findById(Long id);
 
-    Guest findById(String id);
+    /** guest 정보 조회 */
+    Guest getGuest(String id);
 
     /** 현재 라운드에 입력된 총 단어 결과 **/
     Object totalWordResult(Long roomId);
+
 }

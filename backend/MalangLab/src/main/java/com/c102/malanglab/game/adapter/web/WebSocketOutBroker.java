@@ -32,6 +32,11 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
     }
 
     @Override
+    public void alertRoomDestory(Long roomId, Message<Object> message) {
+        simpMessageSendingOperations.convertAndSend("/topic/room." + roomId, message);
+    }
+
+    @Override
     public void alertServerTime(Long serverTime) {
         simpMessageSendingOperations.convertAndSend("/topic/serverTime", serverTime);
     }

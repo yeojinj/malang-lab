@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/game")
@@ -72,6 +73,17 @@ public class ApiController {
         return new CustomResponseEntity(HttpStatus.OK, true).convertToResponseEntity();
     }
 
+    @PostMapping("/{roomId}/destory")
+    public ResponseEntity<Void> destory(
+            @PathVariable Long roomId,
+            @RequestBody String userId
+    ) {
+        if(!gameStatusCase.isGameManager(roomId, userId)) {
+            throw new IllegalStateException("게임을 시작할 권한을 가지고 있지 않습니다.");
+        }
+        gameStatusCase.destory(roomId);
+        return new CustomResponseEntity(HttpStatus.NO_CONTENT, null).convertToResponseEntity();
+    }
     @PostMapping("/{roomId}/user/out")
     public ResponseEntity<Void> userOut(
             @PathVariable Long roomId,

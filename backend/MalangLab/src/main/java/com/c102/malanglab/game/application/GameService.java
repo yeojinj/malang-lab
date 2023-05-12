@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -54,6 +56,26 @@ public class GameService implements GameStatusCase {
         Room room = gamePort.join(roomId);
         RoomResponse roomResponse = new RoomResponse(room.getId(), room.getName(), room.getHostId(), room.getMode(), room.getSettings(), room.getGuests());
         return roomResponse;
+    }
+
+    @Override
+    public void destory(Long roomId) {
+        // 모두에게 방이 삭제됨을 공지
+        gameBroadCastPort.alertRoomDestory(roomId, new Message(Message.MessageType.DESTORY, null));
+        // 방에 등록된 모든 이미지, Persistent 제거
+        CompletableFuture<Void> s3ImageRemove = CompletableFuture.runAsync(() -> {
+            s3Port.removeAll(roomId);
+        });
+        CompletableFuture<Void> persistentRemove = CompletableFuture.runAsync(() -> {
+            gamePort.removeRoom(roomId);
+        });
+
+        try {
+            CompletableFuture.allOf(s3ImageRemove, persistentRemove).get();
+        } catch (InterruptedException|ExecutionException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("방을 삭제하는 데 에러가 발생했습니다.");
+        }
     }
 
     @Override
@@ -125,15 +147,16 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void exitMember(Long roomId, String userId) {
-        // 0. TODO: 유저가 게임에 참여한 사람인지 체크하는 로직이 필요함.
-
-        // 1. 게임 참여자의 정보를 삭제합니다.
-        gamePort.removeUser(roomId, userId);
-
-        // 2. 게임 참여자의 이탈 정보를 알립니다.
+        // 1. 게임 참여자의 이탈 정보를 알립니다.
         gameBroadCastPort.alertExitMember(roomId, new Message<GuestRequest>(
                 Message.MessageType.EXIT, GuestRequest.of(userId)
         ));
+        // 2. 계정 정보를 가져옵니다.
+        Guest guest = gamePort.getGuest(userId);
+        // 3. 계정의 이미지를 S3에서 제거합니다.
+        s3Port.removeImgPath(guest.getImagePath());
+        // 4. 게임 참여자의 정보를 00합니다.
+        // TODO: gamePort.removeUser(roomId, userId);
     }
 
     @Override
