@@ -12,8 +12,8 @@ export interface Setting {
 
 export type GameInfo = {
   id: number;
-  title: string;
   name: string;
+  game: string;
   mode: string;
   settings: Setting[];
   present: number;
@@ -21,8 +21,8 @@ export type GameInfo = {
 
 const initialState: GameInfo = {
   id: 0,
-  title: '말랑이의 연구소',
-  name: '',
+  name: '말랑이의 연구소',
+  game: '',
   mode: '',
   settings: [
     {
@@ -45,8 +45,8 @@ export const gameInfoSlice = createSlice({
       state.id = action.payload;
     },
     // 방 제목 입력
-    setTitleAction(state, action) {
-      state.title = action.payload;
+    setNameAction(state, action) {
+      state.name = action.payload;
     },
     // 모드 선택하기
     modeAction(state, action) {
@@ -54,7 +54,7 @@ export const gameInfoSlice = createSlice({
     },
     // 게임 선택하기
     gameAction(state, action) {
-      state.name = action.payload;
+      state.game = action.payload;
     },
     // keyword가 입력 될때
     changekeywordAction(state, action) {
@@ -96,7 +96,7 @@ export const gameInfoSlice = createSlice({
 // Action & Slice export
 export const {
   setPincodeAction,
-  setTitleAction,
+  setNameAction,
   addRoundAction,
   modeAction,
   gameAction,
