@@ -91,11 +91,11 @@ const checkGuestInfoApi = async (payload: Guest) => {
 
 // 게임 / 라운드 시작
 const gameStartApi = async (pin: number) => {
-  console.log(pin)
+  console.log(pin);
   try {
     const res = await authApi.post(`/game/${pin}/start`);
     console.log(res.data);
-    return res.data
+    return res.data;
   } catch (err) {
     console.log('게임 시작 실패', err);
   }
@@ -116,6 +116,17 @@ const inputWordApi = async (payload: WordInfo) => {
   }
 };
 
+// 단어 입력 수 결과 받아오기
+const wordsNumApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/wordcount`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('단어 입력 수 가져오기 실패', err);
+  }
+};
+
 export {
   getTokenApi,
   makeRoomApi,
@@ -123,4 +134,5 @@ export {
   checkGuestInfoApi,
   gameStartApi,
   inputWordApi,
+  wordsNumApi,
 };
