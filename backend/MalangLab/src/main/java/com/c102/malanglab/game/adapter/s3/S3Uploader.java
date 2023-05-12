@@ -1,5 +1,7 @@
 package com.c102.malanglab.game.adapter.s3;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -50,6 +52,21 @@ public class S3Uploader {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(\" + fileName + \") 입니다.");
+        }
+    }
+
+    public void removeFile(String key) {
+        try {
+            amazonS3Client.deleteObject(
+                    bucket,
+                    key.replace("https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/", "")
+            );
+        } catch(AmazonServiceException e) {
+            log.error("Amazon S3에서 Object를 제거할 수 없습니다 -> {}", e.getMessage());
+        } catch(SdkClientException e) {
+            log.error("Amazon S3로부터 응답을 처리할 수 없습니다 -> {}", e.getMessage());
+        } catch(Exception e) {
+            log.error("이미지를 제거하는 데 문제가 발생했습니다 -> {}", e.getMessage());
         }
     }
 }

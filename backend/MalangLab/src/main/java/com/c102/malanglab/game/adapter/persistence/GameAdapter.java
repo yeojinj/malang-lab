@@ -275,7 +275,7 @@ public class GameAdapter implements GamePort {
     }
 
     @Override
-    public Guest findById(String id) {
+    public Guest getGuest(String id) {
         return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
 
@@ -284,6 +284,4 @@ public class GameAdapter implements GamePort {
         // TODO: 만들어 주세요!
         return null;
     }
-
-
 }

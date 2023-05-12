@@ -17,4 +17,11 @@ public class S3Adpater implements S3Port {
     public String setImgPath(MultipartFile image, String path) {
         return s3Uploader.uploadFile(image, path);
     }
+
+    @Override
+    public void removeImgPath(String path) {
+        s3Uploader.removeFile(path);
+    }
+
+
 }
