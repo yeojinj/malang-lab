@@ -5,6 +5,7 @@ import statusSlice from './statusSlice';
 import gameInfoSlice from './gameInfoSlice';
 import guestSlice from './guestSlice';
 import readyInfoSlice from './readyInfoSlice';
+import wordNumSlice from './wordNumSlice';
 import roundInfoSlice from './roundInfoSlice';
 
 // redux 생성 함수
@@ -14,6 +15,7 @@ const store = configureStore({
     gameinfo: gameInfoSlice,
     guest: guestSlice,
     readyInfo: readyInfoSlice,
+    wordNum: wordNumSlice,
     roundInfo: roundInfoSlice,
   },
 });
