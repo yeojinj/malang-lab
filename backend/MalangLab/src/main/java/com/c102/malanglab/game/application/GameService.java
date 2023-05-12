@@ -125,6 +125,8 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void exitMember(Long roomId, String userId) {
+        // 0. TODO: 유저가 게임에 참여한 사람인지 체크하는 로직이 필요함.
+
         // 1. 게임 참여자의 정보를 삭제합니다.
         gamePort.removeUser(roomId, userId);
 

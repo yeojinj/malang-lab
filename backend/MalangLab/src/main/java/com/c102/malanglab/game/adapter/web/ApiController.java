@@ -75,9 +75,9 @@ public class ApiController {
     @PostMapping("/{roomId}/user/out")
     public ResponseEntity<Void> userOut(
             @PathVariable Long roomId,
-            @RequestBody UserOutRequest request
+            @RequestBody String token
     ) {
-        gameStatusCase.exitMember(roomId, request.getToken());
+        gameStatusCase.exitMember(roomId, token);
         return new CustomResponseEntity(HttpStatus.NO_CONTENT, null).convertToResponseEntity();
     }
 
