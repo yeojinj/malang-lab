@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from "@heroicons/react/24/outline";
 
 export default function BgAudioPlayer({ src }) {
@@ -20,7 +20,7 @@ export default function BgAudioPlayer({ src }) {
     return (
         <div className="fixed bottom-3 right-3 z-10">
             <audio ref={playerRef} loop autoPlay src={src}/>
-            {play ? <SpeakerXMarkIcon className="w-12 white" onClick={handleToggleAudio}/> : <SpeakerWaveIcon className="w-12 white " onClick={handleToggleAudio}/> }
+            {!play ? <SpeakerXMarkIcon className="w-12 white" onClick={handleToggleAudio}/> : <SpeakerWaveIcon className="w-12 white " onClick={handleToggleAudio}/> }
         </div>
     );
 }

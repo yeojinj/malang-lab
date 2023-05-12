@@ -1,9 +1,12 @@
 'use client';
 
-import GameModeItem from '@/components/main/GameModeItem';
 import React, { useEffect, useState } from 'react';
-import { getTokenApi } from '@/apis/apis';
+// Components
+import GameModeItem from '@/components/main/GameModeItem';
+// apis
 import { useSocket } from '@/context/SocketContext';
+import { getTokenApi } from '@/apis/apis';
+
 
 export interface Mode {
   name: string;
@@ -12,28 +15,27 @@ export interface Mode {
 }
 
 const modes = [
-  { name: '방 만들기', image: '', path: 'create' },
-  { name: '참여하기', image: '', path: 'join' },
-  { name: '혼자하기', image: '', path: '' },
+  { name: '방 만들기', image: 'blue-malang', path: 'create' },
+  { name: '참여하기', image: 'together-malang', path: 'join' },
+  { name: '혼자하기', image: 'yellow-malang', path: '' },
 ];
 
 export default function MainPage() {
   const [token, setToken] = useState(null);
   const { makeClient } = useSocket();
 
-  // 메인 페이지 입장 시 토큰 생성
+  // 홈 화면 입장시 토큰 생성
   useEffect(() => {
     console.log('first enter');
     const newToken = getTokenApi();
     setToken(newToken);
   }, []);
 
-  // 토큰이 생성되면 웹소켓 연결
+  // 토큰이 있는 사용자는 웹소켓 연결
   useEffect(() => {
     console.log(token, 'new token');
     makeClient('wss://api.malang-lab.com/ws');
   }, [token]);
-
 
   return (
     <div

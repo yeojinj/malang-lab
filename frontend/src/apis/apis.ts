@@ -86,6 +86,9 @@ const checkGuestInfoApi = async (payload: Guest) => {
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
+    if (err.response.data.status == 400) {
+      alert(err.response.data.message)
+    }
   }
 };
 

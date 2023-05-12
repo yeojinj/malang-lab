@@ -1,16 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 // redux
-import { RootState } from '@/store/store';
 import CustomSection from '@/components/profile/CustomSection';
-import { setNicknameAction, setPinAction } from '@/store/guestSlice';
 // apis
 import PinForm from '@/components/join/PinForm';
 import NicknameForm from '@/components/join/NicknameForm';
-import { useSocket } from '@/context/SocketContext';
 
 export default function JoinPage() {
   const [step, setStep] = useState(0);

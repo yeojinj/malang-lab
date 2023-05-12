@@ -1,23 +1,26 @@
+import { useState } from 'react';
+// redux
+import { setPinAction } from '@/store/guestSlice';
+import { useDispatch } from 'react-redux';
+// apis
 import { checkPinApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
+// socket
 import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
-import { setPinAction } from '@/store/guestSlice';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 type Props = {
   setStep: (step: number) => void;
 };
 
 export default function PinForm({ setStep }: Props) {
-  const [pin, setPin] = useState('');
-  const { subscribe } = useSocket();
   const dispatch = useDispatch();
+  const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
+  const [pin, setPin] = useState('');
   
-  // step2 - 닉네임 입력하기
+  // pin 번호 입력
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
   };
