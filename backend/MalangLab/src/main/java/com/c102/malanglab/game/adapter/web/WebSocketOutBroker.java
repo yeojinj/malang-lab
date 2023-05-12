@@ -48,6 +48,6 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
 
     @Override
     public void alertRoomManager(String roomId, Object message) {
-        simpMessageSendingOperations.convertAndSend("/queue/manager/room." + roomId, message);
+        simpMessageSendingOperations.convertAndSend("/queue/manager.room." + roomId, message);
     }
 }
