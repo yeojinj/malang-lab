@@ -116,6 +116,20 @@ const inputWordApi = async (payload: WordInfo) => {
   }
 };
 
+// 참여자 퇴장
+// 키워드 입력
+const userOutApi = async (payload: string) => {
+  console.log(payload, 'pin');
+
+  try {
+    const res = await authApi.get(`/game/${payload}/word`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('참여자 퇴장 실패', err);
+  }
+};
+
 // 단어 입력 수 결과 받아오기
 const wordsNumApi = async (pin: number) => {
   try {
@@ -135,4 +149,5 @@ export {
   gameStartApi,
   inputWordApi,
   wordsNumApi,
+  userOutApi,
 };
