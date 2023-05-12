@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { isGeneratorFunction } from 'util/types';
 
 export default function NicknameForm() {
   const router = useRouter();
@@ -52,31 +51,9 @@ export default function NicknameForm() {
       publish(destination, type, message);
       setTimeout(() => {
         router.push('/ready');
-      }, 5000);
+      }, 1000);
     }
   }, [imagePath]);
-
-  // const setGuestInfoFunction = async () => {
-  //     // 이미지 저장하기
-  //     let tmp = await setGuestInfo(guest)
-  //     await setImagePath(tmp)
-  // }
-
-  // useEffect(() => {
-  //     if (guest.nickname.trim() && imagePath) {
-  //         // 메세지 전송
-  //         console.log(guest.pin);
-  //         const destination = `/topic/room.${guest.pin}`;
-  //         const type = 'JOIN';
-  //         const message = {
-  //             id: guest.pin,
-  //             nickname: guest.nickname,
-  //             imagePath,
-  //         };
-  //         publish(destination, type, message);
-  //         // router.push('/ready')
-  //     }
-  // }, [guest.nickname, imagePath])
 
   return (
     <section className="w-[70%] sm:w-[50%] md:w-[40%] lg:w-[30%] flex flex-col justify-center align-middle gap-5">

@@ -17,10 +17,10 @@ import { RootState } from '@/store/store';
 export default function GamePage() {
   const [countShow, setCountShow] = useState(false);
   const [finish, setFinish] = useState(false);
-  const [userNum, setUserNum] = useState(60)
+  const [userNum, setUserNum] = useState(60);
   const [wordNum, setWordNum] = useState(1004);
   const isHost = useSelector((state: RootState) => state.status.isHost);
-  const time = 60;
+  const time = 5;
   const keyword = '말랑이';
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
