@@ -1,8 +1,7 @@
 import { axios, authApi } from './axios.config';
 import { Guest } from './../store/guestSlice';
 import { GameInfo, Setting } from '@/store/gameInfoSlice';
-import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { WordInfo } from '@/store/Types';
 
@@ -66,7 +65,7 @@ const checkGuestInfoApi = async (payload: Guest) => {
     for (var i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
-    
+
     return new Blob([ab], { type: 'image/png' });
   }
 
@@ -90,11 +89,23 @@ const checkGuestInfoApi = async (payload: Guest) => {
   }
 };
 
+// 게임 / 라운드 시작
+const gameStartApi = async (pin: number) => {
+  console.log(pin)
+  try {
+    const res = await authApi.post(`/game/${pin}/start`);
+    console.log(res.data);
+    return res.data
+  } catch (err) {
+    console.log('게임 시작 실패', err);
+  }
+};
+
 // 키워드 입력
 const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
   // const pin = useSelector((state: RootState) => state.guest.pin);
-  const pin = 195048
+  const pin = 195048;
 
   try {
     const res = await authApi.post(`/game/${pin}/word`, payload);
@@ -103,7 +114,13 @@ const inputWordApi = async (payload: WordInfo) => {
   } catch (err) {
     console.log('단어 입력 실패', err);
   }
-
 };
 
-export { getTokenApi, makeRoomApi, checkPinApi, checkGuestInfoApi, inputWordApi };
+export {
+  getTokenApi,
+  makeRoomApi,
+  checkPinApi,
+  checkGuestInfoApi,
+  gameStartApi,
+  inputWordApi,
+};

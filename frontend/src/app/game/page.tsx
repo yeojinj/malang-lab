@@ -17,10 +17,13 @@ import { RootState } from '@/store/store';
 export default function GamePage() {
   const [countShow, setCountShow] = useState(false);
   const [finish, setFinish] = useState(false);
+  const [userNum, setUserNum] = useState(60)
+  const [wordNum, setWordNum] = useState(1004);
   const isHost = useSelector((state: RootState) => state.status.isHost);
   const time = 60;
   const keyword = '말랑이';
-  const word = 'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png'
+  const word =
+    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -44,20 +47,15 @@ export default function GamePage() {
 
       {isHost ? (
         <>
-          <div className="flex fixed top-0 w-screen">
-            <GameUserNum num={60} />
+          <div className="flex fixed top-0 w-screen mr-10">
+            <GameUserNum num={userNum} />
             <Timer setFinish={setFinish} time={time + 3.2} />
           </div>
-          <WordNum num={1004} />
-          <h1 className="absolute font-bold text-[5rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
+          <WordNum num={wordNum} />
+          <h1 className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
             {keyword}
           </h1>
-          <Image
-            src={word}
-            alt="word"
-            width={800}
-            height={500}
-          />
+          <Image src={word} alt="word" width={800} height={500} />
         </>
       ) : (
         <>
