@@ -32,6 +32,9 @@ public interface GamePort {
     /** 게임 호스트인지 체크 */
     boolean isGameManager(Long roomId, String userId);
 
+    /** 방 PIN 번호로 방 정보 조회 */
+    Room findById(Long id);
+
     /** 게임 시작 시 현재 라운드 정보 조회 */
     Round checkRound(Long roomId);
 
@@ -41,10 +44,10 @@ public interface GamePort {
     /** 현재 라운드에 입력된 총 단어 수 */
     Long totalWordCount(Long roomId);
 
-    Room findById(Long id);
+    /** 현재 라운드 결과 - 워드클라우드 */
+    Object getRoundResultCloud(Long roomId);
 
-    Guest findById(String id);
+    /** 현재 라운드 결과 - 히든단어 */
 
-    /** 현재 라운드에 입력된 총 단어 결과 **/
-    Object totalWordResult(Long roomId);
+    /** 현재 라운드 결과 - 특별한 아이디어 */
 }
