@@ -1,10 +1,13 @@
 'use client';
 
 import GameModeItem from '@/components/main/GameModeItem';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getTokenApi } from '@/apis/apis';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 import { useSocket } from '@/context/SocketContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { stringToArray } from 'konva/types/shapes/Text';
 
 export interface Mode {
   name: string;
@@ -32,6 +35,7 @@ export default function MainPage() {
     console.log(token, 'new token');
     makeClient('wss://api.malang-lab.com/ws');
   }, [token]);
+
 
   return (
     <div
