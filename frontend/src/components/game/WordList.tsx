@@ -37,7 +37,7 @@ export default function WordList() {
     console.log(roomId)
   }, [words]);
 
-  const destination = `/queue/manager/room.${roomId}`;
+  const destination = `/queue/manager.room.${roomId}`;
   const type = 'CHECK_DB';
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
