@@ -1,3 +1,5 @@
+'use client';
+
 import { userOutApi } from "@/apis/apis"
 import { RootState } from "@/store/store"
 import { useRouter } from "next/navigation"
