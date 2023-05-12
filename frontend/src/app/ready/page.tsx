@@ -8,10 +8,12 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
 export default function ReadyPage() {
   const router = useRouter();
   const isHost = useSelector((state: RootState) => state.status.isHost);
+  const title = useSelector((state: RootState) => state.gameinfo.name);
   const readyInfo = useSelector((state: RootState) => state.readyInfo);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
 
@@ -23,11 +25,12 @@ export default function ReadyPage() {
 
   return (
     <>
+      <BgAudioPlayer src="/audio/bgfull.wav" />
       {isHost ? (
         <div className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1">
           <PinCode />
           <div className="text-center text-[#44474B]">
-            <h1 className="text-[2rem] font-bold">말랑이의 연구소</h1>
+            <h1 className="text-[2rem] font-bold">{title}</h1>
             <h2 className="my-5">
               준비가 완료되면 시작하기 버튼을 눌러주세요!
             </h2>

@@ -1,14 +1,7 @@
-'use client'
-
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { Providers } from '@/store/provider';
 import { SocketProvider } from '../context/SocketContext';
-import { useEffect } from 'react';
-import { RootState } from '@/store/store';
-import { useSelector } from 'react-redux';
-import { userOutApi } from '@/apis/apis';
-import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,8 +13,8 @@ export const metadata = {
 
 // <Check> 컴포넌트를 동적으로 로드
 const Check = dynamic(() => import('../components/common/Check'), {
-  ssr : false, // 서버측에는 렌더링하지 않음
-})
+  ssr: false, // 서버측에는 렌더링하지 않음
+});
 
 export default function RootLayout({
   children,
