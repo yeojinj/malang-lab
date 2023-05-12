@@ -1,3 +1,4 @@
+import StartBtn from '@/components/ready/StartBtn';
 import ResultCard from '@/components/result/ResultCard';
 
 const cards = [
@@ -29,9 +30,7 @@ export default function ResultPage() {
           <ResultCard key={card.title} card={card} />
         ))}
       </nav>
-      <button className="bg-[#44474B] font-semibold rounded text-white px-10 py-2">
-        다음 라운드 가기
-      </button>
+      <StartBtn category={'다음 라운드 시작'} />
     </div>
   );
 }

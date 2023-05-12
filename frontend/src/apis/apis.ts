@@ -1,8 +1,7 @@
-import { axios, authApi } from './axios.config';
+import { axios, authApi, BASE_URL } from './axios.config';
 import { Guest } from './../store/guestSlice';
 import { GameInfo, Setting } from '@/store/gameInfoSlice';
-import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { WordInfo } from '@/store/Types';
 
@@ -66,7 +65,7 @@ const checkGuestInfoApi = async (payload: Guest) => {
     for (var i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
-    
+
     return new Blob([ab], { type: 'image/png' });
   }
 
@@ -90,11 +89,23 @@ const checkGuestInfoApi = async (payload: Guest) => {
   }
 };
 
+// 게임 / 라운드 시작
+const gameStartApi = async (pin: number) => {
+  console.log(pin);
+  try {
+    const res = await authApi.post(`/game/${pin}/start`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('게임 시작 실패', err);
+  }
+};
+
 // 키워드 입력
 const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
   // const pin = useSelector((state: RootState) => state.guest.pin);
-  const pin = 195048
+  const pin = 195048;
 
   try {
     const res = await authApi.post(`/game/${pin}/word`, payload);
@@ -103,7 +114,40 @@ const inputWordApi = async (payload: WordInfo) => {
   } catch (err) {
     console.log('단어 입력 실패', err);
   }
-
 };
 
-export { getTokenApi, makeRoomApi, checkPinApi, checkGuestInfoApi, inputWordApi };
+// 참여자 퇴장
+const userOutApi = async (payload: string) => {
+  console.log(payload, 'pin');
+
+  // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
+  if (payload) {
+    const token = localStorage.getItem('token');
+    // 나가기
+    navigator.sendBeacon(`${BASE_URL}/game/${payload}/user/out`, token);
+    // 토큰 삭제
+    localStorage.removeItem('token');
+  }
+};
+
+// 단어 입력 수 결과 받아오기
+const wordsNumApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/wordcount`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('단어 입력 수 가져오기 실패', err);
+  }
+};
+
+export {
+  getTokenApi,
+  makeRoomApi,
+  checkPinApi,
+  checkGuestInfoApi,
+  gameStartApi,
+  inputWordApi,
+  wordsNumApi,
+  userOutApi,
+};

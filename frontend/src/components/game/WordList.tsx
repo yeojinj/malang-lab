@@ -16,16 +16,16 @@ export default function WordList() {
   const [words, setWords] = useState<string[]>([]);
   const { publishUpdate } = useSocket();
   // const roomId = useSelector((state: RootState) => state.guest.pin);
-  const roomId = '195048'
+  const roomId = '195048';
 
   const wordinfo: WordInfo = {
     word,
-    time: new Date().getTime()
-  }
+    time: new Date().getTime(),
+  };
 
   const handlePostWord = async () => {
-    const res = await inputWordApi(wordinfo);
-  }
+    await inputWordApi(wordinfo);
+  };
 
   useEffect(() => {
     // 가장 밑으로 스크롤
@@ -34,11 +34,8 @@ export default function WordList() {
     }
     // 효과음
     playerRef.current?.play();
-    console.log(roomId)
+    console.log(roomId);
   }, [words]);
-
-  const destination = `/queue/manager/room.${roomId}`;
-  const type = 'CHECK_DB';
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -56,8 +53,8 @@ export default function WordList() {
         alert('13자 이내로 입력해주세요.');
         setWord(word.slice(0, 13));
       } else {
-        // publishUpdate(destination, type); // 단어 추가될 때마다 전송
-        handlePostWord()
+        // publishUpdate(`/queue/manager.room.${roomId}`, 'CHECK_DB'); // 단어 추가될 때마다 전송
+        handlePostWord();
         setWords([...words, word]);
         setWord('');
       }

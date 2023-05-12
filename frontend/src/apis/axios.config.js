@@ -20,4 +20,4 @@ authApi.interceptors.request.use(
   },
 );
 
-export { axios, authApi };
+export { axios, authApi, BASE_URL };

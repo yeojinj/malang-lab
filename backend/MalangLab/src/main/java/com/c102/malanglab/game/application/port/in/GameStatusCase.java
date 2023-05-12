@@ -2,6 +2,8 @@ package com.c102.malanglab.game.application.port.in;
 
 import com.c102.malanglab.game.dto.*;
 
+import java.util.concurrent.ExecutionException;
+
 public interface GameStatusCase {
 
     /**
@@ -16,6 +18,11 @@ public interface GameStatusCase {
      * @param roomId
      */
     RoomResponse get(final Long roomId);
+
+    /**
+     * 게임을 삭제합니다.
+     */
+    void destory(final Long roomId);
 
     /**
      * 게스트는 닉네임과 사진을 등록합니다
@@ -64,4 +71,13 @@ public interface GameStatusCase {
      * @return
      */
     Long totalWordCount(final Long roomId, final String userId);
+
+    /**
+     * 라운드 입력 단어 결과를 가져옵니다.
+     * TODO: 리턴 자료형 수정
+     * @param roomId
+     * @param userId
+     * @return
+     */
+    Object totalWordResult(final Long roomId, final String userId);
 }

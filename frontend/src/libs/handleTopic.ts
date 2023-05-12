@@ -1,10 +1,10 @@
 import { setReadyMember } from '@/store/readyInfoSlice';
+import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
 
 const HandleTopic = dispatch => message => {
   if (message.body) {
-    alert('메세지 받음' + message.body);
+    alert(message.body);
     const quote = JSON.parse(message.body);
-    console.log(quote, 'quote');
     if (quote.type == 'JOIN') {
       const member = {
         nickname: quote.message.nickname,
@@ -12,28 +12,15 @@ const HandleTopic = dispatch => message => {
       };
       dispatch(setReadyMember(member));
     }
+    if (quote.type == 'ROUND_START') {
+      dispatch(setRoundInfo(quote.message));
+    }
+    if (quote.type == 'ROUND_FINISH') {
+      dispatch(setFinish());
+    }
   } else {
     alert('got empty message');
   }
 };
 
 export { HandleTopic };
-
-// import { useDispatch } from 'react-redux';
-
-// export default function HandleTopic(message) {
-//   const dispatch = useDispatch();
-//   if (message.body) {
-//     alert('메세지 받음' + message.body);
-//     const quote = JSON.parse(message.body);
-//     if (quote.type == 'JOIN') {
-//       const member = {
-//         nickname: quote.body.nickname,
-//         imagePath: quote.body.imagePath,
-//       };
-//       dispatch(setReadyMember(member));
-//     }
-//   } else {
-//     alert('got empty message');
-//   }
-// }

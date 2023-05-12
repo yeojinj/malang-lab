@@ -10,17 +10,30 @@ import Image from 'next/image';
 import WordList from '@/components/game/WordList';
 import Timer from '@/components/game/Timer';
 import AlertBox from '@/components/common/AlertBox';
-import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { wordZeroAction } from '@/store/wordNumSlice';
+import { useSocket } from '@/context/SocketContext';
 
 export default function GamePage() {
-  const [countShow, setCountShow] = useState(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { publishUpdate } = useSocket();
+
+  const [countShow, setCountShow] = useState(true);
   const [finish, setFinish] = useState(false);
+
+  // redux에서 가져올 값
+  const wordNum = useSelector((state: RootState) => state.wordNum.num);
+  const roundInfo = useSelector((state: RootState) => state.roundInfo);
+  const gameInfo = useSelector((state: RootState) => state.gameinfo);
+  const [userNum, setUserNum] = useState(0);
   const isHost = useSelector((state: RootState) => state.status.isHost);
-  const time = 60;
-  const keyword = '말랑이';
-  const word = 'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png'
+
+  const word =
+    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -29,12 +42,24 @@ export default function GamePage() {
     return () => clearTimeout(timeout);
   }, []);
 
+  const handleClick = () => {
+    router.push('/result');
+    dispatch(wordZeroAction());
+  };
+
+  const handleFinish = () => {
+    // publish 라운드 종료 메시지
+    const destination = `/topic/room.${gameInfo.id}`;
+    const type = 'ROUND_FINISH';
+    publishUpdate(destination, type);
+  };
   return (
     <div
       className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${
         isHost ? 'justify-center' : ''
       } ${finish ? 'justify-center' : ''} items-center`}
     >
+      {/* 카운트다운 */}
       {countShow && (
         <>
           <Blur />
@@ -42,30 +67,29 @@ export default function GamePage() {
         </>
       )}
 
-      {isHost ? (
+      {/* 카운트다운 끝 & Host */}
+      {!countShow && isHost && (
         <>
-          <div className="flex fixed top-0 w-screen">
-            <GameUserNum num={60} />
-            <Timer setFinish={setFinish} time={time + 3.2} />
+          <div className="flex fixed top-0 w-screen mr-10">
+            <GameUserNum num={userNum} />
+            <Timer onFinish={handleFinish} time={roundInfo.timeLimit} />
           </div>
-          <WordNum num={1004} />
-          <h1 className="absolute font-bold text-[5rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
-            {keyword}
+          <WordNum num={wordNum} />
+          <h1 className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
+            {roundInfo.keyword}
           </h1>
-          <Image
-            src={word}
-            alt="word"
-            width={800}
-            height={500}
-          />
+          <Image src={word} alt="word" width={800} height={500} />
         </>
-      ) : (
+      )}
+
+      {/* 카운트다운 끝 & Guest */}
+      {!countShow && !isHost && (
         <>
-          <div className="flex sm:fixed sm:right-10 justify-center">
-            <Timer setFinish={setFinish} time={time + 3.2} />
-          </div>
+          {/* <div className="flex sm:fixed sm:right-10 justify-center">
+            <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
+          </div> */}
           <h1 className="text-[#44474B] text-[3rem] font-semibold sm:mt-16">
-            제시어 : {keyword}
+            제시어 : {roundInfo.keyword}
           </h1>
           <h2 className="text-[#44474B] mx-5 my-2 font-semibold">
             떠오르는 단어를 마구마구 입력해주세요!
@@ -74,22 +98,27 @@ export default function GamePage() {
         </>
       )}
 
-      {finish && isHost && (
+      {/* 게임 끝 & Host */}
+      {roundInfo.finish && isHost && (
         <>
           <Blur />
-          <AlertBox text={'1라운드 종료!'} />
-          <Link href={'/result'}>
-            <button className="bg-black absolute z-20 font-semibold rounded text-white px-10 py-2 bottom-48 left-[45%]">
-              결과 확인하기
-            </button>
-          </Link>
+          <AlertBox text={`${roundInfo.round}라운드 종료!`} />
+          <button
+            className="bg-black absolute z-20 font-semibold rounded text-white px-10 py-2 bottom-48 left-[45%]"
+            onClick={handleClick}
+          >
+            결과 확인하기
+          </button>
         </>
       )}
 
-      {finish && !isHost && (
+      {/* 게임 끝 & Guest */}
+      {roundInfo.finish && !isHost && (
         <>
           <Blur />
-          <AlertBox text={'1라운드 종료!\n 화면을 확인하세요'} />
+          <AlertBox
+            text={`${roundInfo.round}라운드 종료!\n 화면을 확인하세요`}
+          />
         </>
       )}
     </div>

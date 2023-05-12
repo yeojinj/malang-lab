@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { Client, IMessage } from '@stomp/stompjs';
+import { createContext, useContext, useState } from 'react';
+import { Client } from '@stomp/stompjs';
 
 // --------------------------- Context ------------------------------
 interface SocketProps {
@@ -14,7 +14,7 @@ interface SocketProps {
 
 const SocketContext = createContext<SocketProps | undefined>(undefined);
 
-// useSocket 바로 사용
+// useContext 호출 없이 useSocket 바로 사용
 export const useSocket = () => {
   return useContext(SocketContext);
 };
@@ -75,7 +75,9 @@ export function SocketProvider({ children }) {
   };
 
   return (
-    <SocketContext.Provider value={{ client, makeClient, subscribe, publish, publishUpdate }}>
+    <SocketContext.Provider
+      value={{ client, makeClient, subscribe, publish, publishUpdate }}
+    >
       {children}
     </SocketContext.Provider>
   );
