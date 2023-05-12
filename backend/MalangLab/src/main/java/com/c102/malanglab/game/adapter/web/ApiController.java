@@ -2,10 +2,7 @@ package com.c102.malanglab.game.adapter.web;
 
 import com.c102.malanglab.common.response.CustomResponseEntity;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
-import com.c102.malanglab.game.dto.RoomRequest;
-import com.c102.malanglab.game.dto.RoomResponse;
-import com.c102.malanglab.game.dto.GuestRequest;
-import com.c102.malanglab.game.dto.WordRequest;
+import com.c102.malanglab.game.dto.*;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -73,12 +70,12 @@ public class ApiController {
         return new CustomResponseEntity(HttpStatus.OK, true).convertToResponseEntity();
     }
 
-    @GetMapping("/{roomId}/user/out")
+    @PostMapping("/{roomId}/user/out")
     public ResponseEntity<Void> userOut(
             @PathVariable Long roomId,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
+            @RequestBody UserOutRequest request
     ) {
-        gameStatusCase.exitMember(roomId, userId);
+        gameStatusCase.exitMember(roomId, request.getToken());
         return new CustomResponseEntity(HttpStatus.NO_CONTENT, null).convertToResponseEntity();
     }
 
