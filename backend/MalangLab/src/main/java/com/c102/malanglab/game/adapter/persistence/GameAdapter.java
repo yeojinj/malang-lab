@@ -294,16 +294,56 @@ public class GameAdapter implements GamePort {
         String turn = (String) hashOperations.get(key, "turn");
 
         // 2. 해당 턴에 입력된 단어와 가중치 List 조회
-        key = "room:" + roomId + ":" + turn + ":word-cnt";
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        key = "room:" + roomId + ":" + turn + ":word-cnt";
         Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
         List<WordCount> result = typedTuples.stream()
             .map(WordCount::convertToWordCount)
             .collect(Collectors.toList());
+
         return result;
     }
 
     /** 현재 라운드 결과 - 히든단어 */
+    @Override
+    public String getRoundResultHiddenWord(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = (String) hashOperations.get(key, "turn");
+
+        // 2. 히든단어 조회
+        key = "room:" + roomId + ":info:" + turn;
+        String hiddenWord = (String) hashOperations.get(key, "hidden");
+
+        return hiddenWord;
+    }
+
+    /** 현재 라운드 결과 - 히든단어 찾은 사람들 */
+    @Override
+    public List<Guest> getRoundResultHiddenFound(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = (String) hashOperations.get(key, "turn");
+
+        // 2. 히든단어 찾은 사람들 아이디 조회
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        key = "room:" + roomId + ":" + turn + ":hidden:user-time";
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
+        List<Guest> result = typedTuples.stream()
+            .map(Guest::convertToGuest)
+            .collect(Collectors.toList());
+
+        // 3. 히든단어 찾은 사람들 정보 조회
+        int size = result.size();
+        for (int i = 0; i < size; i++) {
+            Guest guest = getGuest(result.get(i).getId());
+            result.set(i, guest);
+        }
+
+        return result;
+    }
 
     /** 현재 라운드 결과 - 특별한 아이디어 */
 

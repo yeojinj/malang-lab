@@ -2,12 +2,10 @@ package com.c102.malanglab.game.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.redis.core.ZSetOperations;
 
 @Entity
 @Getter
@@ -41,5 +39,11 @@ public class Guest {
         if(!room.getGuests().contains(this)) {
             room.getGuests().add(this);
         }
+    }
+
+    public static Guest convertToGuest(ZSetOperations.TypedTuple typedTuple) {
+        Guest guestDomain = new Guest();
+        guestDomain.id = typedTuple.getValue().toString();
+        return guestDomain;
     }
 }

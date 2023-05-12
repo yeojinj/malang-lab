@@ -52,6 +52,10 @@ public interface GamePort {
     List<WordCount> getRoundResultCloud(Long roomId);
 
     /** 현재 라운드 결과 - 히든단어 */
+    String getRoundResultHiddenWord(Long roomId);
+
+    /** 현재 라운드 결과 - 히든단어 찾은 사람들 */
+    List<Guest> getRoundResultHiddenFound(Long roomId);
 
     /** 현재 라운드 결과 - 특별한 아이디어 */
 
