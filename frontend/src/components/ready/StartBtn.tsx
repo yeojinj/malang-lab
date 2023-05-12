@@ -12,6 +12,7 @@ export default function StartBtn({ category }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const gameinfo = useSelector((state: RootState) => state.gameinfo);
+
   const { publish } = useSocket();
 
   const handleClick = async () => {
@@ -34,9 +35,6 @@ export default function StartBtn({ category }) {
           isLast: sendinfo.round == gameinfo.settings.length,
         };
         publish(destination, type, message);
-        setTimeout(() => {
-          router.push('/game');
-        }, 1000);
       }
     }
   };

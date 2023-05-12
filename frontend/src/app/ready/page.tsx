@@ -6,11 +6,21 @@ import StartBtn from '@/components/ready/StartBtn';
 import UserNum from '@/components/ready/UserNum';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
 export default function ReadyPage() {
+  const router = useRouter();
   const isHost = useSelector((state: RootState) => state.status.isHost);
   const readyInfo = useSelector((state: RootState) => state.readyInfo);
+  const roundInfo = useSelector((state: RootState) => state.roundInfo);
+
+  useEffect(() => {
+    if (roundInfo.keyword) {
+      router.push('/game');
+    }
+  }, [roundInfo]);
 
   return (
     <>
