@@ -55,4 +55,13 @@ public interface GameStatusCase {
      * @param userId
      */
     void inputWord(final Long roomId, final String userId, final WordRequest wordRequest);
+
+
+    /**
+     * 호스트가 단어의 수를 가져옵니다.
+     * @param roomId
+     * @param userId
+     * @return
+     */
+    Long totalWordCount(final Long roomId, final String userId);
 }
