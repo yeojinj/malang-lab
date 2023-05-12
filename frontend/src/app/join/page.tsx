@@ -13,7 +13,6 @@ import NicknameForm from '@/components/join/NicknameForm';
 import { useSocket } from '@/context/SocketContext';
 
 export default function JoinPage() {
-  const guest = useSelector((state: RootState) => state.guest);
   const [step, setStep] = useState(0);
 
   return (

@@ -3,11 +3,7 @@
 import GameModeItem from '@/components/main/GameModeItem';
 import React, { useEffect, useState } from 'react';
 import { getTokenApi } from '@/apis/apis';
-import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 import { useSocket } from '@/context/SocketContext';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { stringToArray } from 'konva/types/shapes/Text';
 
 export interface Mode {
   name: string;
@@ -25,12 +21,14 @@ export default function MainPage() {
   const [token, setToken] = useState(null);
   const { makeClient } = useSocket();
 
+  // 메인 페이지 입장 시 토큰 생성
   useEffect(() => {
     console.log('first enter');
     const newToken = getTokenApi();
     setToken(newToken);
   }, []);
 
+  // 토큰이 생성되면 웹소켓 연결
   useEffect(() => {
     console.log(token, 'new token');
     makeClient('wss://api.malang-lab.com/ws');
@@ -39,10 +37,8 @@ export default function MainPage() {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex justify-center items-center"
-      style={{ backgroundImage: "url('/imgs/bg-2.png')" }}
+      className="min-h-screen bg-cover bg-center flex justify-center items-center bg-bg-2"
     >
-      {/* <BgAudioPlayer src='/audio/bgfull.wav'/> */}
       <div className="w-[80vw] sm:w-[60vw] flex justify-center items-center m-auto glass py-5 my-10 sm:my-0 sm:py-10">
         <div className="w-[96%] h-[60%] flex flex-col">
           <p className="text-center text-3xl sm:text-4xl font-semibold">
