@@ -202,7 +202,7 @@ public class GameService implements GameStatusCase {
         }
 
         // TODO: 수정하기
-        Object result = gamePort.totalWordResult(roomId);
+        Object result = gamePort.getRoundResultCloud(roomId);
         return result;
     }
 

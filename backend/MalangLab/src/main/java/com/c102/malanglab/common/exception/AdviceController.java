@@ -15,8 +15,8 @@ public class AdviceController {
     /**
      * IllegalArgumentException에 대해서 처리합니다.
      */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Void> badRequestExceptionHandler(final IllegalArgumentException ex) {
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public ResponseEntity<Void> badRequestExceptionHandler(final Exception ex) {
         return new CustomResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage(), null).convertToResponseEntity();
     }
 
