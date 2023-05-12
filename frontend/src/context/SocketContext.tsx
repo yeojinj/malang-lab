@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { Client, IMessage } from '@stomp/stompjs';
+import { createContext, useContext, useState } from 'react';
+import { Client } from '@stomp/stompjs';
 
 // --------------------------- Context ------------------------------
 interface SocketProps {

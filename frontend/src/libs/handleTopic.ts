@@ -1,5 +1,5 @@
 import { setReadyMember } from '@/store/readyInfoSlice';
-import { setRoundInfo } from '@/store/roundInfoSlice';
+import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
 
 const HandleTopic = dispatch => message => {
   if (message.body) {
@@ -13,8 +13,10 @@ const HandleTopic = dispatch => message => {
       dispatch(setReadyMember(member));
     }
     if (quote.type == 'ROUND_START') {
-      console.log(quote, 'roundinfo quote');
       dispatch(setRoundInfo(quote.message));
+    }
+    if (quote.type == 'ROUND_FINISH') {
+      dispatch(setFinish());
     }
   } else {
     alert('got empty message');

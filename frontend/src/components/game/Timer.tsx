@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react';
 
 type Props = {
-  setFinish: React.Dispatch<React.SetStateAction<boolean>>;
+  onFinish: React.Dispatch<React.SetStateAction<boolean>>;
   time: number;
 };
 
-export default function Timer({ setFinish, time }: Props) {
+export default function Timer({ onFinish, time }: Props) {
   const MINUTES_IN_MS = time * 1000;
   const INTERVAL = 1000;
   const [timeLeft, setTimeLeft] = useState<number>(MINUTES_IN_MS);
@@ -18,15 +18,18 @@ export default function Timer({ setFinish, time }: Props) {
 
     if (timeLeft <= 0) {
       clearInterval(timer);
-      setFinish(true)
+      onFinish(true);
     }
-    
+
     return () => {
       clearInterval(timer);
     };
   }, [timeLeft]);
 
-  const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
+  const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(
+    2,
+    '0',
+  );
   const second = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
 
   return (
