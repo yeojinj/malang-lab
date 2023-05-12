@@ -1,29 +1,33 @@
 import { checkGuestInfoApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
-import { setImageAction, setNicknameAction } from '@/store/guestSlice';
+import { setNicknameAction } from '@/store/guestSlice';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function NicknameForm() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [nickname, setNickname] = useState('');
   const guest = useSelector((state: RootState) => state.guest);
   const { publish } = useSocket();
+  const [nickname, setNickname] = useState('');
   const [imagePath, setImagePath] = useState('');
 
-  // step3 - 닉네임 입력하기
+  // step3 - 닉네임 입력
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
 
-  // 닉네임 저장하기
+  // 닉네임 저장
   const handleClickComplete = () => {
     dispatch(setNicknameAction(nickname));
   };
+
+  // 엔터 키 입력 시에도 닉네임 저장
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if(e.key === 'Enter') handleClickComplete()
+  }
 
   // 닉네임 저장 후 실행
   useEffect(() => {
@@ -64,6 +68,7 @@ export default function NicknameForm() {
         type="text"
         placeholder="닉네임 입력"
         onChange={handleChangeNickname}
+        onKeyPress={handleKeyPress}
         className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
       />
       <button
