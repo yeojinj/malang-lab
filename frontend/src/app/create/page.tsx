@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
@@ -12,13 +12,11 @@ import { RootState } from '@/store/store';
 import gameInfoSlice, {
   setPincodeAction,
   addRoundAction,
-  changekeywordAction,
   deleteRoundAction,
   gameAction,
   modeAction,
-  setTitleAction,
+  setNameAction,
 } from '../../store/gameInfoSlice';
-import { setPinAction } from '@/store/guestSlice';
 import { updateStatus } from '@/store/statusSlice';
 // apis
 import { makeRoomApi } from '@/apis/apis';
@@ -67,6 +65,7 @@ export default function CreatePage() {
   let gameinfo = useSelector((state: RootState) => state.gameinfo);
   const dispatch = useDispatch();
   const router = useRouter();
+  const inputRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -78,14 +77,26 @@ export default function CreatePage() {
   const [step, setStep] = useState(0);
   const [selectedMode, setMode] = useState(gameinfo.mode);
   const [selectedGame, setGame] = useState(gameinfo.name);
-  const [title, setTitle] = useState(gameinfo.title);
+  const [title, setTitle] = useState(gameinfo.name);
 
   // 방제목 설정하기
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    dispatch(setTitleAction(e.target.value));
-    console.log(e.target.value);
+    if (e.target.value.length > 12) {
+      alert('12자 이내로 입력해주세요!');
+      setTitle(title.slice(0, 12));
+    } else {
+      setTitle(e.target.value);
+      dispatch(setNameAction(e.target.value));
+    }
   };
+
+  // 커서 마지막으로 이동
+  const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const element = e.target;
+    element.selectionStart = element.value.length;
+  };
+
+  useEffect(() => inputRef.current.focus(), []);
 
   // 게임 모드 선택하기
   const handleClickMode = (id: string) => {
@@ -145,18 +156,19 @@ export default function CreatePage() {
       // setIsLoading(true)
       const res = await makeRoomApi(gameinfo);
       // setIsLoading(false)
+
       // 방 만들기가 성공했을 때에만 실행
       if (res) {
         // 방의 pin 번호 redux에 저장
         dispatch(setPincodeAction(res.data.id));
+
         // topic, queue 구독
         const topic = `/topic/room.${res.data.id}`;
         const queue = `/queue/manager.room.${res.data.id}`;
         subscribe(topic, handleTopic);
         subscribe(queue, handleQueue);
-        // 대기방으로 입장
+
         router.push('/ready');
-        // host 상태 업데이트
         dispatch(updateStatus());
       }
     } else {
@@ -183,8 +195,11 @@ export default function CreatePage() {
           <div className="w-[50%] mx-auto flex border-b-[2px] border-black">
             <>
               <input
+                ref={inputRef}
+                onFocus={onFocus}
+                value={title}
                 onChange={handleInputName}
-                placeholder={title}
+                placeholder={'12자 이내로 입력해주세요'}
                 className="bg-transparent w-[90%] text-2xl font-bold text-black placeholder-[#8A8A8A] placeholder:text-2xl placeholder:text-center placeholder:font-bold text-center"
               />
             </>
