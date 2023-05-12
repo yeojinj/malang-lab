@@ -263,8 +263,9 @@ public class GameAdapter implements GamePort {
         String turn = (String) hashOperations.get(key, "turn");
 
         // 2. 총 단어 수 조회 및 반환
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         key = "room:" + roomId + ":" + turn + ":word-cnt";
-        Long totalWordCount = hashOperations.size(key);
+        Long totalWordCount = zSetOperations.size(key);
         return totalWordCount;
     }
 
