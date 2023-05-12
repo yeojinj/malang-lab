@@ -171,16 +171,23 @@ export default function CreatePage() {
         router.push('/ready');
         dispatch(updateStatus());
       }
-    } else {
-      alert('라운드 정보를 빠짐 없이 입력해주세요!');
-      return;
     }
   };
 
   // 라운드 정보 유효성 검사
   const checkIsValid = () => {
     return gameinfo.settings.every(setting => {
-      return setting.keyword !== '' && setting.hidden !== '';
+      if (setting.keyword == '' || setting.hidden == '') {
+        alert(
+          `Round${setting.round} :  키워드와 히든단어를 빠짐없이 입력해주세요!`,
+        );
+      } else if (setting.keyword == setting.hidden) {
+        alert(
+          `Round${setting.round} :  키워드와 히든단어를 다르게 입력해주세요!`,
+        );
+      } else {
+        return true;
+      }
     });
   };
 
