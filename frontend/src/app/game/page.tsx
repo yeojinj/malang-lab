@@ -18,13 +18,9 @@ export default function GamePage() {
   const [countShow, setCountShow] = useState(true);
   const [finish, setFinish] = useState(false);
   const [wordNum, setWordNum] = useState(0);
-
   // redux에서 가져올 값
+  const roundInfo = useSelector((state: RootState) => state.roundInfo);
   const [userNum, setUserNum] = useState(0);
-  const [round, setRound] = useState(1);
-  const keyword = '말랑이';
-  const time = 60;
-
   const isHost = useSelector((state: RootState) => state.status.isHost);
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
@@ -55,24 +51,24 @@ export default function GamePage() {
         <>
           <div className="flex fixed top-0 w-screen mr-10">
             <GameUserNum num={userNum} />
-            <Timer setFinish={setFinish} time={time} />
+            <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
           </div>
           <WordNum num={wordNum} />
           <h1 className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
-            {keyword}
+            {roundInfo.keyword}
           </h1>
           <Image src={word} alt="word" width={800} height={500} />
         </>
       )}
 
       {/* 카운트다운 끝 & Guest */}
-      {!countShow && !isHost &&(
+      {!countShow && !isHost && (
         <>
           <div className="flex sm:fixed sm:right-10 justify-center">
-            <Timer setFinish={setFinish} time={time} />
+            <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
           </div>
           <h1 className="text-[#44474B] text-[3rem] font-semibold sm:mt-16">
-            제시어 : {keyword}
+            제시어 : {roundInfo.keyword}
           </h1>
           <h2 className="text-[#44474B] mx-5 my-2 font-semibold">
             떠오르는 단어를 마구마구 입력해주세요!

@@ -33,7 +33,6 @@ export default function StartBtn({ category }) {
           round: sendinfo.round,
           isLast: sendinfo.round == gameinfo.settings.length,
         };
-        console.log(message, 'rounde message!!');
         publish(destination, type, message);
         setTimeout(() => {
           router.push('/game');
