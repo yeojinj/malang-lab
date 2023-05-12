@@ -13,7 +13,7 @@ import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 export default function ReadyPage() {
   const router = useRouter();
   const isHost = useSelector((state: RootState) => state.status.isHost);
-  const title = useSelector((state: RootState) => state.gameinfo.title)
+  const title = useSelector((state: RootState) => state.gameinfo.name);
   const readyInfo = useSelector((state: RootState) => state.readyInfo);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
 
@@ -25,7 +25,7 @@ export default function ReadyPage() {
 
   return (
     <>
-      <BgAudioPlayer src='/audio/bgfull.wav' />
+      <BgAudioPlayer src="/audio/bgfull.wav" />
       {isHost ? (
         <div className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1">
           <PinCode />
