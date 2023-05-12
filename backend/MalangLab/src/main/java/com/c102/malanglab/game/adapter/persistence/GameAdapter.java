@@ -122,6 +122,11 @@ public class GameAdapter implements GamePort {
         return guest;
     }
 
+    @Override
+    public void removeRoom(Long roomId) {
+        // TODO: 방 제거
+    }
+
     /** 유저 퇴장 시 삭제 */
     @Override
     public void removeUser(Long roomId, String userId) {
@@ -301,5 +306,11 @@ public class GameAdapter implements GamePort {
     /** 현재 라운드 결과 - 히든단어 */
 
     /** 현재 라운드 결과 - 특별한 아이디어 */
+
+    /** 참가자 ID로 참가자 정보 조회 */
+    @Override
+    public Guest getGuest(String id) {
+        return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
+    }
 
 }

@@ -12,16 +12,22 @@ type Props = {
 
 export default function PinForm({ setStep }: Props) {
   const [pin, setPin] = useState('');
-  const { client, subscribe, publish } = useSocket();
+  const { subscribe } = useSocket();
   const dispatch = useDispatch();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
+  
   // step2 - 닉네임 입력하기
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
   };
 
-  const handleClickPin = async () => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if(e.key === 'Enter') handleClickComplete()
+  }
+
+  const handleClickComplete = async () => {
+    // pin번호가 입력되지 않았을 경우
     if (!pin?.trim()) {
       alert('PIN 번호를 입력해주세요!');
       return;
@@ -55,11 +61,12 @@ export default function PinForm({ setStep }: Props) {
         type="number"
         placeholder="PIN 번호"
         onChange={handleChangePin}
+        onKeyPress={handleKeyPress}
         className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
       />
       <button
         className="button-black w-[80%] sm:w-[60%]"
-        onClick={handleClickPin}
+        onClick={handleClickComplete}
       >
         참여하기
       </button>
