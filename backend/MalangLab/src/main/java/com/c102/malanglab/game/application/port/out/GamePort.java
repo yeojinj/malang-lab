@@ -4,6 +4,7 @@ import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 import com.c102.malanglab.game.domain.Round;
 
+import com.c102.malanglab.game.domain.WordCount;
 import java.util.List;
 
 public interface GamePort {
@@ -48,7 +49,7 @@ public interface GamePort {
     Long totalWordCount(Long roomId);
 
     /** 현재 라운드 결과 - 워드클라우드 */
-    Object getRoundResultCloud(Long roomId);
+    List<WordCount> getRoundResultCloud(Long roomId);
 
     /** 현재 라운드 결과 - 히든단어 */
 
