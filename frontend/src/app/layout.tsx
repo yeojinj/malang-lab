@@ -5,7 +5,6 @@ import { SocketProvider } from '../context/SocketContext';
 import dynamic from 'next/dynamic';
 
 const inter = Inter({ subsets: ['latin'] });
-const isNotServer = typeof window !== 'undefined'
 
 export const metadata = {
   title: '말랑연구소',
@@ -13,13 +12,10 @@ export const metadata = {
 };
 
 // <Check> 컴포넌트를 동적으로 로드
-const Check = dynamic(() => {
-  if (isNotServer) {
-    return import('../components/common/Check')
+const Check = dynamic(() => import('../components/common/Check'),
+  {
+    ssr: false, // 서버측에는 렌더링하지 않음
   }
-}, {
-  ssr: false, // 서버측에는 렌더링하지 않음
-}
 );
 
 export default function RootLayout({
