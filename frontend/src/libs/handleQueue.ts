@@ -1,12 +1,18 @@
-const queueCallback = message => {
+import { setReadyMember } from '@/store/readyInfoSlice';
+
+const HandleQueue = dispatch => message => {
   if (message.body) {
-    alert('메세지 받음' + message.body);
     const quote = JSON.parse(message.body);
-    // 메세지 처리 로직 짜주세욤..
-    return quote;
+    // if (quote.type == 'JOIN') {
+    //   const member = {
+    //     nickname: quote.message.nickname,
+    //     imagePath: quote.message.imagePath,
+    //   };
+    //   dispatch(setReadyMember(member));
+    // }
   } else {
     alert('got empty message');
   }
 };
 
-export { queueCallback };
+export { HandleQueue };

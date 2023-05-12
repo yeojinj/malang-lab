@@ -1,6 +1,6 @@
 import { checkPinApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
-import { queueCallback } from '@/libs/handleQueue';
+import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
 import { setPinAction } from '@/store/guestSlice';
 import { useState } from 'react';
@@ -15,6 +15,7 @@ export default function PinForm({ setStep }: Props) {
   const { client, subscribe, publish } = useSocket();
   const dispatch = useDispatch();
   const handleTopic = HandleTopic(dispatch);
+  const handleQueue = HandleQueue(dispatch);
   // step2 - 닉네임 입력하기
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
@@ -33,7 +34,7 @@ export default function PinForm({ setStep }: Props) {
       const topic = `/topic/room.${pin}`;
       const queue = `/queue/room.${pin}`;
       subscribe(topic, handleTopic);
-      subscribe(queue, queueCallback);
+      subscribe(queue, handleQueue);
 
       // 리덕스에 저장
       dispatch(setPinAction(pin));

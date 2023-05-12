@@ -2,10 +2,7 @@ package com.c102.malanglab.game.adapter.web;
 
 import com.c102.malanglab.common.response.CustomResponseEntity;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
-import com.c102.malanglab.game.dto.RoomRequest;
-import com.c102.malanglab.game.dto.RoomResponse;
-import com.c102.malanglab.game.dto.GuestRequest;
-import com.c102.malanglab.game.dto.WordRequest;
+import com.c102.malanglab.game.dto.*;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/game")
@@ -73,12 +72,12 @@ public class ApiController {
         return new CustomResponseEntity(HttpStatus.OK, true).convertToResponseEntity();
     }
 
-    @GetMapping("/{roomId}/user/out")
+    @PostMapping("/{roomId}/user/out")
     public ResponseEntity<Void> userOut(
             @PathVariable Long roomId,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
+            @RequestBody UserOutRequest request
     ) {
-        gameStatusCase.exitMember(roomId, userId);
+        gameStatusCase.exitMember(roomId, request.getToken());
         return new CustomResponseEntity(HttpStatus.NO_CONTENT, null).convertToResponseEntity();
     }
 
@@ -103,7 +102,7 @@ public class ApiController {
 
     /**
      * 호스트는 단어의 수를 가져옵니다
-     * POST : /game/{roomId}/wordcount
+     * GET : /game/{roomId}/wordcount
      * @PathVariable roomId : 방 번호 (PIN 번호)
      * @RequestHeader userId : 유저 아이디 토큰
      * @return
@@ -117,4 +116,25 @@ public class ApiController {
         Long result = gameStatusCase.totalWordCount(roomId, userId);
         return new CustomResponseEntity(HttpStatus.OK, result).convertToResponseEntity();
     }
+
+    /**
+     * 호스트는 입력 단어 결과를 가져옵니다
+     * GET : /game/{roomId}/wordresult
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @RequestHeader userId : 유저 아이디 토큰
+     * @return
+     */
+    @GetMapping("/{roomId}/wordresult")
+    public ResponseEntity<Object> totalWordResult(
+            @PathVariable Long roomId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
+    ) {
+        // gameStatusCase
+        // TODO: * 여진이한테 어떤 형식으로 넘겨줄 껀지 물어보기 (라운드별) (단어 : 입력 빈도)
+        // TODO: ResponseEntity 자료형 고치기
+        HashMap<String, Integer> temp = new HashMap<>();
+
+        return new CustomResponseEntity(HttpStatus.OK, temp).convertToResponseEntity();
+    }
+
 }

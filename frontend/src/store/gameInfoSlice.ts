@@ -11,16 +11,17 @@ export interface Setting {
 }
 
 export type GameInfo = {
-  id : number;
-  title : string;
+  id: number;
+  title: string;
   name: string;
   mode: string;
   settings: Setting[];
+  present: number;
 };
 
 const initialState: GameInfo = {
-  id : 0,
-  title:'말랑이의 연구소',
+  id: 0,
+  title: '말랑이의 연구소',
   name: '',
   mode: '',
   settings: [
@@ -32,6 +33,7 @@ const initialState: GameInfo = {
       round: 1,
     },
   ],
+  present: 0,
 };
 
 export const gameInfoSlice = createSlice({
@@ -40,11 +42,11 @@ export const gameInfoSlice = createSlice({
   reducers: {
     // pin 번호
     setPincodeAction(state, action) {
-      state.id = action.payload
+      state.id = action.payload;
     },
     // 방 제목 입력
     setTitleAction(state, action) {
-      state.title = action.payload
+      state.title = action.payload;
     },
     // 모드 선택하기
     modeAction(state, action) {
@@ -70,9 +72,9 @@ export const gameInfoSlice = createSlice({
     // 삭제버튼을 눌렀을 때
     deleteRoundAction(state, action) {
       state.settings.splice(action.payload, 1);
-      state.settings.map((setting, idx)=> {
-        setting.round = idx+1
-      })
+      state.settings.map((setting, idx) => {
+        setting.round = idx + 1;
+      });
     },
     // 추가 버튼을 눌렀을때
     addRoundAction(state) {
@@ -81,9 +83,13 @@ export const gameInfoSlice = createSlice({
         keyword: '',
         hidden: '',
         time: 30,
-        round: state.settings.length+1,
+        round: state.settings.length + 1,
       });
-    }
+    },
+    // 라운드 시작할 때
+    updatePresentAction(state) {
+      state.present += 1;
+    },
   },
 });
 
@@ -98,5 +104,6 @@ export const {
   changekeywordAction,
   changeHiddenAction,
   changeTimeAction,
+  updatePresentAction,
 } = gameInfoSlice.actions;
 export default gameInfoSlice.reducer;
