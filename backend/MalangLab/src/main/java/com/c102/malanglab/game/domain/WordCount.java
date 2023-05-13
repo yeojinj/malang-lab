@@ -7,13 +7,13 @@ import org.springframework.data.redis.core.ZSetOperations;
 @Data
 @NoArgsConstructor
 public class WordCount {
-    String word;
-    int count;
+    String text;
+    int value;
 
     public static WordCount convertToWordCount(ZSetOperations.TypedTuple typedTuple) {
         WordCount wordCountDomain = new WordCount();
-        wordCountDomain.word = typedTuple.getValue().toString();
-        wordCountDomain.count = typedTuple.getScore().intValue();
+        wordCountDomain.text = typedTuple.getValue().toString();
+        wordCountDomain.value = typedTuple.getScore().intValue();
         return wordCountDomain;
     }
 }
