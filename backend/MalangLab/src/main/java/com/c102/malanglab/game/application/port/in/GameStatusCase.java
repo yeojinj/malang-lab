@@ -80,8 +80,6 @@ public interface GameStatusCase {
      * @param userId
      * @return
      */
-
-    Object totalWordResult(final Long roomId, final String userId);
     List<WordCount> roundResultCloud(final Long roomId, final String userId);
 
     /**

@@ -63,9 +63,6 @@ public interface GamePort {
     /** 참가자 ID로 참가자 정보 조회 */
     Guest getGuest(String id);
 
-    /** 현재 라운드에 입력된 총 단어 결과 **/
-    Object totalWordResult(Long roomId);
-
     /** 단어를 가장 많이 입력한 말랑이 */
     /** 히든 단어를 가장 빨리 찾은 말랑이 *
     /** 맨 마지막까지 최선을 다한 말랑이 */

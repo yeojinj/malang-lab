@@ -354,18 +354,12 @@ public class GameAdapter implements GamePort {
     }
 
     @Override
-    public Object totalWordResult(Long roomId) {
-        // TODO: 만들어 주세요!
-        return null;
-    }
-
-    @Override
     public Guest getWinner(Long roomId, AwardType type) {
         switch(type) {
-            case IDEA_MACHINE -> getWinner1(roomId);
-            case LAST_FIGHTER -> getWinner2(roomId);
-            case HIDDEN_FASTER -> getWinner3(roomId);
-            case QUICK_THINKER -> getWinner4(roomId);
+            case IDEA_MACHINE -> getIdeaMachine(roomId);
+            case LAST_FIGHTER -> getLastFighter(roomId);
+            case HIDDEN_FASTER -> getHiddenFaster(roomId);
+            case QUICK_THINKER -> getQuickThinker(roomId);
         }
         return null;
     };
@@ -375,16 +369,7 @@ public class GameAdapter implements GamePort {
      * @param roomId
      * @return
      */
-    private Guest getWinner1(Long roomId) {
-        return null;
-    }
-
-    /**
-     * 히든 단어를 가장 빨리 찾은 말랑이
-     * @param roomId
-     * @return
-     */
-    private Guest getWinner2(Long roomId) {
+    private Guest getIdeaMachine(Long roomId) {
         return null;
     }
 
@@ -393,7 +378,16 @@ public class GameAdapter implements GamePort {
      * @param roomId
      * @return
      */
-    private Guest getWinner3(Long roomId) {
+    private Guest getLastFighter(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 히든 단어를 가장 빨리 찾은 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getHiddenFaster(Long roomId) {
         return null;
     }
 
@@ -402,7 +396,7 @@ public class GameAdapter implements GamePort {
      * @param roomId
      * @return
      */
-    private Guest getWinner4(Long roomId) {
+    private Guest getQuickThinker(Long roomId) {
         return null;
     }
 }

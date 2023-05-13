@@ -196,11 +196,6 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
-    public Object totalWordResult(Long roomId, String userId) {
-        return null;
-    }
-
-    @Override
     public List<WordCount> roundResultCloud(Long roomId, String userId) {
         if (!gamePort.isGameManager(roomId, userId)) {
             throw new IllegalArgumentException("호스트가 아닌 게스트의 요청입니다.");
