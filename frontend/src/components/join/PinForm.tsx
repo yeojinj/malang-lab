@@ -8,6 +8,8 @@ import { useSocket } from '@/context/SocketContext';
 // socket
 import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
+// alert
+import Swal from 'sweetalert2';
 
 type Props = {
   setStep: (step: number) => void;
@@ -19,20 +21,21 @@ export default function PinForm({ setStep }: Props) {
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
   const [pin, setPin] = useState('');
-  
+  const Swal = require('sweetalert2');
+
   // pin 번호 입력
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if(e.key === 'Enter') handleClickComplete()
-  }
+    if (e.key === 'Enter') handleClickComplete();
+  };
 
   const handleClickComplete = async () => {
     // pin번호가 입력되지 않았을 경우
     if (!pin?.trim()) {
-      alert('PIN 번호를 입력해주세요!');
+      Swal.fire('PIN 번호를 입력해주세요!', '', 'question');
       return;
     }
 
@@ -51,7 +54,10 @@ export default function PinForm({ setStep }: Props) {
       // 다음 페이지로 이동
       setStep(1);
     } else {
-      alert('유효한 PIN 번호가 아닙니다!');
+      Swal.fire({
+        icon: 'error',
+        title: '유효한 PIN 번호가 아닙니다!',
+      });
     }
   };
 
