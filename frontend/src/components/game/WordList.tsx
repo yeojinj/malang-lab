@@ -15,7 +15,7 @@ export default function WordList() {
   const playerRef = useRef<HTMLAudioElement>(null);
   const [word, setWord] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
-  const { publishUpdate } = useSocket();
+  const { publish } = useSocket();
   const roomId = useSelector((state: RootState) => state.guest.pin);
   const keyword = useSelector((state: RootState) => state.roundInfo.keyword);
 
@@ -64,7 +64,10 @@ export default function WordList() {
         });
         setWord(word.slice(0, 13));
       } else {
-        publishUpdate(`/queue/manager.room.${roomId}`, 'CHECK_DB'); // 단어 추가될 때마다 전송
+        // 단어 추가될 때마다 전송
+        publish(`/queue/manager.room.${roomId}`, 'CHECK_DB', {
+          roomId,
+        });
         handlePostWord();
         setWords([...words, word]);
         setWord('');
