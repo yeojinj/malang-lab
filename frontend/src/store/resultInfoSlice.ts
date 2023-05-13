@@ -18,7 +18,11 @@ export const resultInfoSlice = createSlice({
   initialState,
   reducers: {
     setWordcloudData(state, action) {
-      state = action.payload;
+      // action.payload.map((item) => {
+      //   state.wordcloudData.push(item)
+      // })
+      state.wordcloudData = action.payload;
+      console.log(state.wordcloudData);
     },
   },
 });

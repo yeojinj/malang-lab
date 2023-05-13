@@ -16,10 +16,7 @@ export default function ReadyPage() {
   const title = useSelector((state: RootState) => state.gameinfo.name);
   const readyInfo = useSelector((state: RootState) => state.readyInfo);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
-<<<<<<< HEAD
-=======
   const guestTitle = useSelector((state: RootState) => state.guest.title);
->>>>>>> 9163ea4ecdee863fe2cda21b7ce3094186b2d44c
 
   useEffect(() => {
     if (roundInfo.keyword) {
@@ -30,7 +27,7 @@ export default function ReadyPage() {
   return (
     <>
       <BgAudioPlayer src="/audio/bgfull.wav" />
-      {true ? (
+      {isHost ? (
         <div className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1">
           <PinCode />
           <div className="text-center text-[#44474B]">
@@ -39,7 +36,7 @@ export default function ReadyPage() {
               준비가 완료되면 시작하기 버튼을 눌러주세요!
             </h2>
             <div>
-                <StartBtn category={'게임 시작'} />
+              <StartBtn category={'게임 시작'} />
               <UserNum num={readyInfo.length} />
             </div>
           </div>

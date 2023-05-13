@@ -16,6 +16,9 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { wordZeroAction } from '@/store/wordNumSlice';
 import { useSocket } from '@/context/SocketContext';
+import BgAudioPlayer from '@/components/common/BgAudioPlayer';
+import { wordcloundApi } from '@/apis/apis';
+import { setWordcloudData } from '@/store/resultInfoSlice';
 
 export default function GamePage() {
   const router = useRouter();
@@ -42,8 +45,12 @@ export default function GamePage() {
     return () => clearTimeout(timeout);
   }, []);
 
-  const handleClick = () => {
-    router.push('/result');
+  const handleClick = async () => {
+    // 결과 데이터 가져오기 API 요청하기
+    console.log('결과 가져오기 누름');
+    const res = await wordcloundApi(gameInfo.id);
+    await dispatch(setWordcloudData(res));
+    await router.push('/result');
     dispatch(wordZeroAction());
   };
 

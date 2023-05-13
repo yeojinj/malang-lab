@@ -146,7 +146,7 @@ const wordcloundApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/wordcloud`);
     console.log(res.data);
-    return res.data;
+    return res.data.data;
   } catch (err) {
     console.log('워드 클라우드 단어 가져오기 실패', err);
   }
