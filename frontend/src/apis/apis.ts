@@ -87,7 +87,7 @@ const checkGuestInfoApi = async (payload: Guest) => {
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
     if (err.response.data.status == 400) {
-      alert(err.response.data.message)
+      alert(err.response.data.message);
     }
   }
 };
@@ -107,12 +107,9 @@ const gameStartApi = async (pin: number) => {
 // 키워드 입력
 const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
-  // const pin = useSelector((state: RootState) => state.guest.pin);
-  const pin = 195048;
-
+  const { word, time, roomId } = payload;
   try {
-    const res = await authApi.post(`/game/${pin}/word`, payload);
-    console.log(res.data);
+    const res = await authApi.post(`/game/${roomId}/word`, payload);
     return res.data;
   } catch (err) {
     console.log('단어 입력 실패', err);
