@@ -141,6 +141,17 @@ const wordsNumApi = async (pin: number) => {
   }
 };
 
+// 워드 클라우드 결과 받아오기
+const wordcloundApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/wordcloud`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('워드 클라우드 단어 가져오기 실패', err);
+  }
+};
+
 export {
   getTokenApi,
   makeRoomApi,
@@ -150,4 +161,5 @@ export {
   inputWordApi,
   wordsNumApi,
   userOutApi,
+  wordcloundApi,
 };

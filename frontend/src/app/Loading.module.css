@@ -9,6 +9,7 @@
 }
 .loadercircle, .loaderblob {
     position: absolute;
+    z-index: 10;
 }
 .loadercircle {
     width: 100px;

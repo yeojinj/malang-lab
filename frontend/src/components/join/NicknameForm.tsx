@@ -62,9 +62,7 @@ export default function NicknameForm() {
         imagePath,
       };
       publish(destination, type, message);
-      setTimeout(() => {
-        router.push('/ready');
-      }, 1000);
+      router.push('/ready');
     }
   }, [imagePath]);
 
