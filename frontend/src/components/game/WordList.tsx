@@ -17,10 +17,12 @@ export default function WordList() {
   const [words, setWords] = useState<string[]>([]);
   const { publishUpdate } = useSocket();
   const roomId = useSelector((state: RootState) => state.guest.pin);
+  const keyword = useSelector((state: RootState) => state.roundInfo.keyword);
 
   const wordinfo: WordInfo = {
     word,
     time: new Date().getTime(),
+    roomId,
   };
 
   const handlePostWord = async () => {
@@ -34,7 +36,6 @@ export default function WordList() {
     }
     // 효과음
     playerRef.current?.play();
-    console.log(roomId);
   }, [words]);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,15 +45,13 @@ export default function WordList() {
           icon: 'question',
           title: '단어를 입력해주세요!',
         });
-      }
-      // else if (word == keyword) {
-      // Swal.fire({
-      //   icon: 'error',
-      //   title: '제시어와 다른 단어를 입력해주세요!',
-      // });
-      //   setWord('');
-      // }
-      else if (words.includes(word)) {
+      } else if (word == keyword) {
+        Swal.fire({
+          icon: 'error',
+          title: '제시어와 다른 단어를 입력해주세요!',
+        });
+        setWord('');
+      } else if (words.includes(word)) {
         Swal.fire({
           icon: 'error',
           title: '중복된 단어입니다!',

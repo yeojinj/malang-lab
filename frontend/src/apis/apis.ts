@@ -107,12 +107,9 @@ const gameStartApi = async (pin: number) => {
 // 키워드 입력
 const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
-  // const pin = useSelector((state: RootState) => state.guest.pin);
-  const pin = 195048;
-
+  const { word, time, roomId } = payload;
   try {
-    const res = await authApi.post(`/game/${pin}/word`, payload);
-    console.log(res.data);
+    const res = await authApi.post(`/game/${roomId}/word`, payload);
     return res.data;
   } catch (err) {
     console.log('단어 입력 실패', err);
