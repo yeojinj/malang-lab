@@ -1,14 +1,16 @@
 'use client';
-
+// Hooks
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+// Components
 import GuestsList from '@/components/ready/GuestsList';
 import PinCode from '@/components/ready/EnterCode';
 import StartBtn from '@/components/ready/StartBtn';
 import UserNum from '@/components/ready/UserNum';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
+// redux
+import { RootState } from '@/store/store';
 
 export default function ReadyPage() {
   const router = useRouter();
@@ -16,10 +18,7 @@ export default function ReadyPage() {
   const title = useSelector((state: RootState) => state.gameinfo.name);
   const readyInfo = useSelector((state: RootState) => state.readyInfo);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
-<<<<<<< HEAD
-=======
   const guestTitle = useSelector((state: RootState) => state.guest.title);
->>>>>>> 9163ea4ecdee863fe2cda21b7ce3094186b2d44c
 
   useEffect(() => {
     if (roundInfo.keyword) {
@@ -30,7 +29,7 @@ export default function ReadyPage() {
   return (
     <>
       <BgAudioPlayer src="/audio/bgfull.wav" />
-      {true ? (
+      {isHost ? (
         <div className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1">
           <PinCode />
           <div className="text-center text-[#44474B]">
