@@ -9,6 +9,7 @@ import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 
 import com.c102.malanglab.game.domain.Round;
+import com.c102.malanglab.game.domain.WordCount;
 import com.c102.malanglab.game.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -196,13 +197,12 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
-    public Object totalWordResult(Long roomId, String userId) {
+    public List<WordCount> roundResultCloud(Long roomId, String userId) {
         if (!gamePort.isGameManager(roomId, userId)) {
             throw new IllegalArgumentException("호스트가 아닌 게스트의 요청입니다.");
         }
 
-        // TODO: 수정하기
-        Object result = gamePort.getRoundResultCloud(roomId);
+        List<WordCount> result = gamePort.getRoundResultCloud(roomId);
         return result;
     }
 
