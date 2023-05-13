@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation';
 import ModeCard from '@/components/create/ModeCard';
 import RoundSetting from '@/components/create/RoundSetting';
 import GameCard from '../../components/create/GameCard';
+import Loading from '../loading';
 // redux
 import { RootState } from '@/store/store';
-import gameInfoSlice, {
+import {
   setPincodeAction,
   addRoundAction,
   deleteRoundAction,
@@ -20,7 +21,6 @@ import gameInfoSlice, {
 import { updateStatus } from '@/store/statusSlice';
 // apis
 import { makeRoomApi } from '@/apis/apis';
-import Loading from '@/components/common/Loading';
 import { HandleTopic } from '@/libs/handleTopic';
 import { HandleQueue } from '@/libs/handleQueue';
 import { useSocket } from '@/context/SocketContext';

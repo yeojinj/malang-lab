@@ -139,12 +139,29 @@ public class ApiController {
      * @return
      */
     @GetMapping("/{roomId}/wordcloud")
-    public ResponseEntity<List<WordCount>> totalWordResult(
+    public ResponseEntity<List<WordCount>> roundResultCloud(
             @PathVariable Long roomId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
     ) {
 
         List<WordCount> result = gameStatusCase.roundResultCloud(roomId, userId);
+        return new CustomResponseEntity(HttpStatus.OK, result).convertToResponseEntity();
+    }
+
+    /**
+     * 호스트는 히든 단어와 히든 단어를 찾은 게스트의 결과를 가져옵니다.
+     * GET : /game/{roomId}/hiddenword
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @RequestHeader userId : 유저 아이디 토큰
+     * @return
+     */
+    @GetMapping("/{roomId}/hiddenword")
+    public ResponseEntity<HiddenResponse> roundResultHidden(
+            @PathVariable Long roomId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
+    ) {
+
+        HiddenResponse result = gameStatusCase.roundResultHidden(roomId, userId);
         return new CustomResponseEntity(HttpStatus.OK, result).convertToResponseEntity();
     }
 

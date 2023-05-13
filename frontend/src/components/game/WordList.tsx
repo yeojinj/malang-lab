@@ -16,8 +16,6 @@ export default function WordList() {
   const [word, setWord] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
   const { publishUpdate } = useSocket();
-  const Swal = require('sweetalert2');
-  // const roomId = useSelector((state: RootState) => state.guest.pin);
   const roomId = useSelector((state: RootState) => state.guest.pin);
 
   const wordinfo: WordInfo = {

@@ -14,8 +14,11 @@ export const readyInfoSlice = createSlice({
     setReadyMember(state, action) {
       state.push(action.payload);
     },
+    outReadyMember(state, action) {
+
+    },
   },
 });
 
-export const { setReadyMember } = readyInfoSlice.actions;
+export const { setReadyMember, outReadyMember } = readyInfoSlice.actions;
 export default readyInfoSlice.reducer;

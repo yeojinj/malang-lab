@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // redux
-import { setPinAction } from '@/store/guestSlice';
+import { setPinAction, setTitleAction } from '@/store/guestSlice';
 import { useDispatch } from 'react-redux';
 // apis
 import { checkPinApi } from '@/apis/apis';
@@ -10,6 +10,7 @@ import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
 // alert
 import Swal from 'sweetalert2';
+import { Z_DATA_ERROR } from 'zlib';
 
 type Props = {
   setStep: (step: number) => void;
@@ -40,16 +41,19 @@ export default function PinForm({ setStep }: Props) {
     }
 
     // 유효한 세션인지 확인 한후
-    const isValid = await checkPinApi(Number(pin));
-    if (isValid) {
+    const data = await checkPinApi(Number(pin));
+    if (data) {
       // topic, queue 구독
       const topic = `/topic/room.${pin}`;
       const queue = `/queue/room.${pin}`;
       subscribe(topic, handleTopic);
       subscribe(queue, handleQueue);
 
-      // 리덕스에 저장
+      // pin번호 리덕스에 저장
       dispatch(setPinAction(pin));
+
+      // 게임 이름 리덕스에 저장
+      dispatch(setTitleAction(data.name))
 
       // 다음 페이지로 이동
       setStep(1);

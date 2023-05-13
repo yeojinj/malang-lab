@@ -4,12 +4,14 @@ export type Guest = {
   pin: string;
   nickname: string;
   imageUrl: string;
+  title: string;
 };
 
 const initialState: Guest = {
   pin: '',
   nickname: '',
   imageUrl: '',
+  title: '',
 };
 
 export const guestSlice = createSlice({
@@ -23,15 +25,23 @@ export const guestSlice = createSlice({
     // image setting
     setImageAction(state, action) {
       state.imageUrl = action.payload;
-      console.log(state.imageUrl, '❤')
+      console.log(state.imageUrl, '❤');
     },
     // nickname setting
     setNicknameAction(state, action) {
       state.nickname = action.payload;
     },
+    // title setting
+    setTitleAction(state, action) {
+      state.title = action.payload;
+    },
   },
 });
 
-export const { setPinAction, setNicknameAction, setImageAction } =
-  guestSlice.actions;
+export const {
+  setPinAction,
+  setNicknameAction,
+  setImageAction,
+  setTitleAction,
+} = guestSlice.actions;
 export default guestSlice.reducer;
