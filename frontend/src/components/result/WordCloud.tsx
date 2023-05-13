@@ -4,73 +4,23 @@ import ReactWordcloud from 'react-wordcloud';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
 import Image from 'next/image';
-const mockItems = [
-  {
-    text: '말랑',
-    value: 1,
-  },
-  {
-    text: '말랑',
-    value: 2,
-  },
-  {
-    text: '말랑',
-    value: 3,
-  },
-  {
-    text: '말랑',
-    value: 4,
-  },
-  {
-    text: '말랑',
-    value: 1,
-  },
-  {
-    text: '말랑',
-    value: 2,
-  },
-  {
-    text: '말랑',
-    value: 3,
-  },
-  {
-    text: '말랑',
-    value: 4,
-  },
-  {
-    text: '말랑',
-    value: 1,
-  },
-  {
-    text: '말랑',
-    value: 2,
-  },
-  {
-    text: '말랑',
-    value: 3,
-  },
-  {
-    text: '말랑',
-    value: 4,
-  },
-  {
-    text: '말랑',
-    value: 1,
-  },
-  {
-    text: '말랑',
-    value: 2,
-  },
-  {
-    text: '말랑',
-    value: 3,
-  },
-  {
-    text: '말랑',
-    value: 4,
-  },
-];
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+// const mockItems = [
+//   {
+//     text: '말랑',
+//     value: 1,
+//   },
+//   {
+//     text: '말랑',
+//     value: 2,
+//   },
+// ];
 export default function WordCloud() {
+  const wordcloudData = useSelector(
+    (state: RootState) => state.resultInfo.wordcloudData,
+  );
+
   return (
     <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">
       <Image
@@ -82,7 +32,7 @@ export default function WordCloud() {
         priority
       />
       <ReactWordcloud
-        words={mockItems}
+        words={wordcloudData}
         size={[500, 500]}
         options={{
           fontSizes: [20, 80],
