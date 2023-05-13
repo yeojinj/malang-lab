@@ -16,9 +16,9 @@ export default function NicknameForm() {
 
   // step3 - 닉네임 입력
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (nickname.length > 10) {
-      alert('10자 이하로 입력해주세요!');
-      setNickname(nickname.slice(0, 10));
+    if (nickname.length > 7) {
+      alert('7자 이하로 입력해주세요!');
+      setNickname(nickname.slice(0, 7));
     } else {
       setNickname(e.target.value);
     }
