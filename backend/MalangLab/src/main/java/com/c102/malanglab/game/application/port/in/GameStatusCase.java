@@ -1,7 +1,9 @@
 package com.c102.malanglab.game.application.port.in;
 
+import com.c102.malanglab.game.domain.WordCount;
 import com.c102.malanglab.game.dto.*;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public interface GameStatusCase {
@@ -79,5 +81,13 @@ public interface GameStatusCase {
      * @param userId
      * @return
      */
-    Object totalWordResult(final Long roomId, final String userId);
+    List<WordCount> roundResultCloud(final Long roomId, final String userId);
+
+    /**
+     * 라운드 히든 단어 결과를 가져옵니다.
+     * @param roomId
+     * @param userId
+     * @return
+     */
+    HiddenResponse roundResultHidden(final Long roomId, final String userId);
 }

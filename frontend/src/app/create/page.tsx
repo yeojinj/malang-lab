@@ -24,6 +24,7 @@ import { makeRoomApi } from '@/apis/apis';
 import { HandleTopic } from '@/libs/handleTopic';
 import { HandleQueue } from '@/libs/handleQueue';
 import { useSocket } from '@/context/SocketContext';
+import Swal from 'sweetalert2';
 
 const modes = [
   {
@@ -66,6 +67,7 @@ export default function CreatePage() {
   const dispatch = useDispatch();
   const router = useRouter();
   const inputRef = useRef(null);
+  const Swal = require('sweetalert2');
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -82,7 +84,10 @@ export default function CreatePage() {
   // 방제목 설정하기
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 12) {
-      alert('12자 이내로 입력해주세요!');
+      Swal.fire({
+        icon: 'warning',
+        title: '12자 이내로 입력해주세요!',
+      });
       setTitle(title.slice(0, 12));
     } else {
       setTitle(e.target.value);
@@ -124,11 +129,17 @@ export default function CreatePage() {
   const handleClickStep = () => {
     if (step === 0) {
       if (selectedGame === '') {
-        alert('게임을 선택하세요!');
+        Swal.fire({
+          icon: 'question',
+          title: '게임을 선택하세요!',
+        });
         return;
       }
       if (selectedMode === '') {
-        alert('모드를 선택하세요!');
+        Swal.fire({
+          icon: 'question',
+          title: '모드를 선택하세요!',
+        });
         return;
       }
     }
@@ -138,7 +149,10 @@ export default function CreatePage() {
   // 라운드 세팅 추가하기
   const handleClickAdd = () => {
     if (gameinfo.settings.length === 3) {
-      alert('최대 3라운드까지 가능해요!');
+      Swal.fire({
+        icon: 'error',
+        title: '최대 3라운드까지 가능해요!',
+      });
       return;
     }
     dispatch(addRoundAction());
@@ -178,13 +192,17 @@ export default function CreatePage() {
   const checkIsValid = () => {
     return gameinfo.settings.every(setting => {
       if (setting.keyword == '' || setting.hidden == '') {
-        alert(
-          `Round${setting.round} :  키워드와 히든단어를 빠짐없이 입력해주세요!`,
-        );
+        Swal.fire({
+          icon: 'question',
+          title: `Round${setting.round}`,
+          text: '키워드와 히든단어를 빠짐없이 입력해주세요!',
+        });
       } else if (setting.keyword == setting.hidden) {
-        alert(
-          `Round${setting.round} :  키워드와 히든단어를 다르게 입력해주세요!`,
-        );
+        Swal.fire({
+          icon: 'warning',
+          title: `Round${setting.round}`,
+          text: '키워드와 히든단어를 다르게 입력해주세요!',
+        });
       } else {
         return true;
       }
@@ -193,9 +211,7 @@ export default function CreatePage() {
 
   return (
     <div
-      className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center"
-      style={{ backgroundImage: "url('/imgs/bg-3.png')" }}
-    >
+      className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center bg-bg-3">
       {isLoading && <Loading />}
       <section className="glass w-[70%] min-h-[90vh] border-2 mx-auto flex my-5">
         <div className="w-[70%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">

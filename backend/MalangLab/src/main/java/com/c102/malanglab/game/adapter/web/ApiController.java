@@ -2,6 +2,7 @@ package com.c102.malanglab.game.adapter.web;
 
 import com.c102.malanglab.common.response.CustomResponseEntity;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
+import com.c102.malanglab.game.domain.WordCount;
 import com.c102.malanglab.game.dto.*;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -130,23 +132,37 @@ public class ApiController {
     }
 
     /**
-     * 호스트는 입력 단어 결과를 가져옵니다
-     * GET : /game/{roomId}/wordresult
+     * 호스트는 워드 클라우드 생성에 사용할 단어 결과를 가져옵니다
+     * GET : /game/{roomId}/wordcloud
      * @PathVariable roomId : 방 번호 (PIN 번호)
      * @RequestHeader userId : 유저 아이디 토큰
      * @return
      */
-    @GetMapping("/{roomId}/wordresult")
-    public ResponseEntity<Object> totalWordResult(
+    @GetMapping("/{roomId}/wordcloud")
+    public ResponseEntity<List<WordCount>> roundResultCloud(
             @PathVariable Long roomId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
     ) {
-        // gameStatusCase
-        // TODO: * 여진이한테 어떤 형식으로 넘겨줄 껀지 물어보기 (라운드별) (단어 : 입력 빈도)
-        // TODO: ResponseEntity 자료형 고치기
-        HashMap<String, Integer> temp = new HashMap<>();
 
-        return new CustomResponseEntity(HttpStatus.OK, temp).convertToResponseEntity();
+        List<WordCount> result = gameStatusCase.roundResultCloud(roomId, userId);
+        return new CustomResponseEntity(HttpStatus.OK, result).convertToResponseEntity();
+    }
+
+    /**
+     * 호스트는 히든 단어와 히든 단어를 찾은 게스트의 결과를 가져옵니다.
+     * GET : /game/{roomId}/hiddenword
+     * @PathVariable roomId : 방 번호 (PIN 번호)
+     * @RequestHeader userId : 유저 아이디 토큰
+     * @return
+     */
+    @GetMapping("/{roomId}/hiddenword")
+    public ResponseEntity<HiddenResponse> roundResultHidden(
+            @PathVariable Long roomId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String userId
+    ) {
+
+        HiddenResponse result = gameStatusCase.roundResultHidden(roomId, userId);
+        return new CustomResponseEntity(HttpStatus.OK, result).convertToResponseEntity();
     }
 
 }
