@@ -4,8 +4,8 @@ import com.c102.malanglab.common.response.CustomResponseEntity;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.domain.WordCount;
 import com.c102.malanglab.game.dto.*;
+
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/game")
@@ -48,12 +47,6 @@ public class ApiController {
         return new CustomResponseEntity(HttpStatus.OK, gameStatusCase.get(roomId)).convertToResponseEntity();
     }
 
-    /**
-     * 게스트는 방에 들어가기 위해 PIN을 입력합니다
-     * GET : /game/{roomId}
-     * @PathVariable roomId : 방 번호 (PIN 번호)
-     * @return
-     */
     @PostMapping("/{roomId}")
     public ResponseEntity<GuestRequest> register(@PathVariable Long roomId, @Valid GuestRequest guestRequest) {
         // 이미지 파일 검사
@@ -163,6 +156,19 @@ public class ApiController {
 
         HiddenResponse result = gameStatusCase.roundResultHidden(roomId, userId);
         return new CustomResponseEntity(HttpStatus.OK, result).convertToResponseEntity();
+    }
+
+    /**
+     * 시상 부문 3개 랜덤 조회합니다.
+     * GET: /game/{roomId}/awards
+     * @PathVariable roomId: 방 번호(PIN 번호)
+     * @return
+     */
+    @GetMapping("{roomId}/awards")
+    public ResponseEntity<?> awards(@PathVariable Long roomId) {
+        List<AwardResponse> list = gameStatusCase.getAwards(roomId);
+
+        return new CustomResponseEntity(HttpStatus.OK, list).convertToResponseEntity();
     }
 
 }

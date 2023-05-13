@@ -1,5 +1,6 @@
 package com.c102.malanglab.game.application.port.out;
 
+import com.c102.malanglab.game.domain.AwardType;
 import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 import com.c102.malanglab.game.domain.Round;
@@ -61,4 +62,10 @@ public interface GamePort {
 
     /** 참가자 ID로 참가자 정보 조회 */
     Guest getGuest(String id);
+
+    /** 단어를 가장 많이 입력한 말랑이 */
+    /** 히든 단어를 가장 빨리 찾은 말랑이 *
+    /** 맨 마지막까지 최선을 다한 말랑이 */
+    /** 빈도수 가장 높은 단어 먼저 쓴 말랑이 */
+    Guest getWinner(Long roomId, AwardType type);
 }
