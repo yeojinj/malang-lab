@@ -18,6 +18,10 @@ export default function ReadyPage() {
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
 
   useEffect(() => {
+
+  }, [])
+
+  useEffect(() => {
     if (roundInfo.keyword) {
       router.push('/game');
     }
