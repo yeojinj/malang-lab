@@ -289,4 +289,51 @@ public class GameAdapter implements GamePort {
         // TODO: 만들어 주세요!
         return null;
     }
+
+    @Override
+    public Guest getWinner(Long roomId, AwardType type) {
+        switch(type) {
+            case IDEA_MACHINE -> getWinner1(roomId);
+            case LAST_FIGHTER -> getWinner2(roomId);
+            case HIDDEN_FASTER -> getWinner3(roomId);
+            case QUICK_THINKER -> getWinner4(roomId);
+        }
+        return null;
+    };
+
+    /**
+     * 단어를 가장 많이 입력한 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getWinner1(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 히든 단어를 가장 빨리 찾은 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getWinner2(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 맨 마지막까지 최선을 다한 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getWinner3(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 빈도수 가장 높은 단어 먼저 쓴 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getWinner4(Long roomId) {
+        return null;
+    }
 }
