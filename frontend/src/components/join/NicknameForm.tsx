@@ -5,19 +5,21 @@ import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 
 export default function NicknameForm() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const guest = useSelector((state: RootState) => state.guest);
   const { publish } = useSocket();
+  const Swal = require('sweetalert2');
+  const guest = useSelector((state: RootState) => state.guest);
   const [nickname, setNickname] = useState('');
   const [imagePath, setImagePath] = useState('');
 
   // step3 - 닉네임 입력
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (nickname.length > 7) {
-      alert('7자 이하로 입력해주세요!');
+      Swal.fire('7자 이하로 입력해주세요!', '', 'warning');
       setNickname(nickname.slice(0, 7));
     } else {
       setNickname(e.target.value);
