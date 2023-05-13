@@ -121,7 +121,7 @@ const inputWordApi = async (payload: WordInfo) => {
 
 // 참여자 퇴장
 const userOutApi = async (payload: string) => {
-  console.log(payload, 'pin');
+  console.log(payload, 'pin!!!!!!!!!!');
 
   // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
   if (payload) {

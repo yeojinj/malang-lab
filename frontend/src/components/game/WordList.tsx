@@ -18,7 +18,7 @@ export default function WordList() {
   const { publishUpdate } = useSocket();
   const Swal = require('sweetalert2');
   // const roomId = useSelector((state: RootState) => state.guest.pin);
-  const roomId = '195048';
+  const roomId = useSelector((state: RootState) => state.guest.pin);
 
   const wordinfo: WordInfo = {
     word,
@@ -67,7 +67,7 @@ export default function WordList() {
         });
         setWord(word.slice(0, 13));
       } else {
-        // publishUpdate(`/queue/manager.room.${roomId}`, 'CHECK_DB'); // 단어 추가될 때마다 전송
+        publishUpdate(`/queue/manager.room.${roomId}`, 'CHECK_DB'); // 단어 추가될 때마다 전송
         handlePostWord();
         setWords([...words, word]);
         setWord('');
