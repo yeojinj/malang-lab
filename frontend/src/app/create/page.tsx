@@ -193,9 +193,7 @@ export default function CreatePage() {
 
   return (
     <div
-      className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center"
-      style={{ backgroundImage: "url('/imgs/bg-3.png')" }}
-    >
+      className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center bg-bg-3">
       {isLoading && <Loading />}
       <section className="glass w-[70%] min-h-[90vh] border-2 mx-auto flex my-5">
         <div className="w-[70%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">

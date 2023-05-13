@@ -12,9 +12,7 @@ export default function JoinPage() {
 
   return (
     <div
-      className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle"
-      style={{ backgroundImage: "url('/imgs/bg-2.png')" }}
-    >
+      className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle bg-bg-2">
       {step === 0 && <PinForm setStep={setStep} />}
       {/* 캐릭터 생성하기 */}
       {step === 1 && <CustomSection setStep={setStep} />}

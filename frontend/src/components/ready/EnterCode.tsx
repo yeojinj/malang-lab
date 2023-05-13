@@ -1,12 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { QRCodeSVG } from 'qrcode.react';
+// import { QRCodeSVG } from 'qrcode.react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 export default function PinCode() {
-  const url = `http://localhost:3000`;
+  // const url = `http://localhost:3000`;
   const code = useSelector((state: RootState) => state.gameinfo.id)
 
   return (
@@ -29,7 +29,7 @@ export default function PinCode() {
           <h1 className="text-[5rem] text-[#44474B] font-bold mr-10">{code}</h1>
         </div>
       </div>
-      <QRCodeSVG value={url} />
+      {/* <QRCodeSVG value={url} /> */}
     </div>
   );
 }
