@@ -175,6 +175,7 @@ export default function CreatePage() {
       if (res) {
         // 방의 pin 번호 redux에 저장
         dispatch(setPincodeAction(res.data.id));
+        console.log(res.data.id)
 
         // topic, queue 구독
         const topic = `/topic/room.${res.data.id}`;

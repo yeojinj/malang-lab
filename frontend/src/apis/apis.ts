@@ -117,7 +117,7 @@ const inputWordApi = async (payload: WordInfo) => {
 };
 
 // 참여자 퇴장
-const userOutApi = async (payload: string) => {
+const guestOutApi = async (payload: string) => {
   console.log(payload, 'pin!!!!!!!!!!');
 
   // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
@@ -128,6 +128,16 @@ const userOutApi = async (payload: string) => {
     // 토큰 삭제
     localStorage.removeItem('token');
   }
+};
+
+// 호스트 퇴장하기
+const hostOutApi = async (payload: string) => {
+  console.log(payload, '호스트 퇴장!!!!!!!!!!');
+  const token = localStorage.getItem('token');
+  // 나가기
+  navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
+  // 토큰 삭제
+  localStorage.removeItem('token');
 };
 
 // 단어 입력 수 결과 받아오기
@@ -160,6 +170,7 @@ export {
   gameStartApi,
   inputWordApi,
   wordsNumApi,
-  userOutApi,
+  guestOutApi,
+  hostOutApi,
   wordcloundApi,
 };
