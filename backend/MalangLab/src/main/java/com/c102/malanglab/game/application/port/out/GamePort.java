@@ -5,6 +5,7 @@ import com.c102.malanglab.game.domain.Guest;
 import com.c102.malanglab.game.domain.Room;
 import com.c102.malanglab.game.domain.Round;
 
+import com.c102.malanglab.game.domain.WordCount;
 import java.util.List;
 
 public interface GamePort {
@@ -23,6 +24,7 @@ public interface GamePort {
 
     /** 방 제거 */
     void removeRoom(Long roomId);
+
     /** 유저 퇴장 시 삭제 */
     void removeUser(Long roomId, String userId);
 
@@ -35,6 +37,9 @@ public interface GamePort {
     /** 게임 호스트인지 체크 */
     boolean isGameManager(Long roomId, String userId);
 
+    /** 방 PIN 번호로 방 정보 조회 */
+    Room findById(Long id);
+
     /** 게임 시작 시 현재 라운드 정보 조회 */
     Round checkRound(Long roomId);
 
@@ -44,9 +49,18 @@ public interface GamePort {
     /** 현재 라운드에 입력된 총 단어 수 */
     Long totalWordCount(Long roomId);
 
-    Room findById(Long id);
+    /** 현재 라운드 결과 - 워드클라우드 */
+    List<WordCount> getRoundResultCloud(Long roomId);
 
-    /** guest 정보 조회 */
+    /** 현재 라운드 결과 - 히든단어 */
+    String getRoundResultHiddenWord(Long roomId);
+
+    /** 현재 라운드 결과 - 히든단어 찾은 사람들 */
+    List<Guest> getRoundResultHiddenFound(Long roomId);
+
+    /** 현재 라운드 결과 - 특별한 아이디어 */
+
+    /** 참가자 ID로 참가자 정보 조회 */
     Guest getGuest(String id);
 
     /** 현재 라운드에 입력된 총 단어 결과 **/

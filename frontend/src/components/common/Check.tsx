@@ -1,4 +1,6 @@
-import { userOutApi } from "@/apis/apis"
+'use client';
+
+import { guestOutApi, hostOutApi } from "@/apis/apis"
 import { RootState } from "@/store/store"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -6,6 +8,8 @@ import { useSelector } from "react-redux"
 
 export default function Check() {
     const guest = useSelector((state: RootState) => state.guest)
+    const isHost = useSelector((state: RootState) => state.status.isHost)
+    const pin = useSelector((state: RootState) => state.gameinfo.id)
     const router = useRouter()
     const token = localStorage.getItem('token')
 
@@ -14,7 +18,11 @@ export default function Check() {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             e.preventDefault();
             e.returnValue = '';
-            userOutApi(guest.pin)
+
+            // 호스트이면 방 폭파
+            if(isHost) hostOutApi(String(pin))
+            // 게스트 이면 퇴장 알리기
+            else guestOutApi(guest.pin)
         }
 
         window.addEventListener('beforeunload', handleBeforeUnload)

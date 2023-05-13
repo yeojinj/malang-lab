@@ -5,13 +5,15 @@ import { useSocket } from '@/context/SocketContext';
 import { updatePresentAction } from '@/store/gameInfoSlice';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function StartBtn({ category }) {
+  const [audio, setAudio] = useState<HTMLAudioElement>();
   const router = useRouter();
   const dispatch = useDispatch();
   const gameinfo = useSelector((state: RootState) => state.gameinfo);
+
   const { publish } = useSocket();
 
   const handleClick = async () => {
@@ -34,17 +36,24 @@ export default function StartBtn({ category }) {
           isLast: sendinfo.round == gameinfo.settings.length,
         };
         publish(destination, type, message);
-        setTimeout(() => {
-          router.push('/game');
-        }, 1000);
       }
     }
   };
 
+  // 버튼위에 마우스가 올라가 있을 때만 실행
+  const handleMouseEnter = () => {
+    audio.play();
+  };
+
+  useEffect(() => {
+    setAudio(new Audio('/audio/blop.mp3'));
+  }, []);
+
   return (
     <button
-      className="bg-[#44474B] rounded text-white px-5 py-2"
+      className="bg-[#44474B] rounded text-white px-5 py-2 hover:scale-105"
       onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
     >
       <p className="text-white font-semibold">
         {gameinfo.present == gameinfo.settings.length

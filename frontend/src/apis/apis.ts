@@ -39,7 +39,7 @@ const checkPinApi = async (payload: number) => {
   try {
     const res = await authApi.get(`/game/${payload}`);
     console.log('PIN 번호 확인 완료', res);
-    return res;
+    return res.data.data;
   } catch (err) {
     console.log('PIN 번호 확인 실패', err);
     return false;
@@ -86,6 +86,9 @@ const checkGuestInfoApi = async (payload: Guest) => {
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
+    if (err.response.data.status == 400) {
+      alert(err.response.data.message);
+    }
   }
 };
 
@@ -104,12 +107,9 @@ const gameStartApi = async (pin: number) => {
 // 키워드 입력
 const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
-  // const pin = useSelector((state: RootState) => state.guest.pin);
-  const pin = 195048;
-
+  const { word, time, roomId } = payload;
   try {
-    const res = await authApi.post(`/game/${pin}/word`, payload);
-    console.log(res.data);
+    const res = await authApi.post(`/game/${roomId}/word`, payload);
     return res.data;
   } catch (err) {
     console.log('단어 입력 실패', err);
@@ -117,8 +117,8 @@ const inputWordApi = async (payload: WordInfo) => {
 };
 
 // 참여자 퇴장
-const userOutApi = async (payload: string) => {
-  console.log(payload, 'pin');
+const guestOutApi = async (payload: string) => {
+  console.log(payload, 'pin!!!!!!!!!!');
 
   // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
   if (payload) {
@@ -128,6 +128,16 @@ const userOutApi = async (payload: string) => {
     // 토큰 삭제
     localStorage.removeItem('token');
   }
+};
+
+// 호스트 퇴장하기
+const hostOutApi = async (payload: string) => {
+  console.log(payload, '호스트 퇴장!!!!!!!!!!');
+  const token = localStorage.getItem('token');
+  // 나가기
+  navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
+  // 토큰 삭제
+  localStorage.removeItem('token');
 };
 
 // 단어 입력 수 결과 받아오기
@@ -141,6 +151,17 @@ const wordsNumApi = async (pin: number) => {
   }
 };
 
+// 워드 클라우드 결과 받아오기
+const wordcloundApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/wordcloud`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('워드 클라우드 단어 가져오기 실패', err);
+  }
+};
+
 export {
   getTokenApi,
   makeRoomApi,
@@ -149,5 +170,7 @@ export {
   gameStartApi,
   inputWordApi,
   wordsNumApi,
-  userOutApi,
+  guestOutApi,
+  hostOutApi,
+  wordcloundApi,
 };

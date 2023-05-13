@@ -1,9 +1,9 @@
 package com.c102.malanglab.game.application.port.in;
 
+import com.c102.malanglab.game.domain.WordCount;
 import com.c102.malanglab.game.dto.*;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public interface GameStatusCase {
 

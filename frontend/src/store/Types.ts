@@ -5,4 +5,5 @@ export type Test = {
 export type WordInfo = {
   word: string;
   time: number;
+  roomId: string;
 };

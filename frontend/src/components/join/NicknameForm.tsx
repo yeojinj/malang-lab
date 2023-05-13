@@ -5,18 +5,25 @@ import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 
 export default function NicknameForm() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const guest = useSelector((state: RootState) => state.guest);
   const { publish } = useSocket();
+  const Swal = require('sweetalert2');
+  const guest = useSelector((state: RootState) => state.guest);
   const [nickname, setNickname] = useState('');
   const [imagePath, setImagePath] = useState('');
 
   // step3 - 닉네임 입력
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
+    if (nickname.length > 7) {
+      Swal.fire('7자 이하로 입력해주세요!', '', 'warning');
+      setNickname(nickname.slice(0, 7));
+    } else {
+      setNickname(e.target.value);
+    }
   };
 
   // 닉네임 저장
@@ -26,15 +33,17 @@ export default function NicknameForm() {
 
   // 엔터 키 입력 시에도 닉네임 저장
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if(e.key === 'Enter') handleClickComplete()
-  }
+    if (e.key === 'Enter') handleClickComplete();
+  };
 
   // 닉네임 저장 후 실행
   useEffect(() => {
     const checkGuestInfo = async () => {
       // 닉네임 및 이미지 확인 api 전송
       let tmp = await checkGuestInfoApi(guest);
-      setImagePath(tmp);
+      if (tmp) {
+        setImagePath(tmp);
+      }
     };
     // 닉네임 준비 완료?
     if (guest.nickname !== '') {
@@ -53,9 +62,7 @@ export default function NicknameForm() {
         imagePath,
       };
       publish(destination, type, message);
-      setTimeout(() => {
-        router.push('/ready');
-      }, 1000);
+      router.push('/ready');
     }
   }, [imagePath]);
 
@@ -65,6 +72,7 @@ export default function NicknameForm() {
         닉네임 설정하기
       </p>
       <input
+        value={nickname}
         type="text"
         placeholder="닉네임 입력"
         onChange={handleChangeNickname}
@@ -72,7 +80,7 @@ export default function NicknameForm() {
         className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
       />
       <button
-        className="button-black w-[80%] sm:w-[60%]]"
+        className="button-black w-[80%] sm:w-[60%] h-12 mx-auto rounded-[5px] text-lg"
         onClick={handleClickComplete}
       >
         완료

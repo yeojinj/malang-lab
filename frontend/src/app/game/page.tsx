@@ -1,7 +1,7 @@
 'use client';
 
 import 'animate.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Blur from '@/components/common/Blur';
 import CountDown from '@/components/game/CountDown';
 import GameUserNum from '@/components/game/GameUserNum';
@@ -15,19 +15,24 @@ import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { wordZeroAction } from '@/store/wordNumSlice';
+import { useSocket } from '@/context/SocketContext';
+import BgAudioPlayer from '@/components/common/BgAudioPlayer';
+
 
 export default function GamePage() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { publishUpdate } = useSocket();
 
   const [countShow, setCountShow] = useState(true);
-  const [finish, setFinish] = useState(false);
 
   // redux에서 가져올 값
   const wordNum = useSelector((state: RootState) => state.wordNum.num);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
-  const [userNum, setUserNum] = useState(0);
+  const gameInfo = useSelector((state: RootState) => state.gameinfo);
+  const userNum = useSelector((state: RootState) => state.readyInfo).length;
   const isHost = useSelector((state: RootState) => state.status.isHost);
+  const playerRef = useRef<HTMLAudioElement>(null);
 
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
@@ -44,12 +49,21 @@ export default function GamePage() {
     dispatch(wordZeroAction());
   };
 
+  const handleFinish = () => {
+    // publish 라운드 종료 메시지
+    const destination = `/topic/room.${gameInfo.id}`;
+    const type = 'ROUND_FINISH';
+    publishUpdate(destination, type);
+  };
+
   return (
     <div
       className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${
         isHost ? 'justify-center' : ''
-      } ${finish ? 'justify-center' : ''} items-center`}
+      } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
     >
+      <BgAudioPlayer src="/audio/gamefull.wav" />
+      <audio ref={playerRef} src={'/audio/blop.mp3'} />
       {/* 카운트다운 */}
       {countShow && (
         <>
@@ -63,7 +77,7 @@ export default function GamePage() {
         <>
           <div className="flex fixed top-0 w-screen mr-10">
             <GameUserNum num={userNum} />
-            <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
+            <Timer onFinish={handleFinish} time={roundInfo.timeLimit} />
           </div>
           <WordNum num={wordNum} />
           <h1 className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
@@ -76,9 +90,9 @@ export default function GamePage() {
       {/* 카운트다운 끝 & Guest */}
       {!countShow && !isHost && (
         <>
-          <div className="flex sm:fixed sm:right-10 justify-center">
+          {/* <div className="flex sm:fixed sm:right-10 justify-center">
             <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
-          </div>
+          </div> */}
           <h1 className="text-[#44474B] text-[3rem] font-semibold sm:mt-16">
             제시어 : {roundInfo.keyword}
           </h1>
@@ -90,7 +104,7 @@ export default function GamePage() {
       )}
 
       {/* 게임 끝 & Host */}
-      {finish && isHost && (
+      {roundInfo.finish && isHost && (
         <>
           <Blur />
           <AlertBox text={`${roundInfo.round}라운드 종료!`} />
@@ -104,7 +118,7 @@ export default function GamePage() {
       )}
 
       {/* 게임 끝 & Guest */}
-      {finish && !isHost && (
+      {roundInfo.finish && !isHost && (
         <>
           <Blur />
           <AlertBox

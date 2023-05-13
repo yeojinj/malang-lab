@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { Client, IMessage } from '@stomp/stompjs';
+import { createContext, useContext, useState } from 'react';
+import { Client } from '@stomp/stompjs';
 
 // --------------------------- Context ------------------------------
 interface SocketProps {
@@ -82,27 +82,3 @@ export function SocketProvider({ children }) {
     </SocketContext.Provider>
   );
 }
-
-// // 구독
-// const address = `/topic/room.${pin}`;
-// const callback = message => {
-//   if (message.body) {
-//     alert('메세지 받음' + message.body);
-//     const quote = JSON.parse(message.body);
-//     alert('메세지파싱함' + quote);
-//     return quote;
-//   } else {
-//     alert('got empty message');
-//   }
-// };
-// subscribe(address, callback);
-
-// // 메세지 전송
-// const destination = `/topic/room.${pin}`;
-// const type = 'JOIN';
-// const message = {
-//   id: '',
-//   nickname: '',
-//   imagePath: '',
-// };
-// publish(destination, type, message);
