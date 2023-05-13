@@ -132,8 +132,13 @@ const guestOutApi = async (payload: string) => {
 
 // 호스트 퇴장하기
 const hostOutApi = async (payload: string) => {
-
-  }
+  console.log(payload, '호스트 퇴장!!!!!!!!!!');
+  const token = localStorage.getItem('token');
+  // 나가기
+  navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
+  // 토큰 삭제
+  localStorage.removeItem('token');
+};
 
 // 단어 입력 수 결과 받아오기
 const wordsNumApi = async (pin: number) => {
