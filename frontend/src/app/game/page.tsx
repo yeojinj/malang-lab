@@ -1,7 +1,7 @@
 'use client';
 
 import 'animate.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Blur from '@/components/common/Blur';
 import CountDown from '@/components/game/CountDown';
 import GameUserNum from '@/components/game/GameUserNum';
@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { wordZeroAction } from '@/store/wordNumSlice';
 import { useSocket } from '@/context/SocketContext';
+import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
 export default function GamePage() {
   const router = useRouter();
@@ -23,14 +24,14 @@ export default function GamePage() {
   const { publishUpdate } = useSocket();
 
   const [countShow, setCountShow] = useState(true);
-  const [finish, setFinish] = useState(false);
 
   // redux에서 가져올 값
   const wordNum = useSelector((state: RootState) => state.wordNum.num);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
   const gameInfo = useSelector((state: RootState) => state.gameinfo);
-  const [userNum, setUserNum] = useState(0);
+  const userNum = useSelector((state: RootState) => state.readyInfo).length;
   const isHost = useSelector((state: RootState) => state.status.isHost);
+  const playerRef = useRef<HTMLAudioElement>(null);
 
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
@@ -41,6 +42,10 @@ export default function GamePage() {
     }, 3200);
     return () => clearTimeout(timeout);
   }, []);
+
+  useEffect(() => {
+    playerRef.current?.play();
+  }, [wordNum])
 
   const handleClick = () => {
     router.push('/result');
@@ -53,12 +58,15 @@ export default function GamePage() {
     const type = 'ROUND_FINISH';
     publishUpdate(destination, type);
   };
+
   return (
     <div
       className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${
         isHost ? 'justify-center' : ''
-      } ${finish ? 'justify-center' : ''} items-center`}
+      } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
     >
+      <BgAudioPlayer src="/audio/gamefull.wav" />
+      <audio ref={playerRef} src={'/audio/blop.mp3'} />
       {/* 카운트다운 */}
       {countShow && (
         <>
