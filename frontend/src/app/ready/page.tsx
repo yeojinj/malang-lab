@@ -1,14 +1,16 @@
 'use client';
-
+// Hooks
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+// Components
 import GuestsList from '@/components/ready/GuestsList';
 import PinCode from '@/components/ready/EnterCode';
 import StartBtn from '@/components/ready/StartBtn';
 import UserNum from '@/components/ready/UserNum';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
+// redux
+import { RootState } from '@/store/store';
 
 export default function ReadyPage() {
   const router = useRouter();

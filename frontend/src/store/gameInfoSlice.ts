@@ -43,6 +43,7 @@ export const gameInfoSlice = createSlice({
     // pin 번호
     setPincodeAction(state, action) {
       state.id = action.payload;
+      console.log(state.id)
     },
     // 방 제목 입력
     setNameAction(state, action) {
