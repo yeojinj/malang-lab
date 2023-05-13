@@ -13,6 +13,7 @@ type Props = {
 
 export default function GameModeItem({ mode }: Props) {
   const [audio, setAudio] = useState<HTMLAudioElement>();
+  // const audio = new Audio('/audio/hover.mp3')
   
   // 버튼위에 마우스가 올라가 있을 때만 실행
   const handleMouseEnter = (() => {

@@ -2,8 +2,8 @@ import { setReadyMember } from '@/store/readyInfoSlice';
 import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
 
 const HandleTopic = dispatch => message => {
+  var joinAudio = new Audio('/audio/hello.mp3')
   if (message.body) {
-    // alert(message.body);
     const quote = JSON.parse(message.body);
     if (quote.type == 'JOIN') {
       const member = {
@@ -11,6 +11,8 @@ const HandleTopic = dispatch => message => {
         imagePath: quote.message.imagePath,
       };
       dispatch(setReadyMember(member));
+      // hello.mp3 재생
+      joinAudio.play()
     }
     if (quote.type == 'ROUND_START') {
       dispatch(setRoundInfo(quote.message));
