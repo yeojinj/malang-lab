@@ -39,7 +39,7 @@ const checkPinApi = async (payload: number) => {
   try {
     const res = await authApi.get(`/game/${payload}`);
     console.log('PIN 번호 확인 완료', res);
-    return res;
+    return res.data.data;
   } catch (err) {
     console.log('PIN 번호 확인 실패', err);
     return false;
