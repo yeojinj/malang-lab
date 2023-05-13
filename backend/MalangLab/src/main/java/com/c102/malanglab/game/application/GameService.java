@@ -5,8 +5,7 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.application.port.out.S3Port;
-import com.c102.malanglab.game.domain.Guest;
-import com.c102.malanglab.game.domain.Room;
+import com.c102.malanglab.game.domain.*;
 
 import com.c102.malanglab.game.domain.Round;
 import com.c102.malanglab.game.domain.WordCount;
@@ -16,10 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -217,6 +216,37 @@ public class GameService implements GameStatusCase {
 
         HiddenResponse result = new HiddenResponse(word, guests);
         return result;
+    }
+
+
+
+    @Override
+    public List<AwardResponse> getAwards(Long roomId) {
+        Set<Integer> intSet = new HashSet<>();
+        AwardType[] arr = AwardType.values();
+        while(true) {
+            if(intSet.size() == 3) break;
+            int spot = ThreadLocalRandom.current().nextInt(0, AwardType.values().length);
+            intSet.add(spot);
+        }
+
+        List<Award> awards = new ArrayList<>();
+        for(int awardTypeNum : intSet) {
+            Award award = new Award(arr[awardTypeNum], gamePort.getWinner(roomId, arr[awardTypeNum]));
+            awards.add(award);
+        }
+
+        return awards.stream().map(a ->
+            AwardResponse.builder()
+                .type(a.getType().toString())
+                .guest(
+                    new GuestResponse(
+                        a.getGuest().getId(),
+                        a.getGuest().getNickname(),
+                        a.getGuest().getImagePath(),
+                        roomId)
+            ).build()
+        ).collect(Collectors.toList());
     }
 
 //    @Scheduled(fixedDelay = 1000)
