@@ -27,7 +27,7 @@ public class Guest {
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", updatable = false)
     private Room room;
-
+G
     public Guest(String id, String nickname, String url) {
         this.id = id;
         this.nickname = nickname;

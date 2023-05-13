@@ -82,4 +82,12 @@ public interface GameStatusCase {
      * @return
      */
     List<WordCount> roundResultCloud(final Long roomId, final String userId);
+
+    /**
+     * 라운드 히든 단어 결과를 가져옵니다.
+     * @param roomId
+     * @param userId
+     * @return
+     */
+    HiddenResponse roundResultHidden(final Long roomId, final String userId);
 }
