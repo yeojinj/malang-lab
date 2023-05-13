@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { wordZeroAction } from '@/store/wordNumSlice';
 import { useSocket } from '@/context/SocketContext';
-import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
 export default function GamePage() {
   const router = useRouter();
@@ -42,10 +41,6 @@ export default function GamePage() {
     }, 3200);
     return () => clearTimeout(timeout);
   }, []);
-
-  useEffect(() => {
-    playerRef.current?.play();
-  }, [wordNum])
 
   const handleClick = () => {
     router.push('/result');

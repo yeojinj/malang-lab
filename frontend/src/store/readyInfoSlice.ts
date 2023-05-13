@@ -12,9 +12,7 @@ export const readyInfoSlice = createSlice({
   initialState,
   reducers: {
     setReadyMember(state, action) {
-      console.log(action, 'action!!!!!!!!!!!');
       state.push(action.payload);
-      console.log(state, 'state!!!!!!!!!!!!!');
     },
     outReadyMember(state, action) {
 
