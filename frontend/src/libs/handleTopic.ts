@@ -3,7 +3,6 @@ import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
 
 const HandleTopic = dispatch => message => {
   if (message.body) {
-    // alert(message.body);
     const quote = JSON.parse(message.body);
     if (quote.type == 'JOIN') {
       const member = {
