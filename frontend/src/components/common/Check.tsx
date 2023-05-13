@@ -18,6 +18,7 @@ export default function Check() {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             e.preventDefault();
             e.returnValue = '';
+            console.log(pin, '~~~~~~~~~~')
 
             // 호스트이면 방 폭파
             if(isHost) hostOutApi(String(pin))
@@ -29,7 +30,7 @@ export default function Check() {
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         }
-    }, [guest])
+    }, [guest, pin])
 
     // 토큰이 없는 경우 홈화면으로
     useEffect(() => {
