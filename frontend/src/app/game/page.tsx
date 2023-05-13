@@ -16,6 +16,8 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { wordZeroAction } from '@/store/wordNumSlice';
 import { useSocket } from '@/context/SocketContext';
+import BgAudioPlayer from '@/components/common/BgAudioPlayer';
+
 
 export default function GamePage() {
   const router = useRouter();
