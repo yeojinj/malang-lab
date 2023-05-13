@@ -143,11 +143,10 @@ const hostOutApi = async (payload: string) => {
 };
 
 // 단어 입력 수 결과 받아오기
-const wordsNumApi = async (pin: number) => {
+const wordsNumApi = async (pin: string) => {
   try {
     const res = await authApi.get(`/game/${pin}/wordcount`);
-    console.log(res.data);
-    return res.data;
+    return res.data.data;
   } catch (err) {
     console.log('단어 입력 수 가져오기 실패', err);
   }
