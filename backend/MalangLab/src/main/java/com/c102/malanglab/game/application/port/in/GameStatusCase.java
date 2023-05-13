@@ -4,7 +4,6 @@ import com.c102.malanglab.game.domain.WordCount;
 import com.c102.malanglab.game.dto.*;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public interface GameStatusCase {
 
@@ -90,4 +89,6 @@ public interface GameStatusCase {
      * @return
      */
     HiddenResponse roundResultHidden(final Long roomId, final String userId);
+
+    List<AwardResponse> getAwards(Long roomId);
 }

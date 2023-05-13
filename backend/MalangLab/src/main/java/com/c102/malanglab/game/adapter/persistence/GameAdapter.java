@@ -353,4 +353,50 @@ public class GameAdapter implements GamePort {
         return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
 
+    @Override
+    public Guest getWinner(Long roomId, AwardType type) {
+        switch(type) {
+            case IDEA_MACHINE -> getIdeaMachine(roomId);
+            case LAST_FIGHTER -> getLastFighter(roomId);
+            case HIDDEN_FASTER -> getHiddenFaster(roomId);
+            case QUICK_THINKER -> getQuickThinker(roomId);
+        }
+        return null;
+    };
+
+    /**
+     * 단어를 가장 많이 입력한 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getIdeaMachine(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 맨 마지막까지 최선을 다한 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getLastFighter(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 히든 단어를 가장 빨리 찾은 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getHiddenFaster(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 빈도수 가장 높은 단어 먼저 쓴 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getQuickThinker(Long roomId) {
+        return null;
+    }
 }

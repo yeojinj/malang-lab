@@ -133,7 +133,9 @@ const guestOutApi = async (payload: string) => {
 // 호스트 퇴장하기
 const hostOutApi = async (payload: string) => {
   console.log(payload, '호스트 퇴장!!!!!!!!!!');
+  
   const token = localStorage.getItem('token');
+  console.log(token, '나가는 호스트의 토큰,,,')
   // 나가기
   navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
   // 토큰 삭제
