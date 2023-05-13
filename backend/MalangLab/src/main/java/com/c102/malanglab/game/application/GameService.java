@@ -177,7 +177,7 @@ public class GameService implements GameStatusCase {
                 // 방장에게 데이터 베이스 확인 요청을 보냅니다.
                 gameUniCastPort.alertRoomManager(
                         Long.toString(roomId),
-                        new Message<Object>(Message.MessageType.CHECK_DB, null)
+                        new Message<Object>(Message.MessageType.CHECK_DB, roomId)
                 );
                 return;
             default:
