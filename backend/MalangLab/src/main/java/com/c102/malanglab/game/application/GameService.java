@@ -147,12 +147,12 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void exitMember(Long roomId, String userId) {
-        // 1. 게임 참여자의 이탈 정보를 알립니다.
-        gameBroadCastPort.alertExitMember(roomId, new Message<GuestRequest>(
-                Message.MessageType.EXIT, GuestRequest.of(userId)
-        ));
-        // 2. 계정 정보를 가져옵니다.
+        // 1. 계정 정보를 가져옵니다.
         Guest guest = gamePort.getGuest(userId);
+        // 2. 게임 참여자의 이탈 정보를 알립니다.
+        gameBroadCastPort.alertExitMember(roomId, new Message<GuestRequest>(
+                Message.MessageType.EXIT, GuestRequest.of(guest.getNickname())
+        ));
         // 3. 계정의 이미지를 S3에서 제거합니다.
         s3Port.removeImgPath(guest.getImagePath());
         // 4. 게임 참여자의 정보를 00합니다.
