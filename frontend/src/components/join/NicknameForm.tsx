@@ -1,11 +1,13 @@
-import { checkGuestInfoApi } from '@/apis/apis';
-import { useSocket } from '@/context/SocketContext';
-import { setNicknameAction } from '@/store/guestSlice';
-import { RootState } from '@/store/store';
+'use client'
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+// apis
+import { checkGuestInfoApi } from '@/apis/apis';
+import { useSocket } from '@/context/SocketContext';
+// redux
 import { useSelector, useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
+import { setNicknameAction } from '@/store/guestSlice';
+import { RootState } from '@/store/store';
 
 export default function NicknameForm() {
   const router = useRouter();

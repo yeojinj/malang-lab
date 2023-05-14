@@ -17,7 +17,7 @@ export default function GameModeItem({ mode }: Props) {
   
   // 버튼위에 마우스가 올라가 있을 때만 실행
   const handleMouseEnter = (() => {
-    audio.play()
+    audio?.play()
   })
 
   useEffect(() => {

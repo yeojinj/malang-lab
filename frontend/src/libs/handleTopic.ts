@@ -13,7 +13,7 @@ const HandleTopic = dispatch => message => {
       };
       dispatch(setReadyMember(member));
       // hello.mp3 재생
-      joinAudio.play();
+      joinAudio?.play();
     }
     // 라운드 시작
     if (quote.type === 'ROUND_START') {
