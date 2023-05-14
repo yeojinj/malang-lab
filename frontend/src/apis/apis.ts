@@ -44,15 +44,15 @@ const checkPinApi = async (payload: number) => {
 };
 
 // 닉네임 및 캐릭터 설정하기
-const checkGuestInfoApi = async (payload: Guest) => {
+const checkGuestInfoApi = async (payload: any) => {
   console.log(payload, 'setGuestInfo');
-  const formData = new FormData();
+  const formData: any = new FormData();
   const { pin, nickname, imageUrl, title } = payload;
 
   formData.append('id', localStorage.getItem('token'));
   formData.append('nickname', nickname);
 
-  function b64toBlob(dataURI: string) {
+  function b64toBlob(dataURI: any) {
     // 인코딩된 문자열 데이터를 디코딩
     var byteString = atob(dataURI.split(',')[1]);
     // ArrayBuffer는 자바스크립트에서 구현된 버퍼, 고정된 크기의 메모리 공간에 바이너리 데이터를 저장하는 객체
