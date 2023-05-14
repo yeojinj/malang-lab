@@ -1,5 +1,5 @@
 import { axios, authApi, BASE_URL } from './axios.config';
-import { Guest } from './../store/guestSlice';
+import { Guest } from '@/store/guestSlice';
 import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
 
@@ -44,7 +44,7 @@ const checkPinApi = async (payload: number) => {
 };
 
 // 닉네임 및 캐릭터 설정하기
-const checkGuestInfoApi = async (payload: any) => {
+const checkGuestInfoApi = async (payload: Guest) => {
   console.log(payload, 'setGuestInfo');
   const formData: any = new FormData();
   const { pin, nickname, imageUrl, title } = payload;
@@ -52,7 +52,7 @@ const checkGuestInfoApi = async (payload: any) => {
   formData.append('id', localStorage.getItem('token'));
   formData.append('nickname', nickname);
 
-  function b64toBlob(dataURI: any) {
+  function b64toBlob(dataURI: string) {
     // 인코딩된 문자열 데이터를 디코딩
     var byteString = atob(dataURI.split(',')[1]);
     // ArrayBuffer는 자바스크립트에서 구현된 버퍼, 고정된 크기의 메모리 공간에 바이너리 데이터를 저장하는 객체
