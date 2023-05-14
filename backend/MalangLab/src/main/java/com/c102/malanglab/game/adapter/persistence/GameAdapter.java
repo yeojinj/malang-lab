@@ -3,7 +3,9 @@ package com.c102.malanglab.game.adapter.persistence;
 import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -170,9 +172,11 @@ public class GameAdapter implements GamePort {
     public List<Guest> getGuestList(Long roomId) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         Set<ZSetOperations.TypedTuple<Object>> tuples = zSetOperations.rangeWithScores("room:" + roomId + ":guests", 0, -1);
-
         // 1. tuples로부터 참가자 이름을 순서대로 가져온다.
         List<String> userIds = tuples.stream().map(t -> (String) t.getValue()).collect(Collectors.toList());
+        if(userIds.isEmpty()) { // 참가자 이름목록이 비어있다면 빈 리스트를 리턴한다.
+            return List.of();
+        }
         // 2. mysql로 유저 목록을 일괄 조회환다.
         List<Guest> list = guestRepository.getUserList(userIds);
 
@@ -274,9 +278,9 @@ public class GameAdapter implements GamePort {
     @Override
     public Long totalWordCount(Long roomId) {
         // 1. 현재 턴 수 조회
-        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         String key = "room:" + roomId + ":status";
-        String turn = (String) hashOperations.get(key, "turn");
+        String turn = hashOperations.get(key, "turn");
 
         // 2. 총 단어 수 조회 및 반환
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
@@ -289,18 +293,21 @@ public class GameAdapter implements GamePort {
     @Override
     public List<WordCount> getRoundResultCloud(Long roomId) {
         // 1. 현재 턴 수 조회
-        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         String key = "room:" + roomId + ":status";
-        String turn = (String) hashOperations.get(key, "turn");
+        String turn = hashOperations.get(key, "turn");
 
         // 2. 해당 턴에 입력된 단어와 가중치 List 조회
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         key = "room:" + roomId + ":" + turn + ":word-cnt";
         Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
-        List<WordCount> result = typedTuples.stream()
-            .map(WordCount::convertToWordCount)
-            .collect(Collectors.toList());
 
+        List<WordCount> result = new ArrayList<>();
+        if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
+            result = typedTuples.stream()
+                    .map(WordCount::convertToWordCount)
+                    .collect(Collectors.toList());
+        }
         return result;
     }
 
@@ -308,13 +315,13 @@ public class GameAdapter implements GamePort {
     @Override
     public String getRoundResultHiddenWord(Long roomId) {
         // 1. 현재 턴 수 조회
-        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         String key = "room:" + roomId + ":status";
-        String turn = (String) hashOperations.get(key, "turn");
+        String turn = hashOperations.get(key, "turn");
 
         // 2. 히든단어 조회
         key = "room:" + roomId + ":info:" + turn;
-        String hiddenWord = (String) hashOperations.get(key, "hidden");
+        String hiddenWord = hashOperations.get(key, "hidden");
 
         return hiddenWord;
     }
@@ -323,23 +330,25 @@ public class GameAdapter implements GamePort {
     @Override
     public List<Guest> getRoundResultHiddenFound(Long roomId) {
         // 1. 현재 턴 수 조회
-        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         String key = "room:" + roomId + ":status";
-        String turn = (String) hashOperations.get(key, "turn");
+        String turn = hashOperations.get(key, "turn");
 
         // 2. 히든단어 찾은 사람들 아이디 조회
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         key = "room:" + roomId + ":" + turn + ":hidden:user-time";
         Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
-        List<Guest> result = typedTuples.stream()
-            .map(Guest::convertToGuest)
-            .collect(Collectors.toList());
+        List<Guest> result = new ArrayList<>();
+        if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
+            result = typedTuples.stream()
+                    .map(Guest::convertToGuest)
+                    .collect(Collectors.toList());
 
-        // 3. 히든단어 찾은 사람들 정보 조회
-        int size = result.size();
-        for (int i = 0; i < size; i++) {
-            Guest guest = getGuest(result.get(i).getId());
-            result.set(i, guest);
+            // 3. 히든단어 찾은 사람들 정보 조회
+            int size = result.size();
+            for (int i = 0; i < size; i++) {
+                result.set(i, getGuest(result.get(i).getId()));
+            }
         }
 
         return result;
@@ -362,7 +371,7 @@ public class GameAdapter implements GamePort {
             case QUICK_THINKER -> getQuickThinker(roomId);
         }
         return null;
-    };
+    }
 
     /**
      * 단어를 가장 많이 입력한 말랑이
