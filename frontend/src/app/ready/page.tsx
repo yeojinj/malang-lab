@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 // Components
 import GuestsList from '@/components/ready/GuestsList';
-import PinCode from '@/components/ready/EnterCode';
+import PinCode from '@/components/ready/PinCode';
 import StartBtn from '@/components/ready/StartBtn';
 import UserNum from '@/components/ready/UserNum';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
@@ -28,9 +28,9 @@ export default function ReadyPage() {
 
   return (
     <>
-      <BgAudioPlayer src="/audio/bgfull.wav" />
       {isHost ? (
         <div className="min-h-screen bg-cover flex flex-col align-middle bg-bg-1">
+          <BgAudioPlayer src="/audio/bgfull.wav" />
           <PinCode />
           <div className="text-center text-[#44474B]">
             <h1 className="text-[2rem] font-bold">{title}</h1>
