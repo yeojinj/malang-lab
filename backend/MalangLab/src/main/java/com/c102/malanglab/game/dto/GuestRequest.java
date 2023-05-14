@@ -18,7 +18,7 @@ public class GuestRequest {
     @NotNull
     private MultipartFile image;
 
-    public static GuestRequest of(String id) {
-        return new GuestRequest(id, null, null);
+    public static GuestRequest of(String nickname) {
+        return new GuestRequest(null, nickname, null);
     }
 }

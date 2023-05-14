@@ -21,7 +21,7 @@ public class WebSocketInBroker {
             @DestinationVariable Long roomId,
             @Header("Authorization") String userId,
             Message message) {
-        log.info("roomId -> {}, userId -> {}, message -> {}", roomId, userId, message);
+//        log.info("roomId -> {}, userId -> {}, message -> {}", roomId, userId, message);
         switch(message.getType()) {
             case JOIN:
                 gameStatusCase.joinMember(roomId, userId, (Message<GuestRequest>) message);
