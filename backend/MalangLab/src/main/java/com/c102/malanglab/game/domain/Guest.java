@@ -1,5 +1,6 @@
 package com.c102.malanglab.game.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -23,6 +24,7 @@ public class Guest {
 
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", updatable = false)
+    @JsonBackReference
     @ToString.Exclude
     private Room room;
 
