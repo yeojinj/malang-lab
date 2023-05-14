@@ -1,0 +1,34 @@
+.pulsate {
+	-webkit-animation: pulsate 2s ease-in-out infinite both;
+	        animation: pulsate 2s ease-in-out infinite both;
+}
+
+@-webkit-keyframes pulsate {
+    0% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+    50% {
+      -webkit-transform: scale(0.95);
+              transform: scale(0.95);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+  @keyframes pulsate {
+    0% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+    50% {
+      -webkit-transform: scale(0.95);
+              transform: scale(0.95);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+  

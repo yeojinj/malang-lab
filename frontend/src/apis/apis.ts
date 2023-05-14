@@ -1,8 +1,6 @@
 import { axios, authApi, BASE_URL } from './axios.config';
 import { Guest } from './../store/guestSlice';
-import { GameInfo, Setting } from '@/store/gameInfoSlice';
-import { useDispatch } from 'react-redux';
-import { RootState } from '@/store/store';
+import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
 
 // 토큰 생성하기
