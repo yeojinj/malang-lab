@@ -38,7 +38,7 @@ export default function ReadyPage() {
               준비가 완료되면 시작하기 버튼을 눌러주세요!
             </h2>
             <div>
-                <StartBtn category={'게임 시작'} />
+              <StartBtn category={'게임 시작'} />
               <UserNum num={readyInfo.length} />
             </div>
           </div>

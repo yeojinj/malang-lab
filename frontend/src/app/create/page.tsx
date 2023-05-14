@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import ModeCard from '@/components/create/ModeCard';
 import RoundSetting from '@/components/create/RoundSetting';
 import GameCard from '../../components/create/GameCard';
-import Loading from '../loading';
 // redux
 import { RootState } from '@/store/store';
 import {
@@ -68,9 +67,6 @@ export default function CreatePage() {
   const router = useRouter();
   const inputRef = useRef(null);
   const Swal = require('sweetalert2');
-
-  const [isLoading, setIsLoading] = useState(false);
-
   const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
@@ -167,9 +163,7 @@ export default function CreatePage() {
   // 방 만들기
   const handleClickCreate = async () => {
     if (checkIsValid()) {
-      // setIsLoading(true)
       const res = await makeRoomApi(gameinfo);
-      // setIsLoading(false)
 
       // 방 만들기가 성공했을 때에만 실행
       if (res) {
@@ -213,7 +207,6 @@ export default function CreatePage() {
   return (
     <div
       className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center bg-bg-3">
-      {isLoading && <Loading />}
       <section className="glass w-[70%] min-h-[90vh] border-2 mx-auto flex my-5">
         <div className="w-[70%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">
           <div className="w-[50%] mx-auto flex border-b-[2px] border-black">

@@ -6,16 +6,7 @@ import 'tippy.js/animations/scale.css';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-// const mockItems = [
-//   {
-//     text: '말랑',
-//     value: 1,
-//   },
-//   {
-//     text: '말랑',
-//     value: 2,
-//   },
-// ];
+
 export default function WordCloud() {
   const wordcloudData = useSelector(
     (state: RootState) => state.resultInfo.wordcloudData,
