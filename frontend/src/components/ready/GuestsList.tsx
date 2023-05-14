@@ -12,7 +12,7 @@ type Props = {
 export default function GuestsList({ host }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const readyInfo = useSelector((state: RootState) => state.readyInfo);
-
+  console.log(readyInfo)
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;

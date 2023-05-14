@@ -1,4 +1,4 @@
-import { setReadyMember } from '@/store/readyInfoSlice';
+import { setReadyMember, guestOutAction } from '@/store/readyInfoSlice';
 import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
 
 const HandleTopic = dispatch => message => {
@@ -25,8 +25,10 @@ const HandleTopic = dispatch => message => {
     }
     // 유저 이탈
     if (quote.type === 'EXIT') {
+      console.log(quote.body.nickname)
       console.log('게스트 나가요;;;')
       alert(message.body);
+      dispatch(guestOutAction(quote.body.nickname))
     }
     // 호스트 이탈
     if (quote.type === 'DESTROY') {
