@@ -4,18 +4,17 @@ import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
 
 // 토큰 생성하기
-const getTokenApi = () => {
-  return axios
-    .post('/token')
-    .then(res => {
-      console.log('토큰 받기 성공', res);
-      localStorage.setItem('token', res.data.data.token);
-      return res.data.data.token;
-    })
-    .catch(err => {
-      console.log('토큰 받기 실패', err);
-      return false;
-    });
+const getTokenApi = async () => {
+  try {
+    const res = await axios
+      .post('/token');
+    console.log('토큰 받기 성공', res);
+    localStorage.setItem('token', res.data.data.token);
+    return res.data.data.token;
+  } catch (err) {
+    console.log('토큰 받기 실패', err);
+    return false;
+  }
 };
 
 // 방 생성하기
@@ -80,7 +79,6 @@ const checkGuestInfoApi = async (payload: Guest) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(res.data.data.imagePath);
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
