@@ -5,7 +5,6 @@ import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
 
 export default function NicknameForm() {
   const router = useRouter();

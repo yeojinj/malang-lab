@@ -133,9 +133,9 @@ const guestOutApi = async (payload: string) => {
 // 호스트 퇴장하기
 const hostOutApi = async (payload: string) => {
   console.log(payload, '호스트 퇴장!!!!!!!!!!');
-  
+
   const token = localStorage.getItem('token');
-  console.log(token, '나가는 호스트의 토큰,,,')
+  console.log(token, '나가는 호스트의 토큰,,,');
   // 나가기
   navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
   // 토큰 삭제
@@ -153,7 +153,7 @@ const wordsNumApi = async (pin: string) => {
 };
 
 // 워드 클라우드 결과 받아오기
-const wordcloundApi = async (pin: number) => {
+const wordcloudApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/wordcloud`);
     console.log(res.data);
@@ -173,5 +173,5 @@ export {
   wordsNumApi,
   guestOutApi,
   hostOutApi,
-  wordcloundApi,
+  wordcloudApi,
 };

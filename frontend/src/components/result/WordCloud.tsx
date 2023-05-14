@@ -6,11 +6,25 @@ import 'tippy.js/animations/scale.css';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { wordcloudApi } from '@/apis/apis';
+import { useDispatch } from 'react-redux';
+import { setWordcloudData } from '@/store/resultInfoSlice';
+import { useEffect } from 'react';
 
 export default function WordCloud() {
+  const dispatch = useDispatch();
+  const gameInfo = useSelector((state: RootState) => state.gameinfo);
   const wordcloudData = useSelector(
     (state: RootState) => state.resultInfo.wordcloudData,
   );
+  // 결과 데이터 가져오기 API 요청하기
+  useEffect(() => {
+    const res = wordcloudApi(gameInfo.id);
+    dispatch(setWordcloudData(res));
+    return () => {
+      dispatch(setWordcloudData([]));
+    };
+  }, [dispatch, gameInfo.id]);
 
   return (
     <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">

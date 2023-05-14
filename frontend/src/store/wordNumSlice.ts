@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type Num = {
   num: number;
+  total: number;
 };
 
 const initialState: Num = {
   num: 0,
+  total: 0,
 };
 
 export const wordNumSlice = createSlice({
@@ -16,6 +18,10 @@ export const wordNumSlice = createSlice({
     setWordAction(state, action) {
       state.num = action.payload;
     },
+    // 라운드 끝나면 totalnum 업데이트
+    setTotalAction(state, action) {
+      state.total += action.payload;
+    },
     // 라운드 끝나면 wordnum 초기화
     wordZeroAction(state) {
       state.num = 0;
@@ -23,5 +29,6 @@ export const wordNumSlice = createSlice({
   },
 });
 
-export const { setWordAction, wordZeroAction } = wordNumSlice.actions;
+export const { setWordAction, wordZeroAction, setTotalAction } =
+  wordNumSlice.actions;
 export default wordNumSlice.reducer;
