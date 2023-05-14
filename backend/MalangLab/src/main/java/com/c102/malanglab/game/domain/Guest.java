@@ -2,16 +2,14 @@ package com.c102.malanglab.game.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.redis.core.ZSetOperations;
 
 @Entity
 @Getter
 @Table(name = "guest")
 @ToString
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Guest {
 
@@ -27,7 +25,7 @@ public class Guest {
 
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", updatable = false)
-    @JsonIgnore
+    @ToString.Exclude
     private Room room;
 
     public Guest(String id, String nickname, String url) {
