@@ -38,12 +38,4 @@ public class Guest {
         this.nickname = nickname;
         this.imagePath = url;
     }
-
-    public Guest(String id) {
-        this.id = id;
-    }
-
-    public static Guest convertToGuest(ZSetOperations.TypedTuple typedTuple) {
-        return new Guest(String.valueOf(typedTuple.getValue()));
-    }
 }
