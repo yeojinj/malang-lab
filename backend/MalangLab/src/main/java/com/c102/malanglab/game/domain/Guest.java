@@ -1,6 +1,5 @@
 package com.c102.malanglab.game.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -9,7 +8,6 @@ import org.springframework.data.redis.core.ZSetOperations;
 @Getter
 @Table(name = "guest")
 @ToString
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Guest {
 
@@ -28,12 +26,6 @@ public class Guest {
     @ToString.Exclude
     private Room room;
 
-    public Guest(String id, String nickname, String url) {
-        this.id = id;
-        this.nickname = nickname;
-        this.imagePath = url;
-    }
-
     public void setRoom(Room room) {
         this.room = room;
         if(!room.getGuests().contains(this)) {
@@ -41,9 +33,17 @@ public class Guest {
         }
     }
 
+    public Guest(String id, String nickname, String url) {
+        this.id = id;
+        this.nickname = nickname;
+        this.imagePath = url;
+    }
+
+    public Guest(String id) {
+        this.id = id;
+    }
+
     public static Guest convertToGuest(ZSetOperations.TypedTuple typedTuple) {
-        Guest guestDomain = new Guest();
-        guestDomain.id = typedTuple.getValue().toString();
-        return guestDomain;
+        return new Guest(String.valueOf(typedTuple.getValue()));
     }
 }
