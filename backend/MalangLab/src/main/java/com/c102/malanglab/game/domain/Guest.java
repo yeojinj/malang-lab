@@ -1,5 +1,6 @@
 package com.c102.malanglab.game.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Guest {
 
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", updatable = false)
+    @JsonIgnore
     private Room room;
 
     public Guest(String id, String nickname, String url) {
