@@ -53,7 +53,7 @@ const checkGuestInfoApi = async (payload: Guest) => {
   formData.append('id', localStorage.getItem('token'));
   formData.append('nickname', nickname);
 
-  function b64toBlob(dataURI) {
+  function b64toBlob(dataURI: string) {
     // 인코딩된 문자열 데이터를 디코딩
     var byteString = atob(dataURI.split(',')[1]);
     // ArrayBuffer는 자바스크립트에서 구현된 버퍼, 고정된 크기의 메모리 공간에 바이너리 데이터를 저장하는 객체
