@@ -46,8 +46,8 @@ const checkPinApi = async (payload: number) => {
 // 닉네임 및 캐릭터 설정하기
 const checkGuestInfoApi = async (payload: Guest) => {
   console.log(payload, 'setGuestInfo');
-  const formData: any = new FormData();
-  const { pin, nickname, imageUrl } = payload;
+  const formData = new FormData();
+  const { pin, nickname, imageUrl, title } = payload;
 
   formData.append('id', localStorage.getItem('token'));
   formData.append('nickname', nickname);
