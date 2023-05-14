@@ -1,23 +1,19 @@
 import { axios, authApi, BASE_URL } from './axios.config';
-import { Guest } from './../store/guestSlice';
-import { GameInfo, Setting } from '@/store/gameInfoSlice';
-import { useDispatch } from 'react-redux';
-import { RootState } from '@/store/store';
+import { Guest } from '@/store/guestSlice';
+import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
 
 // 토큰 생성하기
-const getTokenApi = () => {
-  return axios
-    .post('/token')
-    .then(res => {
-      console.log('토큰 받기 성공', res);
-      localStorage.setItem('token', res.data.data.token);
-      return res.data.data.token;
-    })
-    .catch(err => {
-      console.log('토큰 받기 실패', err);
-      return false;
-    });
+const getTokenApi = async () => {
+  try {
+    const res = await axios.post('/token');
+    console.log('토큰 받기 성공', res);
+    localStorage.setItem('token', res.data.data.token);
+    return res.data.data.token;
+  } catch (err) {
+    console.log('토큰 받기 실패', err);
+    return false;
+  }
 };
 
 // 방 생성하기
@@ -50,12 +46,12 @@ const checkPinApi = async (payload: number) => {
 const checkGuestInfoApi = async (payload: Guest) => {
   console.log(payload, 'setGuestInfo');
   const formData: any = new FormData();
-  const { pin, nickname, imageUrl } = payload;
+  const { pin, nickname, imageUrl, title } = payload;
 
   formData.append('id', localStorage.getItem('token'));
   formData.append('nickname', nickname);
 
-  function b64toBlob(dataURI) {
+  function b64toBlob(dataURI: string) {
     // 인코딩된 문자열 데이터를 디코딩
     var byteString = atob(dataURI.split(',')[1]);
     // ArrayBuffer는 자바스크립트에서 구현된 버퍼, 고정된 크기의 메모리 공간에 바이너리 데이터를 저장하는 객체
@@ -82,7 +78,6 @@ const checkGuestInfoApi = async (payload: Guest) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(res.data.data.imagePath);
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
@@ -163,6 +158,17 @@ const wordcloudApi = async (pin: number) => {
   }
 };
 
+// 히든 단어 맞춘 사람 결과 받아오기
+const hiddenWordApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/hiddenword`);
+    console.log(res.data);
+    return res.data.data;
+  } catch (err) {
+    console.log('히든 단어 사람 가져오기 실패', err);
+  }
+};
+
 export {
   getTokenApi,
   makeRoomApi,
@@ -174,4 +180,5 @@ export {
   guestOutApi,
   hostOutApi,
   wordcloudApi,
+  hiddenWordApi,
 };

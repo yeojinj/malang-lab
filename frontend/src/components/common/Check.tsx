@@ -1,10 +1,13 @@
 'use client';
 
-import { guestOutApi, hostOutApi } from '@/apis/apis';
-import { RootState } from '@/store/store';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+// apis
+import { guestOutApi, hostOutApi } from '@/apis/apis';
+// redux
+import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
+import { guestOutAction } from '@/store/readyInfoSlice';
 
 export default function Check() {
   const guest = useSelector((state: RootState) => state.guest);
@@ -18,9 +21,7 @@ export default function Check() {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = '';
-      console.log(pin, '~~~~~~~~~~');
-      console.log(isHost);
-
+      
       // 호스트이면 방 폭파
       console.log('폭파 전,,,,');
       if (isHost) {
@@ -30,7 +31,8 @@ export default function Check() {
       // 게스트 이면 퇴장 알리기
       else {
         console.log('나가는 게스트 확인.,,,')
-        guestOutApi(guest.pin);
+        guestOutApi(guest?.pin);
+        // guestOutAction(guest?.nickname)
       }
     };
 
