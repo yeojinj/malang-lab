@@ -129,9 +129,9 @@ export const guestOutApi = async (payload: string) => {
 // 호스트 퇴장하기
 export const hostOutApi = async (payload: string) => {
   console.log(payload, '호스트 퇴장!!!!!!!!!!');
-  
+
   const token = localStorage.getItem('token');
-  console.log(token, '나가는 호스트의 토큰,,,')
+  console.log(token, '나가는 호스트의 토큰,,,');
   // 나가기
   navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
   // 토큰 삭제
@@ -159,6 +159,16 @@ export const wordcloundApi = async (pin: number) => {
   }
 };
 
+// 히든 단어 맞춘 사람 결과 받아오기
+export const hiddenWordApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/hiddenword`);
+    console.log(res)
+  } catch (err) {
+    console.log('히든 단어 사람 가져오기 실패', err);
+  }
+};
+
 export default {
   getTokenApi,
   makeRoomApi,
@@ -170,4 +180,5 @@ export default {
   guestOutApi,
   hostOutApi,
   wordcloundApi,
+  hiddenWordApi,
 };
