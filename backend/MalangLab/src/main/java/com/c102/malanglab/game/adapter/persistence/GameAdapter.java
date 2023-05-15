@@ -6,7 +6,6 @@ import com.c102.malanglab.game.domain.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -173,20 +172,25 @@ public class GameAdapter implements GamePort {
     @Override
     public List<Guest> getGuestList(Long roomId) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
-        Set<ZSetOperations.TypedTuple<Object>> tuples = zSetOperations.rangeWithScores("room:" + roomId + ":guests", 0, -1);
-        // 1. tuples로부터 참가자 이름을 순서대로 가져온다.
-        List<String> userIds = tuples.stream().map(t -> (String) t.getValue()).collect(Collectors.toList());
-        if(userIds.isEmpty()) { // 참가자 이름목록이 비어있다면 빈 리스트를 리턴한다.
-            return List.of();
-        }
-        // 2. MariaDB에서 유저 목록을 일괄 조회한다.
-        List<Guest> list = new ArrayList<>();
-        for (String userId : userIds) {
-            Optional<Guest> guest = guestRepository.findById(userId);
-            guest.ifPresent(list::add);
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores("room:" + roomId + ":guests", 0, -1);
+        if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
+            // 1. tuples로부터 참가자 이름을 순서대로 가져온다.
+            List<String> userIds = typedTuples.stream()
+                    .map(tuple -> String.valueOf(tuple.getValue()))
+                    .filter(d -> !Objects.isNull(d))
+                    .collect(Collectors.toList());
+
+            if(userIds.isEmpty()) { // 참가자 이름목록이 비어있다면 빈 리스트를 리턴한다.
+                return List.of();
+            }
+
+            // 2. mysql로 유저 목록을 일괄 조회환다.
+            List<Guest> list = guestRepository.getUserList(userIds);
+
+            return list;
         }
 
-        return list;
+        return List.of();
     }
 
     /** 게임 호스트인지 체크 */
