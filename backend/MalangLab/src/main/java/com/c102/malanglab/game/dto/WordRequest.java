@@ -10,7 +10,7 @@ import lombok.Data;
 public class WordRequest {
 
     @NotNull
-    @Size(min=1, max=24)
+    @Size(min=1, max=10)
     private String word;
 
     @NotNull
