@@ -1,7 +1,9 @@
 'use client';
-
+// hooks
+import { useRef, useEffect } from 'react';
+// components
 import GuestGrid from './GuestGrid';
-import { useRef, useState, useEffect, useCallback } from 'react';
+// redux
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { ReadyInfo } from '@/store/readyInfoSlice';
@@ -14,6 +16,8 @@ export default function GuestsList({ host }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const readyInfo: ReadyInfo[] = useSelector((state: RootState) => state.readyInfo);
   console.log(readyInfo)
+
+  // 스크롤 위치 하단 고정
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;

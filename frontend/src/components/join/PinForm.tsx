@@ -10,9 +10,9 @@ import { useSocket } from '@/context/SocketContext';
 // socket
 import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
-import { HandleQueueList } from '@/libs/handleQueueList';
 // alert
 import Swal from 'sweetalert2';
+import { HandleApp } from '@/libs/handleApp';
 
 type Props = {
   setStep: (step: number) => void;
@@ -23,7 +23,6 @@ export default function PinForm({ setStep }: Props) {
   const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
-  const handleQueueList = HandleQueueList(dispatch);
   const [pin, setPin] = useState<string>('');
 
   // pin 번호 입력
@@ -48,19 +47,17 @@ export default function PinForm({ setStep }: Props) {
       const token = localStorage.getItem('token');
       // topic, queue 구독
       const topic = `/topic/room.${pin}`;
-      const queue = `/queue/room.${pin}`;
-      console.log(`/queue/${token}`);
-      const queueList = `/queue/${token}`;
+      const queue = `/queue/${token}`;
+      const app = `app/room.${pin}`;
       subscribe(topic, handleTopic);
       subscribe(queue, handleQueue);
-      subscribe(queueList, handleQueueList);
+      subscribe(app, HandleApp)
 
       // pin번호 redux에 저장
       dispatch(setPinAction(pin));
       // 게임 이름 redux에 저장
       dispatch(setTitleAction(data.name));
       // 해당 방의 대기자 목록 redux에 저장
-      // dispatch
 
       // 다음 페이지로 이동
       setStep(1);

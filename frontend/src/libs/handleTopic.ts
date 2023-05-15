@@ -9,8 +9,8 @@ const HandleTopic = dispatch => message => {
     // 유저 참여
     if (quote.type === 'JOIN') {
       const member = {
-        nickname: quote.message.nickname,
-        imagePath: quote.message.imagePath,
+        nickname: quote.body.nickname,
+        imagePath: quote.body.imagePath,
       };
       dispatch(setReadyMember(member));
       // hello.mp3 재생
