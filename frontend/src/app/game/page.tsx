@@ -99,7 +99,7 @@ export default function GamePage() {
           {/* <div className="flex sm:fixed sm:right-10 justify-center">
             <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
           </div> */}
-          <h1 className="text-[#44474B] text-[3rem] font-semibold sm:mt-16">
+          <h1 className="text-[#44474B] text-[3rem] font-semibold mt-10 sm:mt-16">
             제시어 : {roundInfo.keyword}
           </h1>
           <h2 className="text-[#44474B] mx-5 my-2 font-semibold">
