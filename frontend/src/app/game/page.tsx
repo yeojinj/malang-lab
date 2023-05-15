@@ -114,7 +114,7 @@ export default function GamePage() {
           <Blur />
           <AlertBox text={`${roundInfo.round}라운드 종료!`} />
           <button
-            className="bg-black absolute z-20 font-semibold rounded text-white px-10 py-2 bottom-48 left-[45%]"
+            className="bg-black absolute z-20 mx-auto font-semibold rounded text-white px-10 py-2 bottom-48 left-[45%]"
             onClick={handleClick}
           >
             결과 확인하기

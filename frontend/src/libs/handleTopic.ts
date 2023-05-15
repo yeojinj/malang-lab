@@ -4,6 +4,7 @@ import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
 const HandleTopic = dispatch => message => {
   var joinAudio = new Audio('/audio/hello.mp3');
   if (message.body) {
+    console.log(message)
     const quote = JSON.parse(message.body);
     // 유저 참여
     if (quote.type === 'JOIN') {
