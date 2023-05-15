@@ -11,44 +11,46 @@ export default function HiddenWord() {
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
   const [hidden, setHidden] = useState('');
-  // const [guestList, setGuestList] = useState([]);
+  const [guestList, setGuestList] = useState([]);
   const pin = useSelector((state: RootState) => state.gameinfo.id);
 
-  const guestList = [
+  const list = [
     {
       id: 'item-1',
-      username: '유나',
-      profileImg: 'character',
+      nickname: '유나',
+      imagePath: 'character',
     },
     {
       id: 'item-2',
-      username: '나유나',
-      profileImg: 'character',
+      nickname: '나유나',
+      imagePath: 'character',
     },
     {
       id: 'item-3',
-      username: '여지니',
-      profileImg: 'character',
+      nickname: '여지니',
+      imagePath: 'character',
     },
     {
       id: 'item-3',
-      username: '태미니',
-      profileImg: 'character',
+      nickname: '태미니',
+      imagePath: 'character',
     },
   ];
 
   const handleHidden = async () => {
-    await hiddenWordApi(pin);
-    // setHidden(res.word);
-    // var tmp = [];
-    // if (res.guests.length < 4) {
-    //   for (var i = 0; i < 4 - guestList.length; i++) {
-    //     guestList.map(guest => tmp.push(guest));
-    //   }
-    //   setGuestList(tmp);
-    // } else {
-    //   setGuestList(res.guests)
-    // }
+    const res = await hiddenWordApi(pin);
+    setHidden(res.word);
+    var tmp = [];
+    if (res.guests.length < 4) {
+      const tmp = guestList.concat(
+        Array(5 - res.guests.length)
+          .fill(res.guests)
+          .flat(),
+      );
+      setGuestList(tmp);
+    } else {
+      setGuestList(res.guests);
+    }
   };
 
   useEffect(() => {
@@ -57,7 +59,9 @@ export default function HiddenWord() {
 
   return (
     <section className="flex justify-center items-center">
-      <HiddenCarousel left={true} correctPeople={guestList} />
+      {guestList.length >= 4 && (
+        <HiddenCarousel left={true} correctPeople={guestList} />
+      )}
       <div className="relative">
         <Image
           src={word}
@@ -69,7 +73,9 @@ export default function HiddenWord() {
           {hidden}
         </h1>
       </div>
-      <HiddenCarousel left={false} correctPeople={guestList} />
+      {guestList.length >= 4 && (
+        <HiddenCarousel left={false} correctPeople={guestList} />
+      )}
     </section>
   );
 }
