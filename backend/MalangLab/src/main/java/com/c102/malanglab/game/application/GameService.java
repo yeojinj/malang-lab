@@ -143,6 +143,10 @@ public class GameService implements GameStatusCase {
                 new Message<List<GuestResponse>>(Message.MessageType.GUEST_LIST, guestList)
         );
 
+        log.info("joinMember guestList 첫번째 멤버 아이디: " + guestList.get(0).getId());
+        log.info("joinMember guestList 첫번째 멤버 아이디: " + guestList.get(0).getNickname());
+
+
     }
 
     @Override
