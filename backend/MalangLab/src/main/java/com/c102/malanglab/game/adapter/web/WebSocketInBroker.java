@@ -1,6 +1,7 @@
 package com.c102.malanglab.game.adapter.web;
 
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
+import com.c102.malanglab.game.dto.GuestResponse;
 import com.c102.malanglab.game.dto.Message;
 import com.c102.malanglab.game.dto.GuestRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class WebSocketInBroker {
 //        log.info("roomId -> {}, userId -> {}, message -> {}", roomId, userId, message);
         switch(message.getType()) {
             case JOIN:
-                gameStatusCase.joinMember(roomId, userId, (Message<GuestRequest>) message);
+                gameStatusCase.joinMember(roomId, userId, (Message<GuestResponse>) message);
                 break;
             case EXIT:
                 gameStatusCase.exitMember(roomId, userId);
