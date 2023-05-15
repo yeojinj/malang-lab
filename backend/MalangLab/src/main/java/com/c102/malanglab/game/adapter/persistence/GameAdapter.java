@@ -6,12 +6,14 @@ import com.c102.malanglab.game.domain.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -177,8 +179,12 @@ public class GameAdapter implements GamePort {
         if(userIds.isEmpty()) { // 참가자 이름목록이 비어있다면 빈 리스트를 리턴한다.
             return List.of();
         }
-        // 2. mysql로 유저 목록을 일괄 조회환다.
-        List<Guest> list = guestRepository.getUserList(userIds);
+        // 2. MariaDB에서 유저 목록을 일괄 조회한다.
+        List<Guest> list = new ArrayList<>();
+        for (String userId : userIds) {
+            Optional<Guest> guest = guestRepository.findById(userId);
+            guest.ifPresent(list::add);
+        }
 
         return list;
     }
@@ -370,10 +376,18 @@ public class GameAdapter implements GamePort {
     @Override
     public Guest getWinner(Long roomId, AwardType type) {
         switch(type) {
-            case IDEA_MACHINE -> getIdeaMachine(roomId);
-            case LAST_FIGHTER -> getLastFighter(roomId);
-            case HIDDEN_FASTER -> getHiddenFaster(roomId);
-            case QUICK_THINKER -> getQuickThinker(roomId);
+            case IDEA_MACHINE -> {
+                return getIdeaMachine(roomId);
+            }
+            case LAST_FIGHTER -> {
+                return getLastFighter(roomId);
+            }
+            case HIDDEN_FASTER -> {
+                return getHiddenFaster(roomId);
+            }
+            case QUICK_THINKER -> {
+                return getQuickThinker(roomId);
+            }
         }
         return null;
     }
@@ -384,7 +398,19 @@ public class GameAdapter implements GamePort {
      * @return
      */
     private Guest getIdeaMachine(Long roomId) {
-        return null;
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        String key = "room:" + roomId + ":user-word-cnt";
+        long size = zSetOperations.zCard(key);
+        Guest guest = null;
+        for (long i = 0; i < size; i++) {
+            Set<TypedTuple<Object>> resultSet = zSetOperations.reverseRangeWithScores(key, i, i);
+            for (TypedTuple<Object> tuple : resultSet) {
+                Object value = tuple.getValue();
+                guest = getGuest((String) value);
+            }
+            if (guest != null) break;   // 퇴장한 유저인지 체크
+        }
+        return guest;
     }
 
     /**
@@ -393,7 +419,55 @@ public class GameAdapter implements GamePort {
      * @return
      */
     private Guest getLastFighter(Long roomId) {
-        return null;
+        // 1. 전체 턴 수
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":info";
+        int totalRound = Integer.parseInt((String) hashOperations.get(key, "total-round"));
+
+        // 2. 모든 라운드 통틀어서 맨 마지막에 단어를 입력한 사람 찾기
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        long minRemainTime = Long.MAX_VALUE;    // 라운드 종료까지 남은 시간 중 최솟값
+        String minGuestId = "";                 // 해당 기록을 낸 참가자 아이디
+        for (int roundNum = 1; roundNum <= totalRound - 1; roundNum++) {     // 각 라운드마다
+            key = "room:" + roomId + ":info:" + roundNum;
+            int roundTime = Integer.parseInt((String) hashOperations.get(key, "time"));  // 라운드 제한시간
+
+            // 3. 해당 라운드에 참가한 사람 리스트 가져오기
+            key = "room:" + roomId + ":guests";
+            Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
+            List<Guest> guests = new ArrayList<>();
+            if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
+                guests = getGuestList(typedTuples);
+            }
+
+            // 4. 모든 게스트가 각자 해당 라운드에 가장 마지막 단어를 입력했을 때 라운드 종료까지 남은 시간을
+            //    그 라운드에 다른 사람의 기록과 비교해서 최솟값(roundMinRemainTime)과 그 사람(userId) 저장하기
+            long roundMinRemainTime = Long.MAX_VALUE;
+            String roundMinGuestId = "";
+            for (Guest guest : guests) {
+                String userId = guest.getId();
+                if (guestRepository.existsById(userId)) {     // 퇴장한 유저 제외
+                    key = "room:" + roomId + ":" + userId + ":" + roundNum + ":word-time";
+                    Set<TypedTuple<Object>> resultSet = zSetOperations.reverseRangeWithScores(key, 0, 0);
+                    for (TypedTuple<Object> tuple : resultSet) {
+                        Double inputTime = tuple.getScore();
+                        long remainTime = (long) (roundTime * 1000 - inputTime);    // 가장 마지막 단어를 입력했을 때 라운드 종료까지 남은 시간 계산법
+                        if (roundMinRemainTime > remainTime) {
+                            roundMinRemainTime = remainTime;
+                            roundMinGuestId = userId;
+                        }
+                    }
+                }
+            }
+
+            if (minRemainTime > roundMinRemainTime) {   // 해당 라운드의 기록이 역대 기록보다 좋으면
+                minRemainTime = roundMinRemainTime;
+                minGuestId = roundMinGuestId;
+            }
+
+        }
+
+        return guestRepository.findById(minGuestId).orElseThrow(() -> new IllegalArgumentException("수상자가 존재하지 않습니다."));
     }
 
     /**
