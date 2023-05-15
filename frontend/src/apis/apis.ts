@@ -165,7 +165,7 @@ export const hostOutApi = async (payload: string) => {
 };
 
 // 단어 입력 수 결과 받아오기
-export const wordsNumApi = async (pin: string) => {
+export const wordsNumApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/wordcount`);
     return res.data.data;
