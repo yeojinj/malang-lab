@@ -15,6 +15,7 @@ const initialState: RoundInfo = {
   round: 0,
   isLast: false,
   finish: false,
+  startTime: 0,
 };
 
 export const roundInfoSlice = createSlice({
