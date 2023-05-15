@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 // apis
-import { checkGuestInfoApi } from '@/apis/apis';
+import { checkGuestInfoApi, joinGuestApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,7 +18,7 @@ export default function NicknameForm() {
   const [nickname, setNickname] = useState('');
   const [imagePath, setImagePath] = useState('');
 
-  // step3 - 닉네임 입력
+  // 1. 닉네임 입력 ---------------------------------------------------------
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (nickname.length > 7) {
       Swal.fire('7자 이하로 입력해주세요!', '', 'warning');
@@ -38,6 +38,14 @@ export default function NicknameForm() {
     if (e.key === 'Enter') handleClickComplete();
   };
 
+  
+  // 2. 닉네임 및 이미지 확인 api 전송 ----------------------------------------
+  const checkGuestInfo = async (guest: Guest) => {
+    let tmp = await checkGuestInfoApi(guest);
+    if (tmp) {
+      setImagePath(tmp);
+    }
+  };
   // 닉네임 저장 후 실행
   useEffect(() => {
     // 닉네임 준비 완료?
@@ -46,26 +54,22 @@ export default function NicknameForm() {
     }
   }, [guest.nickname]);
 
-  const checkGuestInfo = async (guest: Guest) => {
-    // 닉네임 및 이미지 확인 api 전송
-    let tmp = await checkGuestInfoApi(guest);
-    if (tmp) {
-      setImagePath(tmp);
-    }
-  };
+  // 3. 게스트 입장 ------------------------------------------------------------
+  const joinGuest = async () => {
+    const res = await joinGuestApi({
+      pin: guest.pin,
+      nickname: guest.nickname,
+      imagePath,
+    })
+    return res
+  }
 
+  // 이미지 주소 받아오는데 성공하면 실행
   useEffect(() => {
     if (imagePath.length) {
-      // 메세지 전송
-      const destination = `/topic/room.${guest.pin}`;
-      const type = 'JOIN';
-      const message = {
-        id: guest.pin,
-        nickname: guest.nickname,
-        imagePath,
-      };
-      publish(destination, type, message);
-      router.push('/ready');
+      const res = joinGuest()
+      console.log(res, '💜💜💙💜💜💙')
+      if(res) router.push('/ready');
     }
   }, [imagePath]);
 
