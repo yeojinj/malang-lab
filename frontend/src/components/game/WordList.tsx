@@ -17,11 +17,11 @@ export default function WordList() {
   const [words, setWords] = useState<string[]>([]);
   const { publish } = useSocket();
   const roomId = useSelector((state: RootState) => state.guest.pin);
-  const keyword = useSelector((state: RootState) => state.roundInfo.keyword);
+  const roundInfo = useSelector((state: RootState) => state.roundInfo);
 
   const wordinfo: WordInfo = {
     word,
-    time: new Date().getTime(),
+    time: new Date().getTime() - roundInfo.startTime,
     roomId,
   };
 
@@ -45,7 +45,7 @@ export default function WordList() {
           icon: 'question',
           title: '단어를 입력해주세요!',
         });
-      } else if (word == keyword) {
+      } else if (word == roundInfo.keyword) {
         Swal.fire({
           icon: 'error',
           title: '제시어와 다른 단어를 입력해주세요!',
