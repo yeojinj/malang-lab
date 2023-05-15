@@ -1,7 +1,8 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
+import { getTokenApi } from '@/apis/apis';
 
 // --------------------------- Context ------------------------------
 interface SocketProps {
@@ -28,6 +29,25 @@ export function SocketProvider({ children }) {
   const headers = {
     Authorization: accessToken,
   };
+
+// ----------------------------------------------
+// const [token, setToken] = useState(null);
+
+// // 홈 화면 입장시 토큰 생성
+// useEffect(() => {
+//   console.log('first enter');
+//   const newToken = getTokenApi();
+//   setToken(newToken);
+// }, []);
+
+// // 토큰이 있는 사용자는 웹소켓 연결
+// useEffect(() => {
+//   if(token){
+//     console.log(token, 'new token');
+//     makeClient('wss://api.malang-lab.com/ws');
+//   }
+// }, [token]);
+// ----------------------------------------------
 
   // ACTION
   const makeClient = (brokerURL: string) => {
@@ -64,6 +84,7 @@ export function SocketProvider({ children }) {
       type,
       message,
     });
+    console.log(headers)
     client.publish({ destination, body, headers });
   };
 

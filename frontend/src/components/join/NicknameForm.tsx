@@ -17,6 +17,7 @@ export default function NicknameForm() {
   const guest = useSelector((state: RootState) => state.guest);
   const [nickname, setNickname] = useState('');
   const [imagePath, setImagePath] = useState('');
+  const token = localStorage.getItem('token')
 
   // 1. 닉네임 입력 ---------------------------------------------------------
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,12 +64,11 @@ export default function NicknameForm() {
 
   // 3. 게스트 입장 ------------------------------------------------------------
   const joinGuest = async () => {
-    const res = await joinGuestApi({
-      pin: guest.pin,
-      nickname: guest.nickname,
-      imagePath,
-    })
-    return res
+    publish(`/app/room.${guest.pin}`, 'JOIN', {
+      id : token,
+      nickname : guest.nickname,
+      imagePath, 
+    });
   }
 
   // 이미지 주소 받아오는데 성공하면 실행

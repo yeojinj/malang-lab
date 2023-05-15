@@ -9,6 +9,9 @@ const HandleQueue = dispatch => async message => {
       const res = wordsNumApi(quote.message.roomId);
       dispatch(setWordAction(res));
     }
+    if(quote.type === 'GUEST_LIST') {
+      alert(message.body);
+    }
   } else {
     alert('got empty message');
   }
