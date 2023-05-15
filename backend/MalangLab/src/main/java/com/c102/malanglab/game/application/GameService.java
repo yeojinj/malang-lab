@@ -240,6 +240,10 @@ public class GameService implements GameStatusCase {
             awards.add(award);
         }
 
+        if (awards.isEmpty()) {
+            throw new IllegalArgumentException("상을 받을 참가자가 없습니다.");
+        }
+
         return awards.stream().map(a ->
             AwardResponse.builder()
                 .type(a.getType().toString())
