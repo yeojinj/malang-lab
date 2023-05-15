@@ -32,13 +32,13 @@ export default function HiddenCarousel({ left, correctPeople }) {
         <CarouselItem>
           <div className="flex flex-col justify-center items-center p-2 gap-2">
             <Image
-              src={`/imgs/${item.profileImg}.png`}
+              src={item.imagePath}
               alt="Picture of the author"
               width={80}
               height={80}
               priority
             />
-            <p className="text-sm md:text-lg lg:text-xl">{item.username}</p>
+            <p className="text-sm md:text-lg lg:text-xl">{item.nickname}</p>
           </div>
         </CarouselItem>
       ),
