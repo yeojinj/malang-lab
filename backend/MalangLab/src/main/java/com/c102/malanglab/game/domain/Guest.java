@@ -1,11 +1,8 @@
 package com.c102.malanglab.game.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.redis.core.ZSetOperations;
 
 @Entity
@@ -27,14 +24,9 @@ public class Guest {
 
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", updatable = false)
-    @JsonIgnore
+    @JsonBackReference
+    @ToString.Exclude
     private Room room;
-
-    public Guest(String id, String nickname, String url) {
-        this.id = id;
-        this.nickname = nickname;
-        this.imagePath = url;
-    }
 
     public void setRoom(Room room) {
         this.room = room;
@@ -43,9 +35,9 @@ public class Guest {
         }
     }
 
-    public static Guest convertToGuest(ZSetOperations.TypedTuple typedTuple) {
-        Guest guestDomain = new Guest();
-        guestDomain.id = typedTuple.getValue().toString();
-        return guestDomain;
+    public Guest(String id, String nickname, String url) {
+        this.id = id;
+        this.nickname = nickname;
+        this.imagePath = url;
     }
 }

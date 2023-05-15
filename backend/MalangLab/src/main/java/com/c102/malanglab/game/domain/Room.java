@@ -1,5 +1,6 @@
 package com.c102.malanglab.game.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,7 @@ public class Room {
     private List<Setting> settings = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "room")
+    @JsonManagedReference
     private List<Guest> guests = new ArrayList<>();
 
     public Room(String name, String hostId, GameMode mode, int totalRound, List<Setting> settings) {

@@ -340,18 +340,23 @@ public class GameAdapter implements GamePort {
         Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
         List<Guest> result = new ArrayList<>();
         if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
-            result = typedTuples.stream()
-                    .map(Guest::convertToGuest)
-                    .collect(Collectors.toList());
-
-            // 3. 히든단어 찾은 사람들 정보 조회
-            int size = result.size();
-            for (int i = 0; i < size; i++) {
-                result.set(i, getGuest(result.get(i).getId()));
-            }
+            result = getGuestList(typedTuples);
         }
 
         return result;
+    }
+
+    /**
+     * 히든 정보 조회 tuple에서 유저ID로 DB에 있는 유저 리스트를 반환합니다.
+     * @param typedTuples
+     * @return
+     */
+    private List<Guest> getGuestList(Set<ZSetOperations.TypedTuple<Object>> typedTuples) {
+        return typedTuples.stream()
+                .map(tuple -> String.valueOf(tuple.getValue()))
+                .map(id -> guestRepository.findById(id).orElseGet(null)) // 3. 히든단어 찾은 사람들 정보 조회
+                .filter(d -> !Objects.isNull(d))
+                .collect(Collectors.toList());
     }
 
     /** 현재 라운드 결과 - 특별한 아이디어 */
