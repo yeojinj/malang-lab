@@ -34,7 +34,7 @@ export default function RootLayout({
       </head>
       <body className="text-black">
         <Providers>
-          {/* <Check /> */}
+          <Check />
           <SocketProvider>{children}</SocketProvider>
         </Providers>
       </body>

@@ -79,12 +79,36 @@ export const checkGuestInfoApi = async (payload: Guest) => {
         'Content-Type': 'multipart/form-data',
       },
     });
+
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
     if (err.response.data.status == 400) {
       alert(err.response.data.message);
     }
+  }
+};
+
+// 참여자 입장
+export const joinGuestApi = async payload => {
+  console.log(payload, 'joinGuestPayload');
+  const { pin, nickname, imagePath } = payload;
+  console.log(pin, nickname, imagePath, '💫');
+  const token = localStorage.getItem('token');
+  try {
+    const res = await authApi.post(`/room.${pin}`, {
+      type: 'JOIN',
+      body: {
+        id: token,
+        nickname,
+        imagePath,
+      },
+    });
+    console.log(res.data);
+    return res;
+  } catch (err) {
+    console.log('게스트 참여 실패', err);
+    return false;
   }
 };
 
@@ -193,4 +217,5 @@ export default {
   wordcloudApi,
   hiddenWordApi,
   awardsApi,
+  joinGuestApi,
 };

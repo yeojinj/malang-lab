@@ -31,7 +31,6 @@ export const readyInfoSlice = createSlice({
     guestOutAction(state, action) {
       console.log(action.payload);
       console.log(current(state), '퇴장전 리스트');
-
       return state.filter(user => user.nickname !== action.payload);
     },
   },
