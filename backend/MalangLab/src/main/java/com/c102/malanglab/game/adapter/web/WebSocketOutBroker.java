@@ -48,6 +48,7 @@ public class WebSocketOutBroker implements GameBroadCastPort, GameUniCastPort {
 
     @Override
     public void alertGuestList(String userId, Message<List<GuestResponse>> message) {
+        log.info("===== alertGuestList()");
         simpMessageSendingOperations.convertAndSend("/queue/" + userId, message);
     }
 
