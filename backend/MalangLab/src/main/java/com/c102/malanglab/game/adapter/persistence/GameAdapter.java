@@ -419,7 +419,55 @@ public class GameAdapter implements GamePort {
      * @return
      */
     private Guest getLastFighter(Long roomId) {
-        return null;
+        // 1. 전체 턴 수
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":info";
+        int totalRound = Integer.parseInt((String) hashOperations.get(key, "total-round"));
+
+        // 2. 모든 라운드 통틀어서 맨 마지막에 단어를 입력한 사람 찾기
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        long minRemainTime = Long.MAX_VALUE;    // 라운드 종료까지 남은 시간 중 최솟값
+        String minGuestId = "";                 // 해당 기록을 낸 참가자 아이디
+        for (int roundNum = 1; roundNum <= totalRound - 1; roundNum++) {     // 각 라운드마다
+            key = "room:" + roomId + ":info:" + roundNum;
+            int roundTime = Integer.parseInt((String) hashOperations.get(key, "time"));  // 라운드 제한시간
+
+            // 3. 해당 라운드에 참가한 사람 리스트 가져오기
+            key = "room:" + roomId + ":guests";
+            Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
+            List<Guest> guests = new ArrayList<>();
+            if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
+                guests = getGuestList(typedTuples);
+            }
+
+            // 4. 모든 게스트가 각자 해당 라운드에 가장 마지막 단어를 입력했을 때 라운드 종료까지 남은 시간을
+            //    그 라운드에 다른 사람의 기록과 비교해서 최솟값(roundMinRemainTime)과 그 사람(userId) 저장하기
+            long roundMinRemainTime = Long.MAX_VALUE;
+            String roundMinGuestId = "";
+            for (Guest guest : guests) {
+                String userId = guest.getId();
+                if (guestRepository.existsById(userId)) {     // 퇴장한 유저 제외
+                    key = "room:" + roomId + ":" + userId + ":" + roundNum + ":word-time";
+                    Set<TypedTuple<Object>> resultSet = zSetOperations.reverseRangeWithScores(key, 0, 0);
+                    for (TypedTuple<Object> tuple : resultSet) {
+                        Double inputTime = tuple.getScore();
+                        long remainTime = (long) (roundTime * 1000 - inputTime);    // 가장 마지막 단어를 입력했을 때 라운드 종료까지 남은 시간 계산법
+                        if (roundMinRemainTime > remainTime) {
+                            roundMinRemainTime = remainTime;
+                            roundMinGuestId = userId;
+                        }
+                    }
+                }
+            }
+
+            if (minRemainTime > roundMinRemainTime) {   // 해당 라운드의 기록이 역대 기록보다 좋으면
+                minRemainTime = roundMinRemainTime;
+                minGuestId = roundMinGuestId;
+            }
+
+        }
+
+        return guestRepository.findById(minGuestId).orElseThrow(() -> new IllegalArgumentException("수상자가 존재하지 않습니다."));
     }
 
     /**
