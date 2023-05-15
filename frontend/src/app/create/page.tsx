@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
@@ -9,20 +9,21 @@ import RoundSetting from '@/components/create/RoundSetting';
 import GameCard from '../../components/create/GameCard';
 // redux
 import { RootState } from '@/store/store';
-import gameInfoSlice, {
+import {
   setPincodeAction,
   addRoundAction,
-  changekeywordAction,
   deleteRoundAction,
   gameAction,
   modeAction,
-  setTitleAction,
+  setNameAction,
 } from '../../store/gameInfoSlice';
-import { setPinAction } from '@/store/guestSlice';
 import { updateStatus } from '@/store/statusSlice';
 // apis
 import { makeRoomApi } from '@/apis/apis';
-import Loading from '@/components/common/Loading';
+import { HandleTopic } from '@/libs/handleTopic';
+import { HandleQueue } from '@/libs/handleQueue';
+import { useSocket } from '@/context/SocketContext';
+import Swal from 'sweetalert2';
 
 const modes = [
   {
@@ -64,21 +65,39 @@ export default function CreatePage() {
   let gameinfo = useSelector((state: RootState) => state.gameinfo);
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const [isLoading, setIsLoading] = useState(false);
+  const inputRef = useRef(null);
+  const Swal = require('sweetalert2');
+  const { subscribe } = useSocket();
+  const handleTopic = HandleTopic(dispatch);
+  const handleQueue = HandleQueue(dispatch);
 
   // 1. 방 정보 설정 상태
   const [step, setStep] = useState(0);
   const [selectedMode, setMode] = useState(gameinfo.mode);
   const [selectedGame, setGame] = useState(gameinfo.name);
-  const [title, setTitle] = useState(gameinfo.title);
+  const [title, setTitle] = useState(gameinfo.name);
 
   // 방제목 설정하기
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    dispatch(setTitleAction(e.target.value));
-    console.log(e.target.value);
+    if (e.target.value.length > 12) {
+      Swal.fire({
+        icon: 'warning',
+        title: '12자 이내로 입력해주세요!',
+      });
+      setTitle(title.slice(0, 12));
+    } else {
+      setTitle(e.target.value);
+      dispatch(setNameAction(e.target.value));
+    }
   };
+
+  // 커서 마지막으로 이동
+  const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const element = e.target;
+    element.selectionStart = element.value.length;
+  };
+
+  useEffect(() => inputRef.current.focus(), []);
 
   // 게임 모드 선택하기
   const handleClickMode = (id: string) => {
@@ -106,11 +125,17 @@ export default function CreatePage() {
   const handleClickStep = () => {
     if (step === 0) {
       if (selectedGame === '') {
-        alert('게임을 선택하세요!');
+        Swal.fire({
+          icon: 'question',
+          title: '게임을 선택하세요!',
+        });
         return;
       }
       if (selectedMode === '') {
-        alert('모드를 선택하세요!');
+        Swal.fire({
+          icon: 'question',
+          title: '모드를 선택하세요!',
+        });
         return;
       }
     }
@@ -120,7 +145,10 @@ export default function CreatePage() {
   // 라운드 세팅 추가하기
   const handleClickAdd = () => {
     if (gameinfo.settings.length === 3) {
-      alert('최대 3라운드까지 가능해요!');
+      Swal.fire({
+        icon: 'error',
+        title: '최대 3라운드까지 가능해요!',
+      });
       return;
     }
     dispatch(addRoundAction());
@@ -135,44 +163,60 @@ export default function CreatePage() {
   // 방 만들기
   const handleClickCreate = async () => {
     if (checkIsValid()) {
-      // setIsLoading(true)
       const res = await makeRoomApi(gameinfo);
-      // setIsLoading(false)
+
       // 방 만들기가 성공했을 때에만 실행
       if (res) {
         // 방의 pin 번호 redux에 저장
         dispatch(setPincodeAction(res.data.id));
-        // 대기방으로 입장
+        console.log(res.data.id)
+
+        // topic, queue 구독
+        const topic = `/topic/room.${res.data.id}`;
+        const queue = `/queue/manager.room.${res.data.id}`;
+        subscribe(topic, handleTopic);
+        subscribe(queue, handleQueue);
+
         router.push('/ready');
-        // host 상태 업데이트
         dispatch(updateStatus());
       }
-    } else {
-      alert('라운드 정보를 빠짐 없이 입력해주세요!');
-      return;
     }
   };
 
   // 라운드 정보 유효성 검사
   const checkIsValid = () => {
     return gameinfo.settings.every(setting => {
-      return setting.keyword !== '' && setting.hidden !== '';
+      if (setting.keyword == '' || setting.hidden == '') {
+        Swal.fire({
+          icon: 'question',
+          title: `Round${setting.round}`,
+          text: '키워드와 히든단어를 빠짐없이 입력해주세요!',
+        });
+      } else if (setting.keyword == setting.hidden) {
+        Swal.fire({
+          icon: 'warning',
+          title: `Round${setting.round}`,
+          text: '키워드와 히든단어를 다르게 입력해주세요!',
+        });
+      } else {
+        return true;
+      }
     });
   };
 
   return (
     <div
-      className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center"
-      style={{ backgroundImage: "url('/imgs/bg-3.png')" }}
-    >
-      {isLoading && <Loading />}
+      className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center bg-bg-3">
       <section className="glass w-[70%] min-h-[90vh] border-2 mx-auto flex my-5">
         <div className="w-[70%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">
           <div className="w-[50%] mx-auto flex border-b-[2px] border-black">
             <>
               <input
+                ref={inputRef}
+                onFocus={onFocus}
+                value={title}
                 onChange={handleInputName}
-                placeholder={title}
+                placeholder={'12자 이내로 입력해주세요'}
                 className="bg-transparent w-[90%] text-2xl font-bold text-black placeholder-[#8A8A8A] placeholder:text-2xl placeholder:text-center placeholder:font-bold text-center"
               />
             </>

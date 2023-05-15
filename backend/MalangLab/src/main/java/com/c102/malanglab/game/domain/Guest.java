@@ -1,13 +1,9 @@
 package com.c102.malanglab.game.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
+import org.springframework.data.redis.core.ZSetOperations;
 
 @Entity
 @Getter
@@ -28,18 +24,20 @@ public class Guest {
 
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", updatable = false)
+    @JsonBackReference
+    @ToString.Exclude
     private Room room;
-
-    public Guest(String id, String nickname, String url) {
-        this.id = id;
-        this.nickname = nickname;
-        this.imagePath = url;
-    }
 
     public void setRoom(Room room) {
         this.room = room;
         if(!room.getGuests().contains(this)) {
             room.getGuests().add(this);
         }
+    }
+
+    public Guest(String id, String nickname, String url) {
+        this.id = id;
+        this.nickname = nickname;
+        this.imagePath = url;
     }
 }

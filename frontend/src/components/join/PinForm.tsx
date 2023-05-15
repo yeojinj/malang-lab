@@ -1,47 +1,67 @@
+import { useState } from 'react';
+// redux
+import { setPinAction, setTitleAction } from '@/store/guestSlice';
+import { useDispatch } from 'react-redux';
+// apis
 import { checkPinApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
-import { queueCallback } from '@/libs/handleQueue';
+// socket
+import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
-import { setPinAction } from '@/store/guestSlice';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+// alert
+import Swal from 'sweetalert2';
+import { Z_DATA_ERROR } from 'zlib';
 
 type Props = {
   setStep: (step: number) => void;
 };
 
 export default function PinForm({ setStep }: Props) {
-  const [pin, setPin] = useState('');
-  const { client, subscribe, publish } = useSocket();
   const dispatch = useDispatch();
+  const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
-  // step2 - 닉네임 입력하기
+  const handleQueue = HandleQueue(dispatch);
+  const [pin, setPin] = useState('');
+  const Swal = require('sweetalert2');
+
+  // pin 번호 입력
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPin(e.target.value);
   };
 
-  const handleClickPin = async () => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') handleClickComplete();
+  };
+
+  const handleClickComplete = async () => {
+    // pin번호가 입력되지 않았을 경우
     if (!pin?.trim()) {
-      alert('PIN 번호를 입력해주세요!');
+      Swal.fire('PIN 번호를 입력해주세요!', '', 'question');
       return;
     }
 
     // 유효한 세션인지 확인 한후
-    const isValid = await checkPinApi(Number(pin));
-    if (isValid) {
+    const data = await checkPinApi(Number(pin));
+    if (data) {
       // topic, queue 구독
       const topic = `/topic/room.${pin}`;
       const queue = `/queue/room.${pin}`;
       subscribe(topic, handleTopic);
-      subscribe(queue, queueCallback);
+      subscribe(queue, handleQueue);
 
-      // 리덕스에 저장
+      // pin번호 리덕스에 저장
       dispatch(setPinAction(pin));
+
+      // 게임 이름 리덕스에 저장
+      dispatch(setTitleAction(data.name))
 
       // 다음 페이지로 이동
       setStep(1);
     } else {
-      alert('유효한 PIN 번호가 아닙니다!');
+      Swal.fire({
+        icon: 'error',
+        title: '유효한 PIN 번호가 아닙니다!',
+      });
     }
   };
 
@@ -54,11 +74,12 @@ export default function PinForm({ setStep }: Props) {
         type="number"
         placeholder="PIN 번호"
         onChange={handleChangePin}
+        onKeyPress={handleKeyPress}
         className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
       />
       <button
         className="button-black w-[80%] sm:w-[60%]"
-        onClick={handleClickPin}
+        onClick={handleClickComplete}
       >
         참여하기
       </button>

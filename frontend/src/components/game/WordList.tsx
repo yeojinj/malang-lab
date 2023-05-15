@@ -8,24 +8,26 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { inputWordApi } from '@/apis/apis';
 import { WordInfo } from '@/store/Types';
+import Swal from 'sweetalert2';
 
 export default function WordList() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<HTMLAudioElement>(null);
   const [word, setWord] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
-  const { publishUpdate } = useSocket();
-  // const roomId = useSelector((state: RootState) => state.guest.pin);
-  const roomId = '195048'
+  const { publish } = useSocket();
+  const roomId = useSelector((state: RootState) => state.guest.pin);
+  const keyword = useSelector((state: RootState) => state.roundInfo.keyword);
 
   const wordinfo: WordInfo = {
     word,
-    time: new Date().getTime()
-  }
+    time: new Date().getTime(),
+    roomId,
+  };
 
   const handlePostWord = async () => {
-    const res = await inputWordApi(wordinfo);
-  }
+    await inputWordApi(wordinfo);
+  };
 
   useEffect(() => {
     // 가장 밑으로 스크롤
@@ -34,30 +36,39 @@ export default function WordList() {
     }
     // 효과음
     playerRef.current?.play();
-    console.log(roomId)
   }, [words]);
-
-  const destination = `/queue/manager/room.${roomId}`;
-  const type = 'CHECK_DB';
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (word.trim() === '') {
-        alert('단어를 입력해주세요.');
-      }
-      // else if (word == keyword) {
-      //   alert('제시어와 같습니다.')
-      //   setWord('');
-      // }
-      else if (words.includes(word)) {
-        alert('중복된 단어입니다!');
+        Swal.fire({
+          icon: 'question',
+          title: '단어를 입력해주세요!',
+        });
+      } else if (word == keyword) {
+        Swal.fire({
+          icon: 'error',
+          title: '제시어와 다른 단어를 입력해주세요!',
+        });
+        setWord('');
+      } else if (words.includes(word)) {
+        Swal.fire({
+          icon: 'error',
+          title: '중복된 단어입니다!',
+        });
         setWord('');
       } else if (word.length > 13) {
-        alert('13자 이내로 입력해주세요.');
+        Swal.fire({
+          icon: 'warning',
+          title: '13자 이내로 입력해주세요!',
+        });
         setWord(word.slice(0, 13));
       } else {
-        // publishUpdate(destination, type); // 단어 추가될 때마다 전송
-        handlePostWord()
+        // 단어 추가될 때마다 전송
+        publish(`/queue/manager.room.${roomId}`, 'CHECK_DB', {
+          roomId,
+        });
+        handlePostWord();
         setWords([...words, word]);
         setWord('');
       }

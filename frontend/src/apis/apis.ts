@@ -1,28 +1,24 @@
-import { axios, authApi } from './axios.config';
-import { Guest } from './../store/guestSlice';
-import { GameInfo, Setting } from '@/store/gameInfoSlice';
-import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/store/store';
+import { axios, authApi, BASE_URL } from './axios.config';
+import { Guest } from '@/store/guestSlice';
+import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
 
 // 토큰 생성하기
-const getTokenApi = () => {
-  return axios
-    .post('/token')
-    .then(res => {
-      console.log('토큰 받기 성공', res);
-      localStorage.setItem('token', res.data.data.token);
-      return res.data.data.token;
-    })
-    .catch(err => {
-      console.log('토큰 받기 실패', err);
-      return false;
-    });
+export const getTokenApi = async () => {
+  try {
+    const res = await axios
+      .post('/token');
+    console.log('토큰 받기 성공', res);
+    localStorage.setItem('token', res.data.data.token);
+    return res.data.data.token;
+  } catch (err) {
+    console.log('토큰 받기 실패', err);
+    return false;
+  }
 };
 
 // 방 생성하기
-const makeRoomApi = async (payload: GameInfo) => {
+export const makeRoomApi = async (payload: GameInfo) => {
   console.log(payload, 'makeRoomPayload');
   try {
     const res = await authApi.post('/game', payload);
@@ -35,12 +31,12 @@ const makeRoomApi = async (payload: GameInfo) => {
 };
 
 // PIN 번호 확인하기
-const checkPinApi = async (payload: number) => {
+export const checkPinApi = async (payload: number) => {
   console.log(payload, 'checkPinPayload');
   try {
     const res = await authApi.get(`/game/${payload}`);
     console.log('PIN 번호 확인 완료', res);
-    return res;
+    return res.data.data;
   } catch (err) {
     console.log('PIN 번호 확인 실패', err);
     return false;
@@ -48,15 +44,15 @@ const checkPinApi = async (payload: number) => {
 };
 
 // 닉네임 및 캐릭터 설정하기
-const checkGuestInfoApi = async (payload: Guest) => {
+export const checkGuestInfoApi = async (payload: Guest) => {
   console.log(payload, 'setGuestInfo');
   const formData: any = new FormData();
-  const { pin, nickname, imageUrl } = payload;
+  const { pin, nickname, imageUrl, title } = payload;
 
   formData.append('id', localStorage.getItem('token'));
   formData.append('nickname', nickname);
 
-  function b64toBlob(dataURI) {
+  function b64toBlob(dataURI: string) {
     // 인코딩된 문자열 데이터를 디코딩
     var byteString = atob(dataURI.split(',')[1]);
     // ArrayBuffer는 자바스크립트에서 구현된 버퍼, 고정된 크기의 메모리 공간에 바이너리 데이터를 저장하는 객체
@@ -66,7 +62,7 @@ const checkGuestInfoApi = async (payload: Guest) => {
     for (var i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
-    
+
     return new Blob([ab], { type: 'image/png' });
   }
 
@@ -83,27 +79,106 @@ const checkGuestInfoApi = async (payload: Guest) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(res.data.data.imagePath);
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
+    if (err.response.data.status == 400) {
+      alert(err.response.data.message);
+    }
+  }
+};
+
+// 게임 / 라운드 시작
+export const gameStartApi = async (pin: number) => {
+  console.log(pin);
+  try {
+    const res = await authApi.post(`/game/${pin}/start`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log('게임 시작 실패', err);
   }
 };
 
 // 키워드 입력
-const inputWordApi = async (payload: WordInfo) => {
+export const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
-  // const pin = useSelector((state: RootState) => state.guest.pin);
-  const pin = 195048
-
+  const { word, time, roomId } = payload;
   try {
-    const res = await authApi.post(`/game/${pin}/word`, payload);
-    console.log(res.data);
+    const res = await authApi.post(`/game/${roomId}/word`, payload);
     return res.data;
   } catch (err) {
     console.log('단어 입력 실패', err);
   }
-
 };
 
-export { getTokenApi, makeRoomApi, checkPinApi, checkGuestInfoApi, inputWordApi };
+// 참여자 퇴장
+export const guestOutApi = async (payload: string) => {
+  console.log(payload, 'pin!!!!!!!!!!');
+
+  // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
+  if (payload) {
+    const token = localStorage.getItem('token');
+    // 나가기
+    navigator.sendBeacon(`${BASE_URL}/game/${payload}/user/out`, token);
+    // 토큰 삭제
+    localStorage.removeItem('token');
+  }
+};
+
+// 호스트 퇴장하기
+export const hostOutApi = async (payload: string) => {
+  console.log(payload, '호스트 퇴장!!!!!!!!!!');
+
+  const token = localStorage.getItem('token');
+  console.log(token, '나가는 호스트의 토큰,,,');
+  // 나가기
+  navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
+  // 토큰 삭제
+  localStorage.removeItem('token');
+};
+
+// 단어 입력 수 결과 받아오기
+export const wordsNumApi = async (pin: string) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/wordcount`);
+    return res.data.data;
+  } catch (err) {
+    console.log('단어 입력 수 가져오기 실패', err);
+  }
+};
+
+// 워드 클라우드 결과 받아오기
+export const wordcloundApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/wordcloud`);
+    console.log(res.data);
+    return res.data.data;
+  } catch (err) {
+    console.log('워드 클라우드 단어 가져오기 실패', err);
+  }
+};
+
+// 히든 단어 맞춘 사람 결과 받아오기
+export const hiddenWordApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/hiddenword`);
+    console.log(res)
+  } catch (err) {
+    console.log('히든 단어 사람 가져오기 실패', err);
+  }
+};
+
+export default {
+  getTokenApi,
+  makeRoomApi,
+  checkPinApi,
+  checkGuestInfoApi,
+  gameStartApi,
+  inputWordApi,
+  wordsNumApi,
+  guestOutApi,
+  hostOutApi,
+  wordcloundApi,
+  hiddenWordApi,
+};

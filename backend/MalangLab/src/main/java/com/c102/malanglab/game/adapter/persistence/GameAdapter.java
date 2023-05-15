@@ -3,7 +3,9 @@ package com.c102.malanglab.game.adapter.persistence;
 import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.domain.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -21,7 +23,8 @@ public class GameAdapter implements GamePort {
 
     private final RedisTemplate redisTemplate;
 
-    /** MariaDB, Redis에 방 정보 저장 */
+    /** 방 만들기
+     *  MariaDB, Redis에 방 정보 저장 */
     @Override
     public Room save(Room roomInfo) {
         // PIN 번호 발급
@@ -69,7 +72,7 @@ public class GameAdapter implements GamePort {
         return id;
     }
 
-    /** 게임 참가하기 */
+    /** 게임 참가 */
     @Override
     public Room join(Long roomId) {
         // 1. PIN 유효한지 체크
@@ -99,7 +102,7 @@ public class GameAdapter implements GamePort {
     }
 
 
-    /** 닉네임 설정하기 */
+    /** 닉네임 설정 */
     @Override
     public boolean setNickname(Long roomId, String userId, String nickname) {
         // Redis 중복 검사 및 저장
@@ -113,12 +116,17 @@ public class GameAdapter implements GamePort {
         }
     }
 
-    /** 캐릭터 이미지 설정하기 */
+    /** 캐릭터 이미지 설정 */
     @Override
     public Guest addGuest(Guest guest) {
         // MariaDB 저장
         guestRepository.save(guest);
         return guest;
+    }
+
+    @Override
+    public void removeRoom(Long roomId) {
+        // TODO: 방 제거
     }
 
     /** 유저 퇴장 시 삭제 */
@@ -147,7 +155,7 @@ public class GameAdapter implements GamePort {
         guestRepository.deleteById(userId);
     }
 
-    /** 게임 참가자 정보 저장하기 */
+    /** 게임 참가자 정보 저장 */
     @Override
     public void addGuestList(Long roomId, String userId) {
         // 1. Sorted Set으로 참여자 순서를 기록합니다.
@@ -159,20 +167,36 @@ public class GameAdapter implements GamePort {
         zSetOperations.add("room:" + roomId + ":guests", userId, current);
     }
 
-    /** 게임 참가자 정보 조회하기 */
+    /** 게임 참가자 정보 조회 */
     @Override
     public List<Guest> getGuestList(Long roomId) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         Set<ZSetOperations.TypedTuple<Object>> tuples = zSetOperations.rangeWithScores("room:" + roomId + ":guests", 0, -1);
-
         // 1. tuples로부터 참가자 이름을 순서대로 가져온다.
         List<String> userIds = tuples.stream().map(t -> (String) t.getValue()).collect(Collectors.toList());
+        if(userIds.isEmpty()) { // 참가자 이름목록이 비어있다면 빈 리스트를 리턴한다.
+            return List.of();
+        }
         // 2. mysql로 유저 목록을 일괄 조회환다.
         List<Guest> list = guestRepository.getUserList(userIds);
 
         return list;
     }
 
+    /** 게임 호스트인지 체크 */
+    @Override
+    public boolean isGameManager(Long roomId, String userId) {
+        String hostId = findById(roomId).getHostId();
+        return userId.equals(hostId);
+    }
+
+    /** 방 PIN 번호로 방 정보 조회 */
+    @Override
+    public Room findById(Long id) {
+        return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
+    }
+
+    /** 게임 시작 시 현재 라운드 정보 조회 */
     @Override
     public Round checkRound(Long roomId) {
         HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
@@ -199,7 +223,8 @@ public class GameAdapter implements GamePort {
             .build();
     }
 
-    /** 게임 중 단어 입력 (0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공) */
+    /** 게임 중 단어 입력
+     *  @return 0: 중복 단어, 1: 입력 성공, 2: 히든 단어 입력 성공 */
     @Override
     public int inputWord(Long roomId, String userId, String word, Long time) {
         // 1. 현재 턴 수 조회
@@ -249,19 +274,143 @@ public class GameAdapter implements GamePort {
         else return 1;
     }
 
+    /** 현재 라운드에 입력된 총 단어 수 */
     @Override
-    public Room findById(Long id) {
-        return roomRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 게임이 존재하지 않습니다."));
+    public Long totalWordCount(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = hashOperations.get(key, "turn");
+
+        // 2. 총 단어 수 조회 및 반환
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        key = "room:" + roomId + ":" + turn + ":word-cnt";
+        Long totalWordCount = zSetOperations.size(key);
+        return totalWordCount;
     }
 
+    /** 현재 라운드 결과 - 워드클라우드 */
     @Override
-    public Guest findById(String id) {
+    public List<WordCount> getRoundResultCloud(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = hashOperations.get(key, "turn");
+
+        // 2. 해당 턴에 입력된 단어와 가중치 List 조회
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        key = "room:" + roomId + ":" + turn + ":word-cnt";
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
+
+        List<WordCount> result = new ArrayList<>();
+        if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
+            result = typedTuples.stream()
+                    .map(WordCount::convertToWordCount)
+                    .collect(Collectors.toList());
+        }
+        return result;
+    }
+
+    /** 현재 라운드 결과 - 히든단어 */
+    @Override
+    public String getRoundResultHiddenWord(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = hashOperations.get(key, "turn");
+
+        // 2. 히든단어 조회
+        key = "room:" + roomId + ":info:" + turn;
+        String hiddenWord = hashOperations.get(key, "hidden");
+
+        return hiddenWord;
+    }
+
+    /** 현재 라운드 결과 - 히든단어 찾은 사람들 */
+    @Override
+    public List<Guest> getRoundResultHiddenFound(Long roomId) {
+        // 1. 현재 턴 수 조회
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":status";
+        String turn = hashOperations.get(key, "turn");
+
+        // 2. 히든단어 찾은 사람들 아이디 조회
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        key = "room:" + roomId + ":" + turn + ":hidden:user-time";
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, 0, -1);
+        List<Guest> result = new ArrayList<>();
+        if(!Objects.isNull(typedTuples) && !typedTuples.isEmpty()) {
+            result = getGuestList(typedTuples);
+        }
+
+        return result;
+    }
+
+    /**
+     * 히든 정보 조회 tuple에서 유저ID로 DB에 있는 유저 리스트를 반환합니다.
+     * @param typedTuples
+     * @return
+     */
+    private List<Guest> getGuestList(Set<ZSetOperations.TypedTuple<Object>> typedTuples) {
+        return typedTuples.stream()
+                .map(tuple -> String.valueOf(tuple.getValue()))
+                .map(id -> guestRepository.findById(id).orElseGet(null)) // 3. 히든단어 찾은 사람들 정보 조회
+                .filter(d -> !Objects.isNull(d))
+                .collect(Collectors.toList());
+    }
+
+    /** 현재 라운드 결과 - 특별한 아이디어 */
+
+    /** 참가자 ID로 참가자 정보 조회 */
+    @Override
+    public Guest getGuest(String id) {
         return guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("요청한 ID의 참가자가 존재하지 않습니다."));
     }
 
     @Override
-    public boolean isGameManager(Long roomId, String userId) {
-        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
-        return userId.equals(hashOperations.get("room:" + roomId + ":info", "host-id"));
+    public Guest getWinner(Long roomId, AwardType type) {
+        switch(type) {
+            case IDEA_MACHINE -> getIdeaMachine(roomId);
+            case LAST_FIGHTER -> getLastFighter(roomId);
+            case HIDDEN_FASTER -> getHiddenFaster(roomId);
+            case QUICK_THINKER -> getQuickThinker(roomId);
+        }
+        return null;
+    }
+
+    /**
+     * 단어를 가장 많이 입력한 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getIdeaMachine(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 맨 마지막까지 최선을 다한 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getLastFighter(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 히든 단어를 가장 빨리 찾은 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getHiddenFaster(Long roomId) {
+        return null;
+    }
+
+    /**
+     * 빈도수 가장 높은 단어 먼저 쓴 말랑이
+     * @param roomId
+     * @return
+     */
+    private Guest getQuickThinker(Long roomId) {
+        return null;
     }
 }

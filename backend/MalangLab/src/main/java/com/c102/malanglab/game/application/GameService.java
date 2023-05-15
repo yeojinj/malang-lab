@@ -5,18 +5,20 @@ import com.c102.malanglab.game.application.port.out.GamePort;
 import com.c102.malanglab.game.application.port.in.GameStatusCase;
 import com.c102.malanglab.game.application.port.out.GameUniCastPort;
 import com.c102.malanglab.game.application.port.out.S3Port;
-import com.c102.malanglab.game.domain.Guest;
-import com.c102.malanglab.game.domain.Room;
+import com.c102.malanglab.game.domain.*;
 
 import com.c102.malanglab.game.domain.Round;
+import com.c102.malanglab.game.domain.WordCount;
 import com.c102.malanglab.game.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -54,6 +56,26 @@ public class GameService implements GameStatusCase {
         Room room = gamePort.join(roomId);
         RoomResponse roomResponse = new RoomResponse(room.getId(), room.getName(), room.getHostId(), room.getMode(), room.getSettings(), room.getGuests());
         return roomResponse;
+    }
+
+    @Override
+    public void destory(Long roomId) {
+        // 모두에게 방이 삭제됨을 공지
+        gameBroadCastPort.alertRoomDestory(roomId, new Message(Message.MessageType.DESTORY, null));
+        // 방에 등록된 모든 이미지, Persistent 제거
+        CompletableFuture<Void> s3ImageRemove = CompletableFuture.runAsync(() -> {
+            s3Port.removeAll(roomId);
+        });
+        CompletableFuture<Void> persistentRemove = CompletableFuture.runAsync(() -> {
+            gamePort.removeRoom(roomId);
+        });
+
+        try {
+            CompletableFuture.allOf(s3ImageRemove, persistentRemove).get();
+        } catch (InterruptedException|ExecutionException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("방을 삭제하는 데 에러가 발생했습니다.");
+        }
     }
 
     @Override
@@ -125,13 +147,16 @@ public class GameService implements GameStatusCase {
 
     @Override
     public void exitMember(Long roomId, String userId) {
-        // 1. 게임 참여자의 정보를 삭제합니다.
-        gamePort.removeUser(roomId, userId);
-
+        // 1. 계정 정보를 가져옵니다.
+        Guest guest = gamePort.getGuest(userId);
         // 2. 게임 참여자의 이탈 정보를 알립니다.
         gameBroadCastPort.alertExitMember(roomId, new Message<GuestRequest>(
-                Message.MessageType.EXIT, GuestRequest.of(userId)
+                Message.MessageType.EXIT, GuestRequest.of(guest.getNickname())
         ));
+        // 3. 계정의 이미지를 S3에서 제거합니다.
+        s3Port.removeImgPath(guest.getImagePath());
+        // 4. 게임 참여자의 정보를 00합니다.
+        // TODO: gamePort.removeUser(roomId, userId);
     }
 
     @Override
@@ -151,13 +176,77 @@ public class GameService implements GameStatusCase {
                 // 방장에게 데이터 베이스 확인 요청을 보냅니다.
                 gameUniCastPort.alertRoomManager(
                         Long.toString(roomId),
-                        new Message<Object>(Message.MessageType.CHECK_DB, null)
+                        new Message<Object>(Message.MessageType.CHECK_DB, roomId)
                 );
                 return;
             default:
                 return;
         }
 
+    }
+
+    @Override
+    public Long totalWordCount(Long roomId, String userId) {
+        if (!gamePort.isGameManager(roomId, userId)) {
+            throw new IllegalArgumentException("호스트가 아닌 게스트의 요청입니다.");
+        }
+
+        Long result = gamePort.totalWordCount(roomId);
+        return result;
+    }
+
+    @Override
+    public List<WordCount> roundResultCloud(Long roomId, String userId) {
+        if (!gamePort.isGameManager(roomId, userId)) {
+            throw new IllegalArgumentException("호스트가 아닌 게스트의 요청입니다.");
+        }
+
+        List<WordCount> result = gamePort.getRoundResultCloud(roomId);
+        return result;
+    }
+
+    @Override
+    public HiddenResponse roundResultHidden(Long roomId, String userId) {
+        if (!gamePort.isGameManager(roomId, userId)) {
+            throw new IllegalArgumentException("호스트가 아닌 게스트의 요청입니다.");
+        }
+
+        String word = gamePort.getRoundResultHiddenWord(roomId);
+        List<Guest> guests = gamePort.getRoundResultHiddenFound(roomId);
+
+        HiddenResponse result = new HiddenResponse(word, guests);
+        return result;
+    }
+
+
+
+    @Override
+    public List<AwardResponse> getAwards(Long roomId) {
+        Set<Integer> intSet = new HashSet<>();
+        AwardType[] arr = AwardType.values();
+        while(true) {
+            if(intSet.size() == 3) break;
+            int spot = ThreadLocalRandom.current().nextInt(0, AwardType.values().length);
+            intSet.add(spot);
+        }
+
+        List<Award> awards = new ArrayList<>();
+        for(int awardTypeNum : intSet) {
+            Award award = new Award(arr[awardTypeNum], gamePort.getWinner(roomId, arr[awardTypeNum]));
+            awards.add(award);
+        }
+
+        return awards.stream().map(a ->
+            AwardResponse.builder()
+                .type(a.getType().toString())
+                .guest(
+                    new GuestResponse(
+                        a.getGuest().getId(),
+                        a.getGuest().getNickname(),
+                        a.getGuest().getImagePath(),
+                        roomId)
+            ).build()
+        ).collect(Collectors.toList());
     }
 
 //    @Scheduled(fixedDelay = 1000)
