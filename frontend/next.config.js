@@ -9,8 +9,8 @@ const nextConfig = {
   images: {
     domains: ['s3.ap-northeast-2.amazonaws.com']
   },
-  loading: true,
-  exclude: [/^\/game/],
+  loading: false,
+  exclude: [/^\/join/, /^\/create/, /^\//, /^\result/, /^\/award/],
 };
 
 // const withImages = require('next-images');
