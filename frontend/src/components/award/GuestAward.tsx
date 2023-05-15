@@ -1,3 +1,5 @@
+'use client';
+
 import Confetti from '@/components/award/Confetti';
 import GuestAwardItem from '@/components/award/GuestAwardItem';
 import Blur from '@/components/common/Blur';
