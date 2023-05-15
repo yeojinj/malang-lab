@@ -79,7 +79,7 @@ export const checkGuestInfoApi = async (payload: Guest) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    
+
     return res.data.data.imagePath;
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
@@ -93,7 +93,7 @@ export const checkGuestInfoApi = async (payload: Guest) => {
 export const joinGuestApi = async payload => {
   console.log(payload, 'joinGuestPayload');
   const { pin, nickname, imagePath } = payload;
-  console.log(pin, nickname, imagePath, '💫')
+  console.log(pin, nickname, imagePath, '💫');
   const token = localStorage.getItem('token');
   try {
     const res = await authApi.post(`/room.${pin}`, {
@@ -108,7 +108,7 @@ export const joinGuestApi = async payload => {
     return res;
   } catch (err) {
     console.log('게스트 참여 실패', err);
-    return false
+    return false;
   }
 };
 
@@ -193,6 +193,17 @@ export const hiddenWordApi = async (pin: number) => {
   }
 };
 
+// 어워드 데이터 받아오기
+export const awardsApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/awards`);
+    console.log(res.data);
+    return res.data.data;
+  } catch (err) {
+    console.log('히든 단어 사람 가져오기 실패', err);
+  }
+};
+
 export default {
   getTokenApi,
   makeRoomApi,
@@ -205,5 +216,6 @@ export default {
   hostOutApi,
   wordcloudApi,
   hiddenWordApi,
+  awardsApi,
   joinGuestApi,
 };

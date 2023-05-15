@@ -9,12 +9,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function StartBtn({ category }) {
-  const [audio, setAudio] = useState<HTMLAudioElement>();
   const router = useRouter();
   const dispatch = useDispatch();
-  const gameinfo = useSelector((state: RootState) => state.gameinfo);
-
   const { publish } = useSocket();
+  const [audio, setAudio] = useState<HTMLAudioElement>();
+  const gameinfo = useSelector((state: RootState) => state.gameinfo);
 
   const handleClick = async () => {
     if (gameinfo.present == gameinfo.settings.length) {
@@ -25,7 +24,7 @@ export default function StartBtn({ category }) {
       // 해당 라운드 정보
       const sendinfo = gameinfo.settings[gameinfo.present];
       dispatch(updatePresentAction());
-      // publish 라운드 정보
+      // publish 해당 라운드 정보
       if (res) {
         const destination = `/topic/room.${gameinfo.id}`;
         const type = 'ROUND_START';

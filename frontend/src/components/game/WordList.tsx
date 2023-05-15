@@ -94,15 +94,20 @@ export default function WordList() {
           onChange={e => setWord(e.target.value)}
           onKeyPress={handleKeyPress}
         />
-        <Image
-          src={
-            'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png'
-          }
-          alt=""
-          width={50}
-          height={50}
-          className="absolute bottom-5 sm:bottom-16 right-[20px] animate-bounce"
-        />
+        <div className="group relative flex justify-center sm:bottom-[110px]">
+          <span className="absolute -top-16 scale-0 transition-all rounded bg-gray-800 p-2 text-xl text-white group-hover:scale-100">
+            저는 그냥 문어예요✨
+          </span>
+          <Image
+            src={
+              'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png'
+            }
+            alt=""
+            width={50}
+            height={50}
+            className="animate-bounce"
+          />
+        </div>
       </div>
     </div>
   );
