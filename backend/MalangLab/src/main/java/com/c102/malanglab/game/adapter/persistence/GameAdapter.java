@@ -374,10 +374,18 @@ public class GameAdapter implements GamePort {
     @Override
     public Guest getWinner(Long roomId, AwardType type) {
         switch(type) {
-            case IDEA_MACHINE -> getIdeaMachine(roomId);
-            case LAST_FIGHTER -> getLastFighter(roomId);
-            case HIDDEN_FASTER -> getHiddenFaster(roomId);
-            case QUICK_THINKER -> getQuickThinker(roomId);
+            case IDEA_MACHINE -> {
+                return getIdeaMachine(roomId);
+            }
+            case LAST_FIGHTER -> {
+                return getLastFighter(roomId);
+            }
+            case HIDDEN_FASTER -> {
+                return getHiddenFaster(roomId);
+            }
+            case QUICK_THINKER -> {
+                return getQuickThinker(roomId);
+            }
         }
         return null;
     }
