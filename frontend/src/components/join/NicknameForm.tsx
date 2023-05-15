@@ -6,7 +6,7 @@ import { checkGuestInfoApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { setNicknameAction } from '@/store/guestSlice';
+import { Guest, setNicknameAction } from '@/store/guestSlice';
 import { RootState } from '@/store/store';
 
 export default function NicknameForm() {
@@ -40,18 +40,19 @@ export default function NicknameForm() {
 
   // 닉네임 저장 후 실행
   useEffect(() => {
-    const checkGuestInfo = async () => {
-      // 닉네임 및 이미지 확인 api 전송
-      let tmp = await checkGuestInfoApi(guest);
-      if (tmp) {
-        setImagePath(tmp);
-      }
-    };
     // 닉네임 준비 완료?
     if (guest.nickname !== '') {
-      checkGuestInfo();
+      checkGuestInfo(guest);
     }
   }, [guest.nickname]);
+
+  const checkGuestInfo = async (guest: Guest) => {
+    // 닉네임 및 이미지 확인 api 전송
+    let tmp = await checkGuestInfoApi(guest);
+    if (tmp) {
+      setImagePath(tmp);
+    }
+  };
 
   useEffect(() => {
     if (imagePath.length) {

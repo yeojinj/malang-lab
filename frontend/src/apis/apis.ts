@@ -2,9 +2,10 @@ import { axios, authApi, BASE_URL } from './axios.config';
 import { Guest } from '@/store/guestSlice';
 import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
+import { ReadyInfo } from '@/store/readyInfoSlice';
 
 // 토큰 생성하기
-const getTokenApi = async () => {
+export const getTokenApi = async () => {
   try {
     const res = await axios
       .post('/token');
@@ -18,7 +19,7 @@ const getTokenApi = async () => {
 };
 
 // 방 생성하기
-const makeRoomApi = async (payload: GameInfo) => {
+export const makeRoomApi = async (payload: GameInfo) => {
   console.log(payload, 'makeRoomPayload');
   try {
     const res = await authApi.post('/game', payload);
@@ -31,7 +32,7 @@ const makeRoomApi = async (payload: GameInfo) => {
 };
 
 // PIN 번호 확인하기
-const checkPinApi = async (payload: number) => {
+export const checkPinApi = async (payload: number) => {
   console.log(payload, 'checkPinPayload');
   try {
     const res = await authApi.get(`/game/${payload}`);
@@ -44,7 +45,7 @@ const checkPinApi = async (payload: number) => {
 };
 
 // 닉네임 및 캐릭터 설정하기
-const checkGuestInfoApi = async (payload: Guest) => {
+export const checkGuestInfoApi = async (payload: Guest) => {
   console.log(payload, 'setGuestInfo');
   const formData: any = new FormData();
   const { pin, nickname, imageUrl, title } = payload;
@@ -89,7 +90,7 @@ const checkGuestInfoApi = async (payload: Guest) => {
 };
 
 // 게임 / 라운드 시작
-const gameStartApi = async (pin: number) => {
+export const gameStartApi = async (pin: number) => {
   console.log(pin);
   try {
     const res = await authApi.post(`/game/${pin}/start`);
@@ -101,7 +102,7 @@ const gameStartApi = async (pin: number) => {
 };
 
 // 키워드 입력
-const inputWordApi = async (payload: WordInfo) => {
+export const inputWordApi = async (payload: WordInfo) => {
   console.log(payload, 'postWord');
   const { word, time, roomId } = payload;
   try {
@@ -113,7 +114,7 @@ const inputWordApi = async (payload: WordInfo) => {
 };
 
 // 참여자 퇴장
-const guestOutApi = async (payload: string) => {
+export const guestOutApi = async (payload: string) => {
   console.log(payload, 'pin!!!!!!!!!!');
 
   // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
@@ -127,7 +128,7 @@ const guestOutApi = async (payload: string) => {
 };
 
 // 호스트 퇴장하기
-const hostOutApi = async (payload: string) => {
+export const hostOutApi = async (payload: string) => {
   console.log(payload, '호스트 퇴장!!!!!!!!!!');
 
   const token = localStorage.getItem('token');
@@ -139,7 +140,7 @@ const hostOutApi = async (payload: string) => {
 };
 
 // 단어 입력 수 결과 받아오기
-const wordsNumApi = async (pin: string) => {
+export const wordsNumApi = async (pin: string) => {
   try {
     const res = await authApi.get(`/game/${pin}/wordcount`);
     return res.data.data;
@@ -149,7 +150,7 @@ const wordsNumApi = async (pin: string) => {
 };
 
 // 워드 클라우드 결과 받아오기
-const wordcloundApi = async (pin: number) => {
+export const wordcloundApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/wordcloud`);
     console.log(res.data);
@@ -160,7 +161,7 @@ const wordcloundApi = async (pin: number) => {
 };
 
 // 히든 단어 맞춘 사람 결과 받아오기
-const hiddenWordApi = async (pin: number) => {
+export const hiddenWordApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/hiddenword`);
     console.log(res.data)
@@ -170,7 +171,7 @@ const hiddenWordApi = async (pin: number) => {
   }
 };
 
-export {
+export default {
   getTokenApi,
   makeRoomApi,
   checkPinApi,
