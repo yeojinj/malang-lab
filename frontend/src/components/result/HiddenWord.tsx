@@ -38,8 +38,8 @@ export default function HiddenWord() {
   ];
 
   const handleHidden = async () => {
-    await hiddenWordApi(pin);
-    // setHidden(res.word);
+    const res = await hiddenWordApi(pin);
+    setHidden(res.word);
     // var tmp = [];
     // if (res.guests.length < 4) {
     //   for (var i = 0; i < 4 - guestList.length; i++) {

@@ -163,7 +163,8 @@ const wordcloundApi = async (pin: number) => {
 const hiddenWordApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/hiddenword`);
-    console.log(res)
+    console.log(res.data)
+    return res.data.data
   } catch (err) {
     console.log('히든 단어 사람 가져오기 실패', err);
   }
