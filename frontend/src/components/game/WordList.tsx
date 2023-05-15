@@ -16,7 +16,7 @@ export default function WordList() {
   const [word, setWord] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
   const { publish } = useSocket();
-  const roomId = useSelector((state: RootState) => state.guest.pin);
+  const roomId: string = useSelector((state: RootState) => state.guest.pin);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
 
   const wordinfo: WordInfo = {

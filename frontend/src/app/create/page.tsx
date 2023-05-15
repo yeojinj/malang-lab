@@ -16,6 +16,7 @@ import {
   gameAction,
   modeAction,
   setNameAction,
+  GameInfo,
 } from '../../store/gameInfoSlice';
 import { updateStatus } from '@/store/statusSlice';
 // apis
@@ -62,20 +63,19 @@ const games = [
 ];
 
 export default function CreatePage() {
-  let gameinfo = useSelector((state: RootState) => state.gameinfo);
+  let gameinfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
   const dispatch = useDispatch();
   const router = useRouter();
   const inputRef = useRef(null);
-  const Swal = require('sweetalert2');
   const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
 
   // 1. 방 정보 설정 상태
-  const [step, setStep] = useState(0);
-  const [selectedMode, setMode] = useState(gameinfo.mode);
-  const [selectedGame, setGame] = useState(gameinfo.name);
-  const [title, setTitle] = useState(gameinfo.name);
+  const [step, setStep] = useState<number>(0);
+  const [selectedMode, setMode] = useState<string>(gameinfo.mode);
+  const [selectedGame, setGame] = useState<string>(gameinfo.name);
+  const [title, setTitle] = useState<string>(gameinfo.name);
 
   // 방제목 설정하기
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {

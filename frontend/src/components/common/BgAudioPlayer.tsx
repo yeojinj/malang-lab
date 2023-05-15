@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from "@heroicons/react/24/outline";
 
 export default function BgAudioPlayer({ src }) {
-    const [play, setPlay] = useState(true);
+    const [play, setPlay] = useState<boolean>(true);
     const playerRef = useRef<HTMLAudioElement>(null);
 
     const handleToggleAudio = () => {

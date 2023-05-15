@@ -8,12 +8,13 @@ import { guestOutApi, hostOutApi } from '@/apis/apis';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { guestOutAction } from '@/store/readyInfoSlice';
+import { Guest } from '@/store/guestSlice';
 import useToken from '@/hooks/useToken';
 
 export default function Check() {
-  const guest = useSelector((state: RootState) => state.guest);
-  const isHost = useSelector((state: RootState) => state.status.isHost);
-  const pin = useSelector((state: RootState) => state.gameinfo.id);
+  const guest: Guest = useSelector((state: RootState) => state.guest);
+  const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
+  const pin: number = useSelector((state: RootState) => state.gameinfo.id);
   const router = useRouter();
   const { getToken } = useToken();
   const token = getToken();

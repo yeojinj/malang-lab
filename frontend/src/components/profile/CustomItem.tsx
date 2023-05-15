@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function CustomItem({ onClick }) {
   // 아이템 탭 이동
-  const [activeTab, setActiveTab] = useState('캐릭터');
+  const [activeTab, setActiveTab] = useState<string>('캐릭터');
   const handleTab = (tabId: string) => {
     setActiveTab(tabId);
   };

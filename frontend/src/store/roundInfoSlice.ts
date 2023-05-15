@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export type RoundInfo = {
+export interface RoundInfo {
   keyword: string;
   timeLimit: number;
   round: number;

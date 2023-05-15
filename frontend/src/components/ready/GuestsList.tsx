@@ -6,6 +6,7 @@ import GuestGrid from './GuestGrid';
 // redux
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { ReadyInfo } from '@/store/readyInfoSlice';
 
 type Props = {
   host: boolean;
@@ -13,7 +14,7 @@ type Props = {
 
 export default function GuestsList({ host }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const readyInfo = useSelector((state: RootState) => state.readyInfo);
+  const readyInfo: ReadyInfo[] = useSelector((state: RootState) => state.readyInfo);
   console.log(readyInfo)
 
   // 스크롤 위치 하단 고정

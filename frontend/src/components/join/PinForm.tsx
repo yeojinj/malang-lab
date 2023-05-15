@@ -23,7 +23,7 @@ export default function PinForm({ setStep }: Props) {
   const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
-  const [pin, setPin] = useState('');
+  const [pin, setPin] = useState<string>('');
 
   // pin 번호 입력
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {

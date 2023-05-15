@@ -7,12 +7,11 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { wordcloudApi } from '@/apis/apis';
-import { useDispatch } from 'react-redux';
-import { setWordcloudData } from '@/store/resultInfoSlice';
 import { useEffect, useState } from 'react';
+import { GameInfo } from '@/store/gameInfoSlice';
 
 export default function WordCloud() {
-  const gameInfo = useSelector((state: RootState) => state.gameinfo);
+  const gameInfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
   const [words, setWords] = useState([]);
 
   useEffect(() => {

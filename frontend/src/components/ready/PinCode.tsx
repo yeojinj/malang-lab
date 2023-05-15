@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 export default function PinCode() {
-  const code = useSelector((state: RootState) => state.gameinfo.id);
+  const code: number = useSelector((state: RootState) => state.gameinfo.id);
 
   return (
     <div className="flex mt-3 mb-10 justify-center">
