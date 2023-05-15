@@ -6,6 +6,7 @@ export type RoundInfo = {
   round: number;
   isLast: boolean;
   finish: boolean;
+  startTime: number;
 };
 
 const initialState: RoundInfo = {
@@ -26,6 +27,7 @@ export const roundInfoSlice = createSlice({
       state.round = action.payload.round;
       state.isLast = action.payload.isLast;
       state.finish = false;
+      state.startTime = action.payload.startTime;
     },
     setFinish(state) {
       state.finish = true;
