@@ -39,7 +39,7 @@ export default function GamePage() {
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
 
   useEffect(() => {
-    setCountShow(true)
+    setCountShow(true);
     const timeout = setTimeout(() => {
       setCountShow(false);
     }, 3200);
@@ -99,7 +99,7 @@ export default function GamePage() {
           {/* <div className="flex sm:fixed sm:right-10 justify-center">
             <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
           </div> */}
-          <h1 className="text-[#44474B] text-[3rem] font-semibold sm:mt-16">
+          <h1 className="text-[#44474B] text-[3rem] font-semibold mt-10 sm:mt-16">
             제시어 : {roundInfo.keyword}
           </h1>
           <h2 className="text-[#44474B] mx-5 my-2 font-semibold">
@@ -115,7 +115,7 @@ export default function GamePage() {
           <Blur />
           <AlertBox text={`${roundInfo.round}라운드 종료!`} />
           <button
-            className="bg-black absolute z-20 mx-auto font-semibold rounded text-white px-10 py-2 bottom-48 left-[45%]"
+            className="bg-black absolute z-20 mx-auto font-semibold rounded text-white px-10 py-2 bottom-48"
             onClick={handleClick}
           >
             결과 확인하기
