@@ -7,8 +7,7 @@ import { ReadyInfo } from '@/store/readyInfoSlice';
 // 토큰 생성하기
 export const getTokenApi = async () => {
   try {
-    const res = await axios
-      .post('/token');
+    const res = await axios.post('/token');
     console.log('토큰 받기 성공', res);
     localStorage.setItem('token', res.data.data.token);
     return res.data.data.token;
@@ -150,10 +149,9 @@ export const wordsNumApi = async (pin: string) => {
 };
 
 // 워드 클라우드 결과 받아오기
-export const wordcloundApi = async (pin: number) => {
+export const wordcloudApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/wordcloud`);
-    console.log(res.data);
     return res.data.data;
   } catch (err) {
     console.log('워드 클라우드 단어 가져오기 실패', err);
@@ -164,8 +162,8 @@ export const wordcloundApi = async (pin: number) => {
 export const hiddenWordApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/hiddenword`);
-    console.log(res.data)
-    return res.data.data
+    console.log(res.data);
+    return res.data.data;
   } catch (err) {
     console.log('히든 단어 사람 가져오기 실패', err);
   }
@@ -181,6 +179,6 @@ export default {
   wordsNumApi,
   guestOutApi,
   hostOutApi,
-  wordcloundApi,
+  wordcloudApi,
   hiddenWordApi,
 };

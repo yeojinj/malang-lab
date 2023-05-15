@@ -1,13 +1,13 @@
 import { wordsNumApi } from '@/apis/apis';
 import { setWordAction } from '@/store/wordNumSlice';
 
-const HandleQueue = dispatch => message => {
+const HandleQueue = dispatch => async message => {
   if (message.body) {
     const quote = JSON.parse(message.body);
-    console.log(quote)
+    console.log(quote);
     if (quote.type === 'CHECK_DB') {
-      const res = wordsNumApi(quote.message.roomId)
-      dispatch(setWordAction(res))
+      const res = wordsNumApi(quote.message.roomId);
+      dispatch(setWordAction(res));
     }
   } else {
     alert('got empty message');
