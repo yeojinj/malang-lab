@@ -33,6 +33,7 @@ export default function StartBtn({ category }) {
           timeLimit: sendinfo.time,
           round: sendinfo.round,
           isLast: sendinfo.round == gameinfo.settings.length,
+          startTime: new Date().getTime(),
         };
         publish(destination, type, message);
         router.push('/game')
