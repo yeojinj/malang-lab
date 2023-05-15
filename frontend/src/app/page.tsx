@@ -37,8 +37,8 @@ export default function MainPage() {
 
   // 토큰이 있는 사용자는 웹소켓 연결
   useEffect(() => {
-    if (token) {
-      console.log(token, 'socket');
+    if(token){
+      console.log(token, 'new token');
       makeClient('wss://api.malang-lab.com/ws');
     }
   }, [token]);

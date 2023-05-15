@@ -26,7 +26,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-
     // redux 적용
     <html lang="en" className={inter.className}>
       <head>
