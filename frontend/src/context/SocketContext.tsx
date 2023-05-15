@@ -55,6 +55,7 @@ export function SocketProvider({ children }) {
   // 구독
   const subscribe = (address, callback) => {
     client.subscribe(address, callback);
+    // console.log(res, '💘💘💘💘')
   };
 
   // 메세지 전송
