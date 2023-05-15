@@ -11,14 +11,16 @@ import UserNum from '@/components/ready/UserNum';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 // redux
 import { RootState } from '@/store/store';
+import { ReadyInfo } from '@/store/readyInfoSlice';
+import { RoundInfo } from '@/store/roundInfoSlice';
 
 export default function ReadyPage() {
   const router = useRouter();
-  const isHost = useSelector((state: RootState) => state.status.isHost);
-  const title = useSelector((state: RootState) => state.gameinfo.name);
-  const readyInfo = useSelector((state: RootState) => state.readyInfo);
-  const roundInfo = useSelector((state: RootState) => state.roundInfo);
-  const guestTitle = useSelector((state: RootState) => state.guest.title);
+  const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
+  const title: string = useSelector((state: RootState) => state.gameinfo.name);
+  const readyInfo: ReadyInfo[] = useSelector((state: RootState) => state.readyInfo);
+  const roundInfo: RoundInfo = useSelector((state: RootState) => state.roundInfo);
+  const guestTitle: string = useSelector((state: RootState) => state.guest.title);
 
   useEffect(() => {
     if (roundInfo.keyword) {

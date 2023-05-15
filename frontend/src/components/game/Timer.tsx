@@ -7,8 +7,8 @@ type Props = {
 };
 
 export default function Timer({ onFinish, time }: Props) {
-  const MINUTES_IN_MS = time * 1000;
-  const INTERVAL = 1000;
+  const MINUTES_IN_MS: number = time * 1000;
+  const INTERVAL: number = 1000;
   const [timeLeft, setTimeLeft] = useState<number>(MINUTES_IN_MS);
 
   useEffect(() => {

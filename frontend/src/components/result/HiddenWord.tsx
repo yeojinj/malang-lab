@@ -10,37 +10,13 @@ import { RootState } from '@/store/store';
 export default function HiddenWord() {
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
-  const [hidden, setHidden] = useState('');
+  const [hidden, setHidden] = useState<string>('');
   const [guestList, setGuestList] = useState([]);
   const pin = useSelector((state: RootState) => state.gameinfo.id);
-
-  const list = [
-    {
-      id: 'item-1',
-      nickname: '유나',
-      imagePath: 'character',
-    },
-    {
-      id: 'item-2',
-      nickname: '나유나',
-      imagePath: 'character',
-    },
-    {
-      id: 'item-3',
-      nickname: '여지니',
-      imagePath: 'character',
-    },
-    {
-      id: 'item-3',
-      nickname: '태미니',
-      imagePath: 'character',
-    },
-  ];
 
   const handleHidden = async () => {
     const res = await hiddenWordApi(pin);
     setHidden(res.word);
-    var tmp = [];
     if (res.guests.length < 4) {
       const tmp = guestList.concat(
         Array(5 - res.guests.length)

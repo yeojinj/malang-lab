@@ -14,9 +14,9 @@ export default function NicknameForm() {
   const dispatch = useDispatch();
   const { publish } = useSocket();
   const Swal = require('sweetalert2');
-  const guest = useSelector((state: RootState) => state.guest);
-  const [nickname, setNickname] = useState('');
-  const [imagePath, setImagePath] = useState('');
+  const guest: Guest = useSelector((state: RootState) => state.guest);
+  const [nickname, setNickname] = useState<string>('');
+  const [imagePath, setImagePath] = useState<string>('');
 
   // 1. 닉네임 입력 ---------------------------------------------------------
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {

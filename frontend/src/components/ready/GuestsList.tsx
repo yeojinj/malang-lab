@@ -4,6 +4,7 @@ import GuestGrid from './GuestGrid';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { ReadyInfo } from '@/store/readyInfoSlice';
 
 type Props = {
   host: boolean;
@@ -11,7 +12,7 @@ type Props = {
 
 export default function GuestsList({ host }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const readyInfo = useSelector((state: RootState) => state.readyInfo);
+  const readyInfo: ReadyInfo[] = useSelector((state: RootState) => state.readyInfo);
   console.log(readyInfo)
   useEffect(() => {
     if (scrollRef.current) {

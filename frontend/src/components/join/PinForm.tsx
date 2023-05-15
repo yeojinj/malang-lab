@@ -24,7 +24,7 @@ export default function PinForm({ setStep }: Props) {
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
   const handleQueueList = HandleQueueList(dispatch);
-  const [pin, setPin] = useState('');
+  const [pin, setPin] = useState<string>('');
 
   // pin 번호 입력
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {

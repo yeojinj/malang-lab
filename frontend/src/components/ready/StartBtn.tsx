@@ -2,7 +2,7 @@
 
 import { gameStartApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
-import { updatePresentAction } from '@/store/gameInfoSlice';
+import { GameInfo, updatePresentAction } from '@/store/gameInfoSlice';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ export default function StartBtn({ category }) {
   const dispatch = useDispatch();
   const { publish } = useSocket();
   const [audio, setAudio] = useState<HTMLAudioElement>();
-  const gameinfo = useSelector((state: RootState) => state.gameinfo);
+  const gameinfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
 
   const handleClick = async () => {
     if (gameinfo.present == gameinfo.settings.length) {
@@ -36,7 +36,7 @@ export default function StartBtn({ category }) {
           startTime: new Date().getTime(),
         };
         publish(destination, type, message);
-        router.push('/game')
+        router.push('/game');
       }
     }
   };

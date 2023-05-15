@@ -17,8 +17,8 @@ import { useDispatch } from 'react-redux';
 import { setTotalAction, wordZeroAction } from '@/store/wordNumSlice';
 import { useSocket } from '@/context/SocketContext';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
-import { wordcloudApi } from '@/apis/apis';
-import { setWordcloudData } from '@/store/resultInfoSlice';
+import { RoundInfo } from '@/store/roundInfoSlice';
+import { GameInfo } from '@/store/gameInfoSlice';
 
 export default function GamePage() {
   const router = useRouter();
@@ -28,18 +28,19 @@ export default function GamePage() {
   const [countShow, setCountShow] = useState(true);
 
   // redux에서 가져올 값
-  const num = useSelector((state: RootState) => state.wordNum.num);
-  const roundInfo = useSelector((state: RootState) => state.roundInfo);
-  const gameInfo = useSelector((state: RootState) => state.gameinfo);
-  const userNum = useSelector((state: RootState) => state.readyInfo).length;
-  const isHost = useSelector((state: RootState) => state.status.isHost);
+  const num: number = useSelector((state: RootState) => state.wordNum.num);
+  const roundInfo: RoundInfo = useSelector((state: RootState) => state.roundInfo);
+  const gameInfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
+  const userNum: number = useSelector((state: RootState) => state.readyInfo).length;
+  const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
+
   const playerRef = useRef<HTMLAudioElement>(null);
 
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
-
+  
   useEffect(() => {
-    setCountShow(true)
+    setCountShow(true) // 다음 라운드에 카운트다운 다시 키기
     const timeout = setTimeout(() => {
       setCountShow(false);
     }, 3200);
@@ -47,9 +48,6 @@ export default function GamePage() {
   }, [roundInfo.keyword]);
 
   const handleClick = async () => {
-    // 결과 데이터 가져오기 API 요청하기
-    // const res = await wordcloudApi(gameInfo.id);
-    // dispatch(setWordcloudData(res));
     dispatch(setTotalAction(num));
     dispatch(wordZeroAction());
     router.push('/result');
