@@ -79,13 +79,13 @@ export function SocketProvider({ children }) {
   };
 
   // 메세지 전송
-  const publish = (destination, type, message) => {
-    const body = JSON.stringify({
+  const publish = (destination, type, body) => {
+    const message = JSON.stringify({
       type,
-      message,
+      body,
     });
     console.log(headers)
-    client.publish({ destination, body, headers });
+    client.publish({ destination, body: message, headers });
   };
 
   // DB 업데이트 신호
