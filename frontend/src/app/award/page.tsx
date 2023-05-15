@@ -1,11 +1,14 @@
 'use client';
-
-import { awardsApi } from '@/apis/apis';
-import GuestAward from '@/components/award/GuestAward';
-import HostAward from '@/components/award/HostAward';
-import { RootState } from '@/store/store';
+// hooks
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+// apis
+import { awardsApi } from '@/apis/apis';
+// redux
+import { RootState } from '@/store/store';
+// components
+import GuestAward from '@/components/award/GuestAward';
+import HostAward from '@/components/award/HostAward';
 
 const mocks = [
   {
@@ -48,7 +51,6 @@ const mocks = [
 
 export default function Page() {
   const isHost = useSelector((state: RootState) => state.status.isHost);
-
   const gameinfo = useSelector((state: RootState) => state.gameinfo);
   const [awardDatas, setAwardDatas] = useState([]);
 

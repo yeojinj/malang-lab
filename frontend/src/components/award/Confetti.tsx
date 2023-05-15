@@ -12,9 +12,11 @@ function randomInRange(min: number, max: number) {
 export default function Confetti() {
   const animationEnd = Date.now() + duration;
   const skewRef = useRef(1);
+  const audio = new Audio('/audio/yeah.mp3');
 
   useEffect(() => {
     run();
+    audio?.play()
   }, []);
 
   const run = () => {
