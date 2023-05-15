@@ -12,6 +12,7 @@ import { HandleQueue } from '@/libs/handleQueue';
 import { HandleTopic } from '@/libs/handleTopic';
 // alert
 import Swal from 'sweetalert2';
+import { HandleApp } from '@/libs/handleApp';
 
 type Props = {
   setStep: (step: number) => void;
@@ -50,7 +51,7 @@ export default function PinForm({ setStep }: Props) {
       const app = `app/room.${pin}`;
       subscribe(topic, handleTopic);
       subscribe(queue, handleQueue);
-      subscribe(app, handleQueue)
+      subscribe(app, HandleApp)
 
       // pin번호 redux에 저장
       dispatch(setPinAction(pin));

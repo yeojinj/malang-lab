@@ -1,4 +1,5 @@
 import { wordsNumApi } from '@/apis/apis';
+import { setPreMembers } from '@/store/readyInfoSlice';
 import { setWordAction } from '@/store/wordNumSlice';
 
 const HandleQueue = dispatch => async message => {
@@ -10,7 +11,8 @@ const HandleQueue = dispatch => async message => {
       dispatch(setWordAction(res));
     }
     if(quote.type === 'GUEST_LIST') {
-      alert(message.body);
+      console.log(quote)
+      dispatch(setPreMembers(quote.body))
     }
   } else {
     alert('got empty message');
