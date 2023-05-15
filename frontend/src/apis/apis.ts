@@ -1,3 +1,5 @@
+'use clinet';
+
 import { axios, authApi, BASE_URL } from './axios.config';
 import { Guest } from '@/store/guestSlice';
 import { GameInfo } from '@/store/gameInfoSlice';

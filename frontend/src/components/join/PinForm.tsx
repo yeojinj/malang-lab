@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 // redux
 import { setPinAction, setTitleAction } from '@/store/guestSlice';
@@ -21,7 +23,7 @@ export default function PinForm({ setStep }: Props) {
   const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
-  const handleQueueList = HandleQueueList(dispatch)
+  const handleQueueList = HandleQueueList(dispatch);
   const [pin, setPin] = useState('');
 
   // pin 번호 입력
@@ -43,20 +45,20 @@ export default function PinForm({ setStep }: Props) {
     // 유효한 세션인지 확인 한후
     const data = await checkPinApi(Number(pin));
     if (data) {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('token');
       // topic, queue 구독
       const topic = `/topic/room.${pin}`;
       const queue = `/queue/room.${pin}`;
-      console.log(`/queue/${token}`)
+      console.log(`/queue/${token}`);
       const queueList = `/queue/${token}`;
       subscribe(topic, handleTopic);
       subscribe(queue, handleQueue);
-      subscribe(queueList, handleQueueList)
+      subscribe(queueList, handleQueueList);
 
       // pin번호 redux에 저장
       dispatch(setPinAction(pin));
       // 게임 이름 redux에 저장
-      dispatch(setTitleAction(data.name))
+      dispatch(setTitleAction(data.name));
       // 해당 방의 대기자 목록 redux에 저장
       // dispatch
 
