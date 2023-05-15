@@ -6,12 +6,14 @@ import com.c102.malanglab.game.domain.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -396,7 +398,19 @@ public class GameAdapter implements GamePort {
      * @return
      */
     private Guest getIdeaMachine(Long roomId) {
-        return null;
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        String key = "room:" + roomId + ":user-word-cnt";
+        long size = zSetOperations.zCard(key);
+        Guest guest = null;
+        for (long i = 0; i < size; i++) {
+            Set<TypedTuple<Object>> resultSet = zSetOperations.reverseRangeWithScores(key, i, i);
+            for (TypedTuple<Object> tuple : resultSet) {
+                Object value = tuple.getValue();
+                guest = getGuest((String) value);
+            }
+            if (guest != null) break;   // 퇴장한 유저인지 체크
+        }
+        return guest;
     }
 
     /**
