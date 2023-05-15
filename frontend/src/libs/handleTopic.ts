@@ -18,7 +18,7 @@ const HandleTopic = dispatch => message => {
     }
     // 라운드 시작
     if (quote.type === 'ROUND_START') {
-      dispatch(setRoundInfo(quote.message));
+      dispatch(setRoundInfo(quote.body));
     }
     // 라운드 종료
     if (quote.type === 'ROUND_FINISH') {

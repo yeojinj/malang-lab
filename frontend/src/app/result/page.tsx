@@ -24,8 +24,7 @@ const cards = [
 ];
 
 export default function ResultPage() {
-  const total = useSelector((state: RootState) => state.wordNum.total);
-  console.log('count...');
+  const total: number = useSelector((state: RootState) => state.wordNum.total);
   return (
     <div className="w-screen h-screen bg-cover bg-bg-3 flex flex-col justify-center items-center gap-16 lg:gap-32">
       <header className="text-4xl font-bold">

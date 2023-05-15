@@ -8,7 +8,7 @@ import PinForm from '@/components/join/PinForm';
 import NicknameForm from '@/components/join/NicknameForm';
 
 export default function JoinPage() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState<number>(0);
 
   return (
     <div

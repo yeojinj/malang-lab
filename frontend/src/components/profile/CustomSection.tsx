@@ -15,7 +15,7 @@ type Props = {
 export default function CustomSection({ setStep }: Props) {
   const dispatch = useDispatch()
   // stage 위에 올라가 있는 이미지 배열
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
   // 선택된 아이템의 인덱스
   const [isSelected, setIsSelected] = useState<number>(-1);
 

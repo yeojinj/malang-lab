@@ -13,7 +13,7 @@ export interface Mode {
   path: string;
 }
 
-const modes = [
+const modes: Mode[] = [
   { name: '방 만들기', image: 'blue-malang', path: 'create' },
   { name: '참여하기', image: 'together-malang', path: 'join' },
   { name: '혼자하기', image: 'yellow-malang', path: '' },
