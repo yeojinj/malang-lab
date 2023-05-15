@@ -177,8 +177,12 @@ public class GameAdapter implements GamePort {
         if(userIds.isEmpty()) { // 참가자 이름목록이 비어있다면 빈 리스트를 리턴한다.
             return List.of();
         }
-        // 2. mysql로 유저 목록을 일괄 조회환다.
-        List<Guest> list = guestRepository.getUserList(userIds);
+        // 2. MariaDB에서 유저 목록을 일괄 조회한다.
+        List<Guest> list = new ArrayList<>();
+        for (String userId : userIds) {
+            Optional<Guest> guest = guestRepository.findById(userId);
+            guest.ifPresent(list::add);
+        }
 
         return list;
     }
