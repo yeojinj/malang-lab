@@ -9,22 +9,25 @@ import { RootState } from '@/store/store';
 import { wordcloudApi } from '@/apis/apis';
 import { useDispatch } from 'react-redux';
 import { setWordcloudData } from '@/store/resultInfoSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function WordCloud() {
-  const dispatch = useDispatch();
   const gameInfo = useSelector((state: RootState) => state.gameinfo);
-  const wordcloudData = useSelector(
-    (state: RootState) => state.resultInfo.wordcloudData,
-  );
-  // 결과 데이터 가져오기 API 요청하기
+  const [words, setWords] = useState([]);
+
   useEffect(() => {
-    const res = wordcloudApi(gameInfo.id);
-    dispatch(setWordcloudData(res));
-    return () => {
-      dispatch(setWordcloudData([]));
+    const handleWords = async () => {
+      try {
+        // 워드클라우드 단어 받아오기
+        const res = await wordcloudApi(gameInfo.id);
+        // 받아오면 state에 저장
+        setWords(res);
+      } catch (err) {
+        console.log('Failed to fetch word cloud data', err);
+      }
     };
-  }, [dispatch, gameInfo.id]);
+    handleWords();
+  }, [gameInfo.id]);
 
   return (
     <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">
@@ -37,7 +40,7 @@ export default function WordCloud() {
         priority
       />
       <ReactWordcloud
-        words={wordcloudData}
+        words={words ? words : []}
         size={[500, 500]}
         options={{
           fontSizes: [20, 80],
