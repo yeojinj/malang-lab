@@ -32,7 +32,7 @@ export default function Check() {
       else {
         console.log('나가는 게스트 확인.,,,')
         guestOutApi(guest?.pin);
-        // guestOutAction(guest?.nickname)
+        guestOutAction(guest?.nickname)
       }
     };
 
