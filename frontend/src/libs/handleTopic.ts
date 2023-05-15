@@ -35,6 +35,10 @@ const HandleTopic = dispatch => message => {
       console.log('호스트가 나가서 방이 폭파되었읍니다;;;')
       alert(message.body)
     }
+    if(quote.type === 'GUEST_LIST') {
+      alert(message.body);
+      console.log(quote)
+    }
   } else {
     alert('got empty message');
   }

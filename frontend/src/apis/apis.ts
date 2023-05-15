@@ -2,6 +2,7 @@ import { axios, authApi, BASE_URL } from './axios.config';
 import { Guest } from '@/store/guestSlice';
 import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
+import { ReadyInfo } from '@/store/readyInfoSlice';
 
 // 토큰 생성하기
 export const getTokenApi = async () => {

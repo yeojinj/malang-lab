@@ -4,7 +4,8 @@ import { setWordAction } from '@/store/wordNumSlice';
 const HandleQueue = dispatch => message => {
   if (message.body) {
     const quote = JSON.parse(message.body);
-    if (quote.type == 'CHECK_DB') {
+    console.log(quote)
+    if (quote.type === 'CHECK_DB') {
       const res = wordsNumApi(quote.message.roomId)
       dispatch(setWordAction(res))
     }
