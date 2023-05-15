@@ -6,11 +6,28 @@ import 'tippy.js/animations/scale.css';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { wordcloudApi } from '@/apis/apis';
+import { useDispatch } from 'react-redux';
+import { setWordcloudData } from '@/store/resultInfoSlice';
+import { useEffect, useState } from 'react';
 
 export default function WordCloud() {
-  const wordcloudData = useSelector(
-    (state: RootState) => state.resultInfo.wordcloudData,
-  );
+  const gameInfo = useSelector((state: RootState) => state.gameinfo);
+  const [words, setWords] = useState([]);
+
+  useEffect(() => {
+    const handleWords = async () => {
+      try {
+        // 워드클라우드 단어 받아오기
+        const res = await wordcloudApi(gameInfo.id);
+        // 받아오면 state에 저장
+        setWords(res);
+      } catch (err) {
+        console.log('Failed to fetch word cloud data', err);
+      }
+    };
+    handleWords();
+  }, [gameInfo.id]);
 
   return (
     <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">
@@ -23,7 +40,7 @@ export default function WordCloud() {
         priority
       />
       <ReactWordcloud
-        words={wordcloudData}
+        words={words ? words : []}
         size={[500, 500]}
         options={{
           fontSizes: [20, 80],

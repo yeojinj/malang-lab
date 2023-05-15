@@ -14,10 +14,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { wordZeroAction } from '@/store/wordNumSlice';
+import { setTotalAction, wordZeroAction } from '@/store/wordNumSlice';
 import { useSocket } from '@/context/SocketContext';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
-import { wordcloundApi } from '@/apis/apis';
+import { wordcloudApi } from '@/apis/apis';
 import { setWordcloudData } from '@/store/resultInfoSlice';
 
 export default function GamePage() {
@@ -28,7 +28,7 @@ export default function GamePage() {
   const [countShow, setCountShow] = useState(true);
 
   // redux에서 가져올 값
-  const wordNum = useSelector((state: RootState) => state.wordNum.num);
+  const num = useSelector((state: RootState) => state.wordNum.num);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
   const gameInfo = useSelector((state: RootState) => state.gameinfo);
   const userNum = useSelector((state: RootState) => state.readyInfo).length;
@@ -39,19 +39,20 @@ export default function GamePage() {
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
 
   useEffect(() => {
+    setCountShow(true)
     const timeout = setTimeout(() => {
       setCountShow(false);
     }, 3200);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [roundInfo.keyword]);
 
   const handleClick = async () => {
     // 결과 데이터 가져오기 API 요청하기
-    console.log('결과 가져오기 누름');
-    const res = await wordcloundApi(gameInfo.id);
-    await dispatch(setWordcloudData(res));
-    await router.push('/result');
+    // const res = await wordcloudApi(gameInfo.id);
+    // dispatch(setWordcloudData(res));
+    dispatch(setTotalAction(num));
     dispatch(wordZeroAction());
+    router.push('/result');
   };
 
   const handleFinish = () => {
@@ -84,7 +85,7 @@ export default function GamePage() {
             <GameUserNum num={userNum} />
             <Timer onFinish={handleFinish} time={roundInfo.timeLimit} />
           </div>
-          <WordNum num={wordNum} />
+          <WordNum num={num} />
           <h1 className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
             {roundInfo.keyword}
           </h1>
