@@ -39,11 +39,12 @@ export default function GamePage() {
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
 
   useEffect(() => {
+    setCountShow(true)
     const timeout = setTimeout(() => {
       setCountShow(false);
     }, 3200);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [roundInfo.keyword]);
 
   const handleClick = async () => {
     // 결과 데이터 가져오기 API 요청하기
