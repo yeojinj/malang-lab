@@ -169,6 +169,17 @@ export const hiddenWordApi = async (pin: number) => {
   }
 };
 
+// 어워드 데이터 받아오기
+export const awardsApi = async (pin: number) => {
+  try {
+    const res = await authApi.get(`/game/${pin}/awards`);
+    console.log(res.data);
+    return res.data.data;
+  } catch (err) {
+    console.log('히든 단어 사람 가져오기 실패', err);
+  }
+};
+
 export default {
   getTokenApi,
   makeRoomApi,
@@ -181,4 +192,5 @@ export default {
   hostOutApi,
   wordcloudApi,
   hiddenWordApi,
+  awardsApi,
 };
