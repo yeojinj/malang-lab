@@ -23,6 +23,8 @@ export default function GuestAwardItem({ awardInfo }: Props) {
     });
   };
 
+  console.log(awardInfo, 'awardInfo')
+
   return (
     <div className="flex flex-col" ref={cardRef}>
       <div className="shadow-[7px_7px_10px_rgba(0,0,0,0.25)] rounded-[10px] bg-white w-[300px] sm:w-[600px] h-[80vh] my-5 flex flex-col justify-center align-middle py-3">

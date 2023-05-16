@@ -6,6 +6,8 @@ import Blur from '@/components/common/Blur';
 import AlertBox from '@/components/common/AlertBox';
 import { AwardInfo } from '@/store/Types';
 import useToken from '@/hooks/useToken';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 type Props = {
   awardDatas: AwardInfo[];
@@ -13,14 +15,14 @@ type Props = {
 
 export default function GuestAward({ awardDatas }: Props) {
   // 내가 받은 award
-  const { getToken } = useToken();
-  const token = getToken();
-  const myAward = awardDatas.filter(item => {
-    item.guest.id === token;
+  const nickname = useSelector((state: RootState) => state.guest.nickname);
+  const myAward = awardDatas?.filter(item => {
+    return item.guest.nickname === nickname;
   });
+  console.log(myAward, 'myAward');
   return (
     <>
-      {myAward.length === 0 ? (
+      {myAward?.length === 0 ? (
         <>
           <Blur />
           <AlertBox text={'수상자 발표!\n 화면을 확인하세요'} />
@@ -28,8 +30,8 @@ export default function GuestAward({ awardDatas }: Props) {
       ) : (
         <>
           <Confetti />
-          {myAward.map((item, idx) => {
-            <GuestAwardItem awardInfo={item} key={idx} />;
+          {myAward?.map((item, idx) => {
+            return <GuestAwardItem awardInfo={item} key={idx} />;
           })}
         </>
       )}

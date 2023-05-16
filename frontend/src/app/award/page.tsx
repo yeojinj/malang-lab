@@ -15,17 +15,19 @@ export default function Page() {
   const isHost: boolean = useSelector(
     (state: RootState) => state.status.isHost,
   );
-  const gameinfo = useSelector((state: RootState) => state.gameinfo);
+  const pin = isHost
+    ? useSelector((state: RootState) => state.gameinfo.id)
+    : useSelector((state: RootState) => state.guest.pin);
   const [awardDatas, setAwardDatas] = useState<AwardInfo[]>([]);
 
   useEffect(() => {
     // award 데이터 받아오기
     const handleAward = async () => {
-      const res = await awardsApi(gameinfo.id);
+      const res = await awardsApi(pin);
       setAwardDatas(res);
     };
     handleAward();
-  }, [gameinfo.id]);
+  }, [pin]);
 
   return (
     <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle bg-bg-2 items-center">

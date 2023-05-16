@@ -196,7 +196,7 @@ export const hiddenWordApi = async (pin: number) => {
 };
 
 // 어워드 데이터 받아오기
-export const awardsApi = async (pin: number) => {
+export const awardsApi = async (pin: number | string) => {
   try {
     const res = await authApi.get(`/game/${pin}/awards`);
     console.log(res.data, 'awardData');
