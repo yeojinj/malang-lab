@@ -38,8 +38,8 @@ export default function GamePage() {
   const userNum: number = useSelector((state: RootState) => state.readyInfo).length;
   const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
 
-  const playerRef = useRef<HTMLAudioElement>(null);
-  const blop = new Audio('/audio/blop.mp3');
+  // const playerRef = useRef<HTMLAudioElement>(null);
+  // const blop = new Audio('/audio/blop.mp3');
 
   const word =
     `https://static.malang-lab.com/static/word.png`;
@@ -65,16 +65,16 @@ export default function GamePage() {
     publishUpdate(destination, type);
   };
 
-  useEffect(() => {
-    blop.play()
-  }, [num]);
+  // useEffect(() => {
+  //   // blop.play()
+  // }, [num]);
 
   return (
     <div
       className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${isHost ? 'justify-center' : ''
         } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
     >
-      <audio ref={playerRef} src={'/audio/blop.mp3'} />
+      {/* <audio ref={playerRef} src={'/audio/blop.mp3'} /> */}
       {/* 카운트다운 */}
       {countShow && (
         <>
