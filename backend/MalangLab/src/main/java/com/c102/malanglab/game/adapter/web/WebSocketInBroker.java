@@ -35,6 +35,7 @@ public class WebSocketInBroker {
                 break;
             case BYE:
                 gameStatusCase.goodBye(roomId);
+                break;
             default:
                 break;
         }
