@@ -25,7 +25,7 @@ export default function PinCode() {
             <Image
               className="mx-5 my-3"
               src={
-                `https://static.malang-lab.com/static/octo-malang.png`
+                `https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png`
               }
               alt="character"
               width={120}

@@ -42,7 +42,7 @@ export default function GamePage() {
   // const blop = new Audio('/audio/blop.mp3');
 
   const word =
-    `https://static.malang-lab.com/static/word.png`;
+  'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
 
   useEffect(() => {
     setCountShow(true) // 다음 라운드에 카운트다운 다시 키기
