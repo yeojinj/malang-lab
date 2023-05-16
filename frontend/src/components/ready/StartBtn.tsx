@@ -17,6 +17,11 @@ export default function StartBtn({ category }) {
 
   const handleClick = async () => {
     if (gameinfo.present == gameinfo.settings.length) {
+      // 수상 넘어가기
+      const destination = `/app/room.${gameinfo.id}`;
+      const type = 'MOVE_CELEBRATE';
+      const message = null;
+      publish(destination, type, message);
       router.push('/award');
     } else {
       // 게임 시작 API
