@@ -13,6 +13,7 @@ import { HandleTopic } from '@/libs/handleTopic';
 // alert
 import Swal from 'sweetalert2';
 import { HandleApp } from '@/libs/handleApp';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   setStep: (step: number) => void;
@@ -20,8 +21,9 @@ type Props = {
 
 export default function PinForm({ setStep }: Props) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { subscribe } = useSocket();
-  const handleTopic = HandleTopic(dispatch);
+  const handleTopic = HandleTopic(dispatch, router);
   const handleQueue = HandleQueue(dispatch);
   const [pin, setPin] = useState<string>('');
   const [audio, setAudio] = useState<HTMLAudioElement>();
@@ -61,7 +63,7 @@ export default function PinForm({ setStep }: Props) {
       const app = `app/room.${pin}`;
       subscribe(topic, handleTopic);
       subscribe(queue, handleQueue);
-      subscribe(app, HandleApp)
+      subscribe(app, HandleApp);
 
       // pin번호 redux에 저장
       dispatch(setPinAction(pin));

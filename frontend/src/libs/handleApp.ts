@@ -1,6 +1,4 @@
 const HandleApp = dispatch => async message => {
-  console.log(message, '---');
-
   if (message.body) {
     const quote = JSON.parse(message.body);
     console.log(quote, 'app');

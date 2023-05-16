@@ -2,8 +2,7 @@ import { setReadyMember, guestOutAction } from '@/store/readyInfoSlice';
 import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
 import { useRouter } from 'next/navigation';
 
-const HandleTopic = dispatch => message => {
-  const router = useRouter();
+const HandleTopic = (dispatch, router) => message => {
   var joinAudio = new Audio('/audio/hello.mp3');
   if (message.body) {
     console.debug(message);
@@ -32,8 +31,8 @@ const HandleTopic = dispatch => message => {
     }
     // 호스트 이탈
     if (quote.type === 'DESTROY') {
-      console.debug('호스트가 퇴장했어요')
-      router.push('/');
+      console.debug('호스트가 퇴장했어요');
+      // router.push('/');
     }
     if (quote.type === 'GUEST_LIST') {
       alert(message.body);

@@ -68,7 +68,7 @@ export default function CreatePage() {
   const router = useRouter();
   const inputRef = useRef(null);
   const { subscribe } = useSocket();
-  const handleTopic = HandleTopic(dispatch);
+  const handleTopic = HandleTopic(dispatch, router);
   const handleQueue = HandleQueue(dispatch);
 
   // 1. 방 정보 설정 상태

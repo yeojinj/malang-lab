@@ -28,6 +28,22 @@ export default function WordCloud() {
     handleWords();
   }, [gameInfo.id]);
 
+  const options: any = {
+    colors: ['#edb02b', '#3464f7', '#258247', '#ed2b82', '#5a5752', '#6830bd'],
+    enableTooltip: true,
+    deterministic: false,
+    fontFamily: 'Inter',
+    fontSizes: [20, 80],
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    padding: 1,
+    rotations: 3,
+    rotationAngles: [0, 70],
+    scale: 'sqrt',
+    spiral: 'circle',
+    transitionDuration: 1000,
+  };
+
   return (
     <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">
       <Image
@@ -41,9 +57,7 @@ export default function WordCloud() {
       <ReactWordcloud
         words={words ? words : []}
         size={[500, 500]}
-        options={{
-          fontSizes: [20, 80],
-        }}
+        options={options}
       />
       <Image
         className="absolute -right-80 bottom-1 animate-bounce"
