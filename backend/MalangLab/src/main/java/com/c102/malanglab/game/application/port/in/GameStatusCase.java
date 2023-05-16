@@ -102,5 +102,10 @@ public interface GameStatusCase {
      */
     HiddenResponse roundResultHidden(final Long roomId, final String userId);
 
+    /**
+     * 수상 결과를 가져옵니다.
+     * @param roomId
+     * @return
+     */
     List<AwardResponse> getAwards(Long roomId);
 }
