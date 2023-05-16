@@ -43,44 +43,26 @@
 ### 📌 방 만들기 화면 / 방 접속하기 화면
 
 <p align="center">
-<img src=>
-<img src=>
+<img width="400" height="280" src=https://github.com/devTaemin/devTaemin/assets/48127239/da581ddc-945a-4cc7-a3ec-8778bd4fda32>
+<img width="400" height="280" src=https://github.com/devTaemin/devTaemin/assets/48127239/6573ecc4-bd34-419f-b87e-3fa9b9c87ce8>
 </p>
 
 <br>
 
-### 📌 호스트 대기실 / 게스트 대기실
+### 📌 호스트 게임진행 / 게스트 게임진행
 
 <p align="center">
-<img src=>
-<img src=>
+<img width="400" height="280" src=https://github.com/devTaemin/devTaemin/assets/48127239/ab13d540-e25f-4163-874f-4d8b08d655dd>
+<img width="400" height="280" src=https://github.com/devTaemin/devTaemin/assets/48127239/28e09e25-f807-42bd-adfc-efeba9361d99>
 </p>
 
 <br>
 
-### 📌 호스트 게임방 / 게스트 게임방
+### 📌 게임 결과 / 시상식
 
 <p align="center">
-<img src=>
-<img src=>
-</p>
-
-<br>
-
-### 📌 워드 클라우드 / 히든 단어 결과
-
-<p align="center">
-<img src=>
-<img src=>
-</p>
-
-<br>
-
-### 📌 최종 결과
-
-<p align="center">
-<img src=>
-<img src=>
+<img width="400" height="280" src=https://github.com/devTaemin/devTaemin/assets/48127239/80683234-064b-4775-9364-092f70cc8dfe>
+<img width="400" height="280" src=>
 </p>
 
 <br>
