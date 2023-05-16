@@ -139,7 +139,7 @@ export const inputWordApi = async (payload: WordInfo) => {
 };
 
 // 참여자 퇴장
-export const guestOutApi = async (payload: string) => {
+export const guestOutApi = async (payload: number) => {
   console.log(payload, 'pin!!!!!!!!!!');
 
   // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
@@ -196,7 +196,7 @@ export const hiddenWordApi = async (pin: number) => {
 };
 
 // 어워드 데이터 받아오기
-export const awardsApi = async (pin: number | string) => {
+export const awardsApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/awards`);
     console.log(res.data, 'awardData');

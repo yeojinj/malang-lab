@@ -1,7 +1,7 @@
 export type WordInfo = {
   word: string;
   time: number;
-  roomId: string;
+  roomId: number;
 };
 
 export type AwardInfo = {
