@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface GuestRepository extends JpaRepository<Guest, String> {
 
-    @Query("SELECT g FROM Guest g WHERE g.id IN :userIds ORDER BY FIELD(g.id, :userIds)")
+    @Query("SELECT g FROM Guest g WHERE g.id IN :userIds") //  ORDER BY FIELD(g.id, :userIds)
     List<Guest> getUserList(List<String> userIds);
 }

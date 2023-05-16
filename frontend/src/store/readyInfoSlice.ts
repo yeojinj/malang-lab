@@ -1,6 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit';
 
-export type ReadyInfo = {
+export interface ReadyInfo {
   nickname: string;
   imagePath: string;
 };

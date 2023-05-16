@@ -14,9 +14,10 @@ export default function NicknameForm() {
   const dispatch = useDispatch();
   const { publish } = useSocket();
   const Swal = require('sweetalert2');
-  const guest = useSelector((state: RootState) => state.guest);
-  const [nickname, setNickname] = useState('');
-  const [imagePath, setImagePath] = useState('');
+  const guest: Guest = useSelector((state: RootState) => state.guest);
+  const [nickname, setNickname] = useState<string>('');
+  const [imagePath, setImagePath] = useState<string>('');
+  const token = localStorage.getItem('token')
 
   // 1. 닉네임 입력 ---------------------------------------------------------
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +31,13 @@ export default function NicknameForm() {
 
   // 닉네임 저장
   const handleClickComplete = () => {
+    if (nickname.length === 0) {
+      Swal.fire({
+        icon: 'question',
+        title: '닉네임을 입력해주세요!',
+      });
+      return
+    }
     dispatch(setNicknameAction(nickname));
   };
 
@@ -38,7 +46,7 @@ export default function NicknameForm() {
     if (e.key === 'Enter') handleClickComplete();
   };
 
-  
+
   // 2. 닉네임 및 이미지 확인 api 전송 ----------------------------------------
   const checkGuestInfo = async (guest: Guest) => {
     let tmp = await checkGuestInfoApi(guest);
@@ -56,12 +64,11 @@ export default function NicknameForm() {
 
   // 3. 게스트 입장 ------------------------------------------------------------
   const joinGuest = async () => {
-    const res = await joinGuestApi({
-      pin: guest.pin,
-      nickname: guest.nickname,
-      imagePath,
-    })
-    return res
+    publish(`/app/room.${guest.pin}`, 'JOIN', {
+      id : token,
+      nickname : guest.nickname,
+      imagePath, 
+    });
   }
 
   // 이미지 주소 받아오는데 성공하면 실행
@@ -69,7 +76,7 @@ export default function NicknameForm() {
     if (imagePath.length) {
       const res = joinGuest()
       console.log(res, '💜💜💙💜💜💙')
-      if(res) router.push('/ready');
+      if (res) router.push('/ready');
     }
   }, [imagePath]);
 
