@@ -57,11 +57,11 @@ export default function CustomSection({ setStep }: Props) {
 
   return (
     <div className="w-[80%] flex flex-col justify-center align-middle gap-2 lg:gap-10">
-      <p className="text-center text-2xl lg:text-5xl font-bold">
+      <p className="text-center text-2xl lg:text-5xl font-bold pulsate">
         말랑이 생성하기
       </p>
       <div className="mx-auto">
-        <div className="flex flex-col-reverse lg:grid grid-cols-2 gap-2 relative lg:m-5 ">
+        <div className="flex flex-col-reverse lg:grid grid-cols-2 gap-2 relative lg:m-5">
           <CustomItem onClick={handleClick} />
           <Stage
             width={300}

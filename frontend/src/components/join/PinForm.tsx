@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // redux
 import { setPinAction, setTitleAction } from '@/store/guestSlice';
 import { useDispatch } from 'react-redux';
@@ -24,6 +24,16 @@ export default function PinForm({ setStep }: Props) {
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
   const [pin, setPin] = useState<string>('');
+  const [audio, setAudio] = useState<HTMLAudioElement>();
+
+  // 버튼위에 마우스가 올라가 있을 때만 실행
+  const handleMouseEnter = () => {
+    audio?.play();
+  };
+
+  useEffect(() => {
+    setAudio(new Audio('/audio/blop.mp3'));
+  }, []);
 
   // pin 번호 입력
   const handleChangePin = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +81,7 @@ export default function PinForm({ setStep }: Props) {
 
   return (
     <section className="w-[70%] sm:w-[50%] md:w-[40%] lg:w-[30%] flex flex-col justify-center align-middle gap-5">
-      <p className="text-center text-4xl sm:text-5xl font-bold mb-5">
+      <p className="text-center text-4xl sm:text-5xl font-bold mb-5 pulsate">
         참여하기
       </p>
       <input
@@ -79,11 +89,12 @@ export default function PinForm({ setStep }: Props) {
         placeholder="PIN 번호"
         onChange={handleChangePin}
         onKeyPress={handleKeyPress}
-        className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
+        className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg hover:scale-105"
       />
       <button
-        className="button-black w-[80%] sm:w-[60%]"
+        className="button-black w-[80%] sm:w-[60%] hover:scale-105"
         onClick={handleClickComplete}
+        onMouseEnter={handleMouseEnter}
       >
         참여하기
       </button>

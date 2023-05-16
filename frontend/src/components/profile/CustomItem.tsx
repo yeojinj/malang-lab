@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { character, sticker } from '@/data/customdata';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function CustomItem({ onClick }) {
   // 아이템 탭 이동
@@ -16,10 +16,11 @@ export default function CustomItem({ onClick }) {
           {['캐릭터', '스티커'].map(tabId => (
             <li key={tabId} className="w-1/2">
               <button
-                className={`w-full inline-block p-4 border-b-2 rounded-t-lg ${activeTab === tabId
+                className={`w-full inline-block p-4 border-b-2 rounded-t-lg ${
+                  activeTab === tabId
                     ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500'
                     : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
-                  }`}
+                }`}
                 onClick={() => handleTab(tabId)}
               >
                 {tabId}
@@ -43,7 +44,7 @@ export default function CustomItem({ onClick }) {
                   return (
                     <div
                       key={idx}
-                      className=" h-20 w-full flex justify-center items-center p-2 mb-2 bg-white rounded-lg"
+                      className=" h-20 w-full flex justify-center items-center p-2 mb-2 bg-white rounded-lg hover:scale-105"
                     >
                       <button onClick={e => onClick(img)}>
                         <Image
