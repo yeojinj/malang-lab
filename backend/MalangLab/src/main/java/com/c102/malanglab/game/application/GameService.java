@@ -150,6 +150,12 @@ public class GameService implements GameStatusCase {
     }
 
     @Override
+    public void moveCelebrateMember(Long roomId) {
+        Message<Object> message = new Message<>(Message.MessageType.MOVE_CELEBRATE, null);
+        gameBroadCastPort.alertMoveCelebrateMember(roomId, message);
+    }
+
+    @Override
     public void exitMember(Long roomId, String userId) {
         // 1. 계정 정보를 가져옵니다.
         Guest guest = gamePort.getGuest(userId);
