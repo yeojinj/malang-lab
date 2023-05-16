@@ -388,9 +388,9 @@ public class GameAdapter implements GamePort {
             case HIDDEN_FASTER -> {
                 return getHiddenFaster(roomId);
             }
-            case QUICK_THINKER -> {
-                return getQuickThinker(roomId);
-            }
+//            case QUICK_THINKER -> {
+//                return getQuickThinker(roomId);
+//            }
         }
         return null;
     }
