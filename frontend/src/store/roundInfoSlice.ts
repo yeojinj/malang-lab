@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export type RoundInfo = {
+export interface RoundInfo {
   keyword: string;
   timeLimit: number;
   round: number;
@@ -15,6 +15,7 @@ const initialState: RoundInfo = {
   round: 0,
   isLast: false,
   finish: false,
+  startTime: 0,
 };
 
 export const roundInfoSlice = createSlice({

@@ -16,6 +16,7 @@ import {
   gameAction,
   modeAction,
   setNameAction,
+  GameInfo,
 } from '../../store/gameInfoSlice';
 import { updateStatus } from '@/store/statusSlice';
 // apis
@@ -62,20 +63,19 @@ const games = [
 ];
 
 export default function CreatePage() {
-  let gameinfo = useSelector((state: RootState) => state.gameinfo);
+  let gameinfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
   const dispatch = useDispatch();
   const router = useRouter();
   const inputRef = useRef(null);
-  const Swal = require('sweetalert2');
   const { subscribe } = useSocket();
   const handleTopic = HandleTopic(dispatch);
   const handleQueue = HandleQueue(dispatch);
 
   // 1. 방 정보 설정 상태
-  const [step, setStep] = useState(0);
-  const [selectedMode, setMode] = useState(gameinfo.mode);
-  const [selectedGame, setGame] = useState(gameinfo.name);
-  const [title, setTitle] = useState(gameinfo.name);
+  const [step, setStep] = useState<number>(0);
+  const [selectedMode, setMode] = useState<string>(gameinfo.mode);
+  const [selectedGame, setGame] = useState<string>(gameinfo.name);
+  const [title, setTitle] = useState<string>(gameinfo.name);
 
   // 방제목 설정하기
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,7 +169,7 @@ export default function CreatePage() {
       if (res) {
         // 방의 pin 번호 redux에 저장
         dispatch(setPincodeAction(res.data.id));
-        console.log(res.data.id)
+        console.log(res.data.id);
 
         // topic, queue 구독
         const topic = `/topic/room.${res.data.id}`;
@@ -198,6 +198,12 @@ export default function CreatePage() {
           title: `Round${setting.round}`,
           text: '키워드와 히든단어를 다르게 입력해주세요!',
         });
+      } else if (setting.keyword.length > 10 || setting.hidden.length > 10) {
+        Swal.fire({
+          icon: 'warning',
+          title: `Round${setting.round}`,
+          text: '키워드와 히든단어를 10자 이내로 입력해주세요!',
+        });
       } else {
         return true;
       }
@@ -205,8 +211,7 @@ export default function CreatePage() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center bg-bg-3">
+    <div className="min-h-screen bg-cover flex flex-col align-middle bg-center justify-center bg-bg-3">
       <section className="glass w-[70%] min-h-[90vh] border-2 mx-auto flex my-5">
         <div className="w-[70%] md:w-[80%] lg:w-[70%] gap-3 mx-auto py-8 flex flex-col">
           <div className="w-[50%] mx-auto flex border-b-[2px] border-black">

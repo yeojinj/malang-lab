@@ -10,7 +10,7 @@ export interface Setting {
   round: number;
 }
 
-export type GameInfo = {
+export interface GameInfo {
   id: number;
   name: string;
   game: string;

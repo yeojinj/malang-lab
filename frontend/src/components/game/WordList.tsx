@@ -16,7 +16,7 @@ export default function WordList() {
   const [word, setWord] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
   const { publish } = useSocket();
-  const roomId = useSelector((state: RootState) => state.guest.pin);
+  const roomId: string = useSelector((state: RootState) => state.guest.pin);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
 
   const wordinfo: WordInfo = {
@@ -94,8 +94,8 @@ export default function WordList() {
           onChange={e => setWord(e.target.value)}
           onKeyPress={handleKeyPress}
         />
-        <div className="group relative flex justify-center sm:bottom-[110px]">
-          <span className="absolute -top-16 scale-0 transition-all rounded bg-gray-800 p-2 text-xl text-white group-hover:scale-100">
+        <div className="group relative flex justify-center">
+          <span className="absolute bottom-20 -right-4 sm:bottom-32 sm:-right-8 scale-0 transition-all rounded p-2 text-lg text-white group-hover:scale-100 bg-black">
             저는 그냥 문어예요✨
           </span>
           <Image
@@ -105,7 +105,7 @@ export default function WordList() {
             alt=""
             width={50}
             height={50}
-            className="animate-bounce"
+            className="absolute bottom-5 sm:bottom-16 right-[20px] animate-bounce"
           />
         </div>
       </div>

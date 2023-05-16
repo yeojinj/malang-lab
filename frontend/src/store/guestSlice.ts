@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export type Guest = {
+export interface Guest {
   pin: string;
   nickname: string;
   imageUrl: string;

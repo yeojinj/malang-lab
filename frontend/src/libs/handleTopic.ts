@@ -9,8 +9,8 @@ const HandleTopic = dispatch => message => {
     // 유저 참여
     if (quote.type === 'JOIN') {
       const member = {
-        nickname: quote.message.nickname,
-        imagePath: quote.message.imagePath,
+        nickname: quote.body.nickname,
+        imagePath: quote.body.imagePath,
       };
       dispatch(setReadyMember(member));
       // hello.mp3 재생
@@ -18,7 +18,7 @@ const HandleTopic = dispatch => message => {
     }
     // 라운드 시작
     if (quote.type === 'ROUND_START') {
-      dispatch(setRoundInfo(quote.message));
+      dispatch(setRoundInfo(quote.body));
     }
     // 라운드 종료
     if (quote.type === 'ROUND_FINISH') {
