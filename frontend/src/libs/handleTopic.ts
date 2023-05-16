@@ -32,10 +32,14 @@ const HandleTopic = (dispatch, router) => message => {
     // 호스트 이탈
     if (quote.type === 'DESTROY') {
       console.debug('호스트가 퇴장했어요');
-      // router.push('/');
+      router.push('/');
     }
     if (quote.type === 'GUEST_LIST') {
       alert(message.body);
+    }
+    //
+    if (quote.type === 'MOVE_CELEBRATE') {
+      router.push('/award');
     }
   } else {
     alert('got empty message');
