@@ -18,7 +18,7 @@ export default function GuestAwardItem({ awardInfo }: Props) {
       return card.tagName !== 'BUTTON';
     };
     domtoimage.toBlob(card, { filter: filter }).then(blob => {
-      saveAs(blob, 'card.png');
+      saveAs(blob, 'award.png');
     });
   };
 
