@@ -4,6 +4,8 @@ import Image from 'next/image';
 import HostAwardItem from '@/components/award/HostAwardItem';
 import { AwardInfo } from '@/store/Types';
 import { useState } from 'react';
+import AlertBox from '../common/AlertBox';
+import Blur from '../common/Blur';
 
 type Props = {
   awardDatas: AwardInfo[];
@@ -15,13 +17,19 @@ export default function HostAward({ awardDatas }: Props) {
   const handleClick = () => {
     if (order < 3) {
       setOrder(order + 1);
-    } else if (order === 3) {
-      setShow(true)
+    } else if (order === 2) {
+      setShow(true);
     }
   };
 
   return (
     <>
+      {show && (
+        <>
+          <Blur />
+          <AlertBox text={'bye'} />
+        </>
+      )}
       <HostAwardItem awardInfo={awardDatas[order]} />
       <Image
         src={
