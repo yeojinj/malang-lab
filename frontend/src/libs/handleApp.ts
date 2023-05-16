@@ -5,9 +5,6 @@ const HandleApp = dispatch => async message => {
     if (quote.type === 'JOIN') {
       console.log(quote, 'join');
     }
-    if (quote.type === 'BYE') {
-      alert(quote);
-    }
   } else {
     alert('got empty message');
   }
