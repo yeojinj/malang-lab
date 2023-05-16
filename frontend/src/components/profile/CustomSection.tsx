@@ -76,7 +76,7 @@ export default function CustomSection({ setStep }: Props) {
                 return (
                   <CustomStage
                     key={idx}
-                    imagePath={`https://static.malang-lab.com/profile/${img}.png`}
+                    imagePath={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/profile/${img}.png`}
                     isSelected={idx == isSelected}
                     onSelect={() => {
                       setIsSelected(idx);
