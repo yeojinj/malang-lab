@@ -6,6 +6,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    domains: ['static.malang-lab.com']
+  },
 };
 
 // const withImages = require('next-images');
