@@ -128,7 +128,6 @@
 - [API 명세서](https://canary-capacity-362.notion.site/API-4c1617137817482cb1cf6f2a4decd8d4)
 - [ER 다이어그램](https://canary-capacity-362.notion.site/ER-DB-d5e83ec85bc94c58a3abd01f7c45ea68)
 - [시퀀스 다이어그램](https://app.diagrams.net/#G1PAIPK7tyjwd32ytZLTLkMEEVXwW4K3Ur)
-- [개발환경 가이드](https://canary-capacity-362.notion.site/db736337de464bdca68b4b38de1673f6)
 - [Jira 컨벤션](https://canary-capacity-362.notion.site/Jira-Convention-f61caecb6e2544f4a38c55195b98500b)
 - [Git 컨벤션](https://canary-capacity-362.notion.site/Git-Convention-719c6c12fef74e7c8148d94ab79bf25b)
 <!-- - [포팅매뉴얼]() -->
