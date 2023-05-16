@@ -51,6 +51,12 @@ public interface GameStatusCase {
     void joinMember(final Long roomId, final String userId, Message message);
 
     /**
+     * 참가자가 시상식 페이지로 이동합니다.
+     * @param roomId
+     */
+    void moveCelebrateMember(final Long roomId);
+
+    /**
      * 참가자가 게임에 퇴장합니다.
      * @param roomId
      * @param userId
