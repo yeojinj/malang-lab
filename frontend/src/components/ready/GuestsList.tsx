@@ -1,34 +1,12 @@
 'use client';
-
+// hooks
+import { useRef, useEffect } from 'react';
+// components
 import GuestGrid from './GuestGrid';
-import { useRef, useState, useEffect } from 'react';
-
-const guests = [
-  {
-    name: '냠냠이',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '문어지지마',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '지냠이',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '냠냠이',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '문어지지마',
-    image: '/imgs/character.png',
-  },
-  {
-    name: '지냠이',
-    image: '/imgs/character.png',
-  },
-];
+// redux
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { ReadyInfo } from '@/store/readyInfoSlice';
 
 type Props = {
   host: boolean;
@@ -36,7 +14,10 @@ type Props = {
 
 export default function GuestsList({ host }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const readyInfo: ReadyInfo[] = useSelector((state: RootState) => state.readyInfo);
+  console.log(readyInfo)
 
+  // 스크롤 위치 하단 고정
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -45,12 +26,12 @@ export default function GuestsList({ host }: Props) {
 
   return (
     <div
-      className={`w-screen h-[70vh] ${
+      className={`w-screen h-[68vh] ${
         host ? 'sm:h-[32vh]' : 'sm:h-[67vh]'
       } my-5 overflow-y-auto scrollbar-hide`}
       ref={scrollRef}
     >
-      <GuestGrid guests={guests} />
+      <GuestGrid guests={readyInfo} />
     </div>
   );
 }

@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 export default function CustomItem({ onClick }) {
   // 아이템 탭 이동
-  const [activeTab, setActiveTab] = useState('캐릭터');
-  const handleTab = tabId => {
+  const [activeTab, setActiveTab] = useState<string>('캐릭터');
+  const handleTab = (tabId: string) => {
     setActiveTab(tabId);
   };
 
@@ -16,11 +16,10 @@ export default function CustomItem({ onClick }) {
           {['캐릭터', '스티커'].map(tabId => (
             <li key={tabId} className="w-1/2">
               <button
-                className={`w-full inline-block p-4 border-b-2 rounded-t-lg ${
-                  activeTab === tabId
+                className={`w-full inline-block p-4 border-b-2 rounded-t-lg ${activeTab === tabId
                     ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500'
                     : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
-                }`}
+                  }`}
                 onClick={() => handleTab(tabId)}
               >
                 {tabId}

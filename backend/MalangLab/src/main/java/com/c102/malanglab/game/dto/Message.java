@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import lombok.*;
 
-import java.util.Map;
-
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,7 +13,7 @@ public class Message<T> {
     private T body;
 
     public enum MessageType {
-        JOIN, EXIT, GUEST_LIST, @JsonEnumDefaultValue UNKNOWN;
+        JOIN, EXIT, GUEST_LIST, ROUND_START, CHECK_DB, @JsonEnumDefaultValue UNKNOWN, DESTORY;
 
         @JsonCreator
         public static MessageType from(String type) {

@@ -10,18 +10,19 @@ export interface Setting {
   round: number;
 }
 
-export type GameInfo = {
-  id : number;
-  title : string;
+export interface GameInfo {
+  id: number;
   name: string;
+  game: string;
   mode: string;
   settings: Setting[];
+  present: number;
 };
 
 const initialState: GameInfo = {
-  id : 0,
-  title:'말랑이의 연구소',
-  name: '',
+  id: 0,
+  name: '말랑이의 연구소',
+  game: '',
   mode: '',
   settings: [
     {
@@ -32,15 +33,21 @@ const initialState: GameInfo = {
       round: 1,
     },
   ],
+  present: 0,
 };
 
 export const gameInfoSlice = createSlice({
   name: 'gameinfo',
   initialState,
   reducers: {
+    // pin 번호
+    setPincodeAction(state, action) {
+      state.id = action.payload;
+      console.log(state.id)
+    },
     // 방 제목 입력
-    setTitleAction(state, action) {
-      state.title = action.payload
+    setNameAction(state, action) {
+      state.name = action.payload;
     },
     // 모드 선택하기
     modeAction(state, action) {
@@ -48,7 +55,7 @@ export const gameInfoSlice = createSlice({
     },
     // 게임 선택하기
     gameAction(state, action) {
-      state.name = action.payload;
+      state.game = action.payload;
     },
     // keyword가 입력 될때
     changekeywordAction(state, action) {
@@ -66,9 +73,9 @@ export const gameInfoSlice = createSlice({
     // 삭제버튼을 눌렀을 때
     deleteRoundAction(state, action) {
       state.settings.splice(action.payload, 1);
-      state.settings.map((setting, idx)=> {
-        setting.round = idx+1
-      })
+      state.settings.map((setting, idx) => {
+        setting.round = idx + 1;
+      });
     },
     // 추가 버튼을 눌렀을때
     addRoundAction(state) {
@@ -77,18 +84,20 @@ export const gameInfoSlice = createSlice({
         keyword: '',
         hidden: '',
         time: 30,
-        round: state.settings.length+1,
+        round: state.settings.length + 1,
       });
     },
-    setPinAction(state, action) {
-      state.id = action.payload
-    }
+    // 라운드 시작할 때
+    updatePresentAction(state) {
+      state.present += 1;
+    },
   },
 });
 
 // Action & Slice export
 export const {
-  setTitleAction,
+  setPincodeAction,
+  setNameAction,
   addRoundAction,
   modeAction,
   gameAction,
@@ -96,5 +105,6 @@ export const {
   changekeywordAction,
   changeHiddenAction,
   changeTimeAction,
+  updatePresentAction,
 } = gameInfoSlice.actions;
 export default gameInfoSlice.reducer;

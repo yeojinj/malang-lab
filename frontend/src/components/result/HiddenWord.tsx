@@ -2,46 +2,56 @@
 
 import Image from 'next/image';
 import HiddenCarousel from './HiddenCarousel';
+import { useEffect, useState } from 'react';
+import { hiddenWordApi } from '@/apis/apis';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export default function HiddenWord() {
-  // 히든단어 맞춘 사람들 데이터를 가져오는데 4개 미만이면 * 4 해서 내려보내기..
-  const mockItems = [
-    {
-      id: 'item-1',
-      username: '유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-2',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      username: '여지니',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      username: '태미니',
-      profileImg: 'character',
-    },
-  ];
+  const word =
+    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
+  const [hidden, setHidden] = useState<string>('');
+  const [guestList, setGuestList] = useState([]);
+  const pin = useSelector((state: RootState) => state.gameinfo.id);
+
+  const handleHidden = async () => {
+    const res = await hiddenWordApi(pin);
+    setHidden(res.word);
+    if (res.guests.length < 4) {
+      const tmp = guestList.concat(
+        Array(5 - res.guests.length)
+          .fill(res.guests)
+          .flat(),
+      );
+      setGuestList(tmp);
+    } else {
+      setGuestList(res.guests);
+    }
+  };
+
+  useEffect(() => {
+    handleHidden();
+  }, []);
+
   return (
     <section className="flex justify-center items-center">
-      <HiddenCarousel left={true} correctPeople={mockItems} />
+      {guestList.length >= 4 && (
+        <HiddenCarousel left={true} correctPeople={guestList} />
+      )}
       <div className="relative">
         <Image
-          src={`/imgs/word.png`}
+          src={word}
           alt="Picture of the author"
           width={800}
           height={500}
         />
         <h1 className="absolute top-[45%] left-[50%] -translate-x-1/2 -translate-y-1/2 font-bold text-xl md:text-3xl lg:text-5xl">
-          hidden word
+          {hidden}
         </h1>
       </div>
-      <HiddenCarousel left={false} correctPeople={mockItems} />
+      {guestList.length >= 4 && (
+        <HiddenCarousel left={false} correctPeople={guestList} />
+      )}
     </section>
   );
 }

@@ -1,24 +1,18 @@
 package com.c102.malanglab.game.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
+import org.springframework.data.redis.core.ZSetOperations;
 
 @Entity
 @Getter
 @Table(name = "guest")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Guest {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid")
     @Column(name = "GUEST_ID")
     private String id;
 
@@ -28,12 +22,22 @@ public class Guest {
     @Column(name = "IMAGE_PATH")
     private String imagePath;
 
-    public Guest(String id, String nickname) {
-        this.id = id;
-        this.nickname = nickname;
+    @ManyToOne
+    @JoinColumn(name = "ROOM_ID", updatable = false)
+    @JsonBackReference
+    @ToString.Exclude
+    private Room room;
+
+    public void setRoom(Room room) {
+        this.room = room;
+        if(!room.getGuests().contains(this)) {
+            room.getGuests().add(this);
+        }
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public Guest(String id, String nickname, String url) {
+        this.id = id;
+        this.nickname = nickname;
+        this.imagePath = url;
     }
 }

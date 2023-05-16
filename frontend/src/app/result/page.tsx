@@ -1,4 +1,9 @@
+'use client';
+
+import StartBtn from '@/components/ready/StartBtn';
 import ResultCard from '@/components/result/ResultCard';
+import { RootState } from '@/store/store';
+import { useSelector } from 'react-redux';
 
 const cards = [
   {
@@ -19,19 +24,18 @@ const cards = [
 ];
 
 export default function ResultPage() {
+  const total: number = useSelector((state: RootState) => state.wordNum.total);
   return (
     <div className="w-screen h-screen bg-cover bg-bg-3 flex flex-col justify-center items-center gap-16 lg:gap-32">
       <header className="text-4xl font-bold">
-        총 {'100'}개의 단어를 생각했어요!
+        총 {total}개의 단어를 생각했어요!
       </header>
       <nav className="flex flex-col lg:flex-row justify-center items-center gap-10">
         {cards.map(card => (
           <ResultCard key={card.title} card={card} />
         ))}
       </nav>
-      <button className="bg-[#44474B] font-semibold rounded text-white px-10 py-2">
-        다음 라운드 가기
-      </button>
+      <StartBtn category={'다음 라운드 시작'} />
     </div>
   );
 }

@@ -22,8 +22,10 @@ import java.util.UUID;
 public class AccessTokenAdapter implements AccessTokenPort {
     private final int TOKEN_RETENTION_DAY = 1;
     private final String TOKEN_PREFIX = "token:";
+    private final String MALANG_PREFIX = "malang-";
     private final ObjectMapper objectMapper;
     private final RedisTemplate redisTemplate;
+
     @Override
     public AccessToken getRandomUserToken() {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
@@ -96,7 +98,7 @@ public class AccessTokenAdapter implements AccessTokenPort {
     private AccessToken generateAccessToken() {
         LocalDateTime current = LocalDateTime.now();
         return AccessToken.builder()
-                .token(String.valueOf(UUID.randomUUID()))
+                .token(MALANG_PREFIX + String.valueOf(UUID.randomUUID()))
                 .createdAt(current)
                 .expiredAt(current.plusDays(TOKEN_RETENTION_DAY))
                 .build();

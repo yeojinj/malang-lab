@@ -1,50 +1,38 @@
 'use client';
 
-import { useRef } from 'react';
-import domtoimage from 'dom-to-image';
-import { saveAs } from 'file-saver';
+import Confetti from '@/components/award/Confetti';
+import GuestAwardItem from '@/components/award/GuestAwardItem';
+import Blur from '@/components/common/Blur';
+import AlertBox from '@/components/common/AlertBox';
+import { AwardInfo } from '@/store/Types';
+import useToken from '@/hooks/useToken';
 
-export default function GuestAward({ text }) {
-  const cardRef = useRef<HTMLDivElement>(null);
+type Props = {
+  awardDatas: AwardInfo[];
+};
 
-  const handleClickDownload = () => {
-    const card = cardRef.current;
-    const filter = (card: HTMLElement) => {
-      return card.tagName !== 'BUTTON';
-    };
-    domtoimage.toBlob(card, { filter: filter }).then(blob => {
-      saveAs(blob, 'card.png');
-    });
-  };
-
+export default function GuestAward({ awardDatas }: Props) {
+  // 내가 받은 award
+  const { getToken } = useToken();
+  const token = getToken();
+  const myAward = awardDatas.filter(item => {
+    item.guest.id === token;
+  });
   return (
-    <div className="flex flex-col" ref={cardRef}>
-      <div className="shadow-[7px_7px_10px_rgba(0,0,0,0.25)] rounded-[10px] bg-white w-[300px] sm:w-[600px] h-[80vh] my-5 flex flex-col justify-center align-middle py-3">
-        <img
-          src={'/imgs/cat.png'}
-          width={500}
-          height={500}
-          alt="award"
-          className="h-[400px] w-[300px] mx-auto my-5"
-        />
-        <div className="text-center font-bold text-2xl">
-          <span className="text-[#006DFF]">{text}</span> 획득!
-        </div>
-        <img
-          src={'/imgs/barcode.png'}
-          width={200}
-          height={100}
-          alt="barcode"
-          className="h-[100px] w-[200px] mx-auto mb-5"
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-black text-white p-5 font-bold rounded-[10px] w-[250px] h-[70px] mx-auto text-lg"
-        onClick={handleClickDownload}
-      >
-        저장하기
-      </button>
-    </div>
+    <>
+      {myAward.length === 0 ? (
+        <>
+          <Blur />
+          <AlertBox text={'수상자 발표!\n 화면을 확인하세요'} />
+        </>
+      ) : (
+        <>
+          <Confetti />
+          {myAward.map((item, idx) => {
+            <GuestAwardItem awardInfo={item} key={idx} />;
+          })}
+        </>
+      )}
+    </>
   );
 }
