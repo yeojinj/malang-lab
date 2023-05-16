@@ -7,6 +7,7 @@ import styles from './PinCode.module.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
+
 export default function PinCode() {
   const code: number = useSelector((state: RootState) => state.gameinfo.id);
 
@@ -24,7 +25,7 @@ export default function PinCode() {
             <Image
               className="mx-5 my-3"
               src={
-                'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png'
+                `https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png`
               }
               alt="character"
               width={120}

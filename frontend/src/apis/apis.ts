@@ -148,7 +148,7 @@ export const guestOutApi = async (payload: string) => {
     // 나가기
     navigator.sendBeacon(`${BASE_URL}/game/${payload}/user/out`, token);
     // 토큰 삭제
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
   }
 };
 
@@ -161,7 +161,7 @@ export const hostOutApi = async (payload: string) => {
   // 나가기
   navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
   // 토큰 삭제
-  localStorage.removeItem('token');
+  // localStorage.removeItem('token');
 };
 
 // 단어 입력 수 결과 받아오기
