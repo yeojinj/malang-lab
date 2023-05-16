@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 import { AwardInfo } from '@/store/Types';
+import { award } from '@/data/awarddata';
 
 type Props = {
   awardInfo: AwardInfo;
@@ -26,17 +27,17 @@ export default function GuestAwardItem({ awardInfo }: Props) {
     <div className="flex flex-col" ref={cardRef}>
       <div className="shadow-[7px_7px_10px_rgba(0,0,0,0.25)] rounded-[10px] bg-white w-[300px] sm:w-[600px] h-[80vh] my-5 flex flex-col justify-center align-middle py-3">
         <img
-          src={awardInfo.guest.imagePath}
+          src={award[awardInfo?.type]?.imagePath}
           width={500}
           height={500}
           alt="award"
           className="h-[400px] w-[300px] mx-auto my-5"
         />
         <div className="text-center font-bold text-2xl">
-          <span className="text-[#006DFF]">{awardInfo.type}</span> 획득!
+          <span className="text-[#006DFF]">{award[awardInfo?.type]?.name}</span> 획득!
         </div>
         <img
-          src={'/imgs/barcode.png'}
+          src={'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/barcode.png'}
           width={200}
           height={100}
           alt="barcode"

@@ -102,9 +102,6 @@ export default function GamePage() {
       {/* 카운트다운 끝 & Guest */}
       {!countShow && !isHost && (
         <>
-          {/* <div className="flex sm:fixed sm:right-10 justify-center">
-            <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
-          </div> */}
           <h1 className="text-[#44474B] text-[3rem] font-semibold mt-10 sm:mt-16">
             제시어 : {roundInfo.keyword}
           </h1>

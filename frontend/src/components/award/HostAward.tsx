@@ -11,9 +11,12 @@ type Props = {
 
 export default function HostAward({ awardDatas }: Props) {
   const [order, setOrder] = useState<number>(0);
+  const [show, setShow] = useState<boolean>(false);
   const handleClick = () => {
     if (order < 3) {
       setOrder(order + 1);
+    } else if (order === 3) {
+      setShow(true)
     }
   };
 

@@ -28,13 +28,12 @@ export default function Page() {
   }, [gameinfo.id]);
 
   return (
-    <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle bg-bg-2">
-      {/* {isHost ? (
+    <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle bg-bg-2 items-center">
+      {isHost ? (
         <HostAward awardDatas={awardDatas} />
       ) : (
         <GuestAward awardDatas={awardDatas} />
-      )} */}
-      {isHost && <HostAward awardDatas={awardDatas} />}
+      )}
     </div>
   );
 }
