@@ -10,8 +10,6 @@ import { wordcloudApi } from '@/apis/apis';
 import { useEffect, useState } from 'react';
 import { GameInfo } from '@/store/gameInfoSlice';
 
-const IMG_BASEURL = process.env.IMG_BASEURL
-
 export default function WordCloud() {
   const gameInfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
   const [words, setWords] = useState([]);
@@ -34,7 +32,7 @@ export default function WordCloud() {
     <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">
       <Image
         className="absolute -left-80 animate-bounce"
-        src={`${IMG_BASEURL}/magnifier.png`}
+        src={`https://static.malang-lab.com/static/magnifier.png`}
         alt="magnifier"
         width={200}
         height={200}
@@ -49,7 +47,7 @@ export default function WordCloud() {
       />
       <Image
         className="absolute -right-80 bottom-1 animate-bounce"
-        src={`${IMG_BASEURL}/black-blue.png`}
+        src={`https://static.malang-lab.com/static/black-blue.png`}
         alt="black-blue"
         width={200}
         height={200}

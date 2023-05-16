@@ -11,7 +11,6 @@ import { setImageAction } from '@/store/guestSlice';
 type Props = {
   setStep: (step: number) => void;
 }
-const IMG_BASEURL = process.env.IMG_BASEURL
 
 export default function CustomSection({ setStep }: Props) {
   const dispatch = useDispatch()
@@ -77,7 +76,7 @@ export default function CustomSection({ setStep }: Props) {
                 return (
                   <CustomStage
                     key={idx}
-                    imagePath={`${IMG_BASEURL}/${img}.png`}
+                    imagePath={`https://static.malang-lab.com/static/${img}.png`}
                     isSelected={idx == isSelected}
                     onSelect={() => {
                       setIsSelected(idx);

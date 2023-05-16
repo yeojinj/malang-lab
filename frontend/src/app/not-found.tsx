@@ -1,7 +1,7 @@
-const IMG_BASEURL = process.env.IMG_BASEURL
+
 
 export default function NotFound() {
-  const notfound =`${IMG_BASEURL}/notfound.png`
+  const notfound =`https://static.malang-lab.com/static/notfound.png`
   return <div
     className="min-h-screen bg-cover bg-center flex flex-col align-middle justify-center bg-bg-4"
   >

@@ -6,9 +6,6 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
- env : {
-  IMG_BASEURL : 'https://static.malang-lab.com/static'
- },
 };
 
 // const withImages = require('next-images');

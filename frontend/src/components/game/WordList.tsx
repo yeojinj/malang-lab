@@ -10,8 +10,6 @@ import { inputWordApi } from '@/apis/apis';
 import { WordInfo } from '@/store/Types';
 import Swal from 'sweetalert2';
 
-const IMG_BASEURL = process.env.IMG_BASEURL
-
 export default function WordList() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<HTMLAudioElement>(null);
@@ -101,7 +99,7 @@ export default function WordList() {
             저는 그냥 문어예요✨
           </span>
           <Image
-            src={`${IMG_BASEURL}/octo-malang.png`}
+            src={`https://static.malang-lab.com/static/octo-malang.png`}
             alt=""
             width={50}
             height={50}
