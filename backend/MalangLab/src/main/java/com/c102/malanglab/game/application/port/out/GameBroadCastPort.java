@@ -10,6 +10,7 @@ import java.util.List;
 public interface GameBroadCastPort {
     void alertJoinMember(Long roomId, Message<GuestRequest> message);
     void alertMoveCelebrateMember(Long roomId, Message<Object> message);
+    void alertGoodBye(Long roomId, Message<Object> message);
     void alertExitMember(Long roomId, Message<GuestRequest> message);
     void alertRoomDestory(Long roomId, Message<Object> message);
     void alertServerTime(Long serverTime);

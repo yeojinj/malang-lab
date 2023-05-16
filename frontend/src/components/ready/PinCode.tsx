@@ -1,8 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import styles from './PinCode.module.css';
-// import { QRCodeSVG } from 'qrcode.react';
 // redux
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -13,13 +11,12 @@ export default function PinCode() {
 
   return (
     <div className="flex mt-3 mb-10 justify-center">
-      <div className={styles.pulsate}>
         <div
           style={{
             background:
               'linear-gradient(180deg,rgba(255, 255, 255, 0.5) -0.19%,rgba(255, 255, 255, 0.25) 99.81%)',
           }}
-          className="h-[130px] shadow-[20px_20px_100px_rgba(0,0,0,0.02)] backdrop-blur-[75px] rounded-[15px] mr-5"
+          className="pulsate h-[130px] shadow-[20px_20px_100px_rgba(0,0,0,0.02)] backdrop-blur-[75px] rounded-[15px] mr-5"
         >
           <div className="flex">
             <Image
@@ -36,8 +33,6 @@ export default function PinCode() {
             </h1>
           </div>
         </div>
-      </div>
-      {/* <QRCodeSVG value={url} /> */}
     </div>
   );
 }

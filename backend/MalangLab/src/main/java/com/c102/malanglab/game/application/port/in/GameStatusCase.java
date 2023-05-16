@@ -57,6 +57,12 @@ public interface GameStatusCase {
     void moveCelebrateMember(final Long roomId);
 
     /**
+     * 호스트가 방의 모든 참가자에게 게임 종료를 알립니다.
+     * @param roomId
+     */
+    void goodBye(final Long roomId);
+
+    /**
      * 참가자가 게임에 퇴장합니다.
      * @param roomId
      * @param userId
@@ -96,5 +102,10 @@ public interface GameStatusCase {
      */
     HiddenResponse roundResultHidden(final Long roomId, final String userId);
 
+    /**
+     * 수상 결과를 가져옵니다.
+     * @param roomId
+     * @return
+     */
     List<AwardResponse> getAwards(Long roomId);
 }
