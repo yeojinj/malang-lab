@@ -164,7 +164,7 @@ public class ApiController {
      * @PathVariable roomId: 방 번호(PIN 번호)
      * @return
      */
-    @GetMapping("{roomId}/awards")
+    @GetMapping("/{roomId}/awards")
     public ResponseEntity<?> awards(@PathVariable Long roomId) {
         List<AwardResponse> list = gameStatusCase.getAwards(roomId);
 
