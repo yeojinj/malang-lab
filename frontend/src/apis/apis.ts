@@ -199,10 +199,10 @@ export const hiddenWordApi = async (pin: number) => {
 export const awardsApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/awards`);
-    console.log(res.data);
+    console.log(res.data, 'awardData');
     return res.data.data;
   } catch (err) {
-    console.log('히든 단어 사람 가져오기 실패', err);
+    console.log('어워드 가져오기 실패', err);
   }
 };
 

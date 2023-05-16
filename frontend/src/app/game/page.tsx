@@ -49,7 +49,7 @@ export default function GamePage() {
 
   const handleClick = async () => {
     dispatch(setTotalAction(num));
-    dispatch(wordZeroAction());
+    dispatch(wordZeroAction());``
     router.push('/result');
   };
 
