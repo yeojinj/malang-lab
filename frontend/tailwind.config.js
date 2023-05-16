@@ -16,14 +16,14 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'box-gradient':
           'linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%)',
-        'bg-1':
-          "url(`https://static.malang-lab.com/static/bg-1.png`)",
+          'bg-1':
+          "url('https://static.malang-lab.com/static/bg-1.png')",
         'bg-2':
-          "url(`https://static.malang-lab.com/static/bg-2.png`)",
+          "url('https://static.malang-lab.com/static/bg-2.png')",
         'bg-3':
-          "url(`https://static.malang-lab.com/static/bg-3.png`)",
+          "url('https://static.malang-lab.com/static/bg-3.png')",
         'bg-4':
-          "url(`https://static.malang-lab.com/static/bg-4.png`)",
+          "url('https://static.malang-lab.com/static/bg-4.png')",
       },
       colors: {
         black: '#44474B',
