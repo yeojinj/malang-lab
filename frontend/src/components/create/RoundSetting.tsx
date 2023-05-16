@@ -9,6 +9,8 @@ import {
   changekeywordAction,
 } from '@/store/gameInfoSlice';
 
+const IMG_BASEURL = process.env.IMG_BASEURL
+
 type Props = {
   idx: number;
   setting: Setting;
@@ -63,7 +65,7 @@ export default function RoundSetting({
       <div className="relative w-[80%] mx-auto">
         <div className="absolute -top-5 right-1">
           <img
-            src="https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/mini-together.png"
+            src= {`${IMG_BASEURL}/mini-together.png`}
             alt=""
             className="w-[50px]"
           />

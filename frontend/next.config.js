@@ -6,9 +6,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  images: {
-    domains: ['s3.ap-northeast-2.amazonaws.com']
-  },
+ env : {
+  IMG_BASEURL : 'https://static.malang-lab.com/static'
+ },
 };
 
 // const withImages = require('next-images');
