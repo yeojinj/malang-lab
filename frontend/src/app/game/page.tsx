@@ -2,23 +2,28 @@
 
 import 'animate.css';
 import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+// apis
+import { useSocket } from '@/context/SocketContext';
+// redux
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { useDispatch } from 'react-redux';
+import { setTotalAction, wordZeroAction } from '@/store/wordNumSlice';
+import { RoundInfo } from '@/store/roundInfoSlice';
+import { GameInfo } from '@/store/gameInfoSlice';
+// Components
 import Blur from '@/components/common/Blur';
 import CountDown from '@/components/game/CountDown';
 import GameUserNum from '@/components/game/GameUserNum';
 import WordNum from '@/components/game/WordNum';
-import Image from 'next/image';
 import WordList from '@/components/game/WordList';
 import Timer from '@/components/game/Timer';
 import AlertBox from '@/components/common/AlertBox';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { setTotalAction, wordZeroAction } from '@/store/wordNumSlice';
-import { useSocket } from '@/context/SocketContext';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
-import { RoundInfo } from '@/store/roundInfoSlice';
-import { GameInfo } from '@/store/gameInfoSlice';
+
+const IMG_BASEURL = process.env.IMG_BASEURL
 
 export default function GamePage() {
   const router = useRouter();
@@ -35,10 +40,11 @@ export default function GamePage() {
   const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
 
   const playerRef = useRef<HTMLAudioElement>(null);
+  const blop = new Audio('/audio/blop.mp3');
 
   const word =
-    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
-  
+    `${IMG_BASEURL}/word.png`;
+
   useEffect(() => {
     setCountShow(true) // 다음 라운드에 카운트다운 다시 키기
     const timeout = setTimeout(() => {
@@ -60,13 +66,15 @@ export default function GamePage() {
     publishUpdate(destination, type);
   };
 
+  useEffect(() => {
+    blop.play()
+  }, [num]);
+
   return (
     <div
-      className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${
-        isHost ? 'justify-center' : ''
-      } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
+      className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${isHost ? 'justify-center' : ''
+        } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
     >
-      <BgAudioPlayer src="/audio/gamefull.wav" />
       <audio ref={playerRef} src={'/audio/blop.mp3'} />
       {/* 카운트다운 */}
       {countShow && (
@@ -79,6 +87,7 @@ export default function GamePage() {
       {/* 카운트다운 끝 & Host */}
       {!countShow && isHost && (
         <>
+          <BgAudioPlayer src="/audio/gamefull.wav" />
           <div className="flex fixed top-0 w-screen mr-10">
             <GameUserNum num={userNum} />
             <Timer onFinish={handleFinish} time={roundInfo.timeLimit} />

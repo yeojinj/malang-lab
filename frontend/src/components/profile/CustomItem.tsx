@@ -47,7 +47,7 @@ export default function CustomItem({ onClick }) {
                     >
                       <button onClick={e => onClick(img)}>
                         <Image
-                          src={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/profile/${img}.png`}
+                          src={`https://static.malang-lab.com/profile/${img}.png`}
                           alt={img}
                           width={75}
                           height={75}

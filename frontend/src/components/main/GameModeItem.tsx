@@ -11,6 +11,8 @@ type Props = {
   mode: Mode;
 };
 
+const IMG_BASEURL = process.env.IMG_BASEURL
+
 export default function GameModeItem({ mode }: Props) {
   const [audio, setAudio] = useState<HTMLAudioElement>();
   // const audio = new Audio('/audio/hover.mp3')
@@ -32,7 +34,7 @@ export default function GameModeItem({ mode }: Props) {
         }`}
     >
         <img
-          src={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/${mode.image}.png`}
+          src={`${IMG_BASEURL}/${mode.image}.png`}
           alt=""
           className="w-[50%] sm:w-[90%] mx-auto mt-2 mb-4"
         />
