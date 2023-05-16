@@ -3,12 +3,11 @@ import Image from 'next/image';
 type Props = {
   text: string;
 };
-const IMG_BASEURL = process.env.IMG_BASEURL
 
 
 export default function AlertBox({ text }: Props) {
-  const tulip = `${IMG_BASEURL}/tulip-malang.png`
-  const mini = `${IMG_BASEURL}/mini-together.png`
+  const tulip = `https://static.malang-lab.com/static/tulip-malang.png`
+  const mini = `https://static.malang-lab.com/static/mini-together.png`
 
   return (
     <div className="bg-white shadow-[7px_7px_10px_rgba(0,0,0,0.25)] rounded-[10px] absolute w-[90vw] sm:w-[50vw] z-20">

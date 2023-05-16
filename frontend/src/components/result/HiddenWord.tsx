@@ -7,10 +7,8 @@ import { hiddenWordApi } from '@/apis/apis';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
-const IMG_BASEURL = process.env.IMG_BASEURL
-
 export default function HiddenWord() {
-  const word = `${IMG_BASEURL}/word.png`;
+  const word = `https://static.malang-lab.com/static/word.png`;
   const [hidden, setHidden] = useState<string>('');
   const [guestList, setGuestList] = useState([]);
   const pin = useSelector((state: RootState) => state.gameinfo.id);

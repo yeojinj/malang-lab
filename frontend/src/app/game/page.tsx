@@ -23,7 +23,6 @@ import Timer from '@/components/game/Timer';
 import AlertBox from '@/components/common/AlertBox';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
-const IMG_BASEURL = process.env.IMG_BASEURL
 
 export default function GamePage() {
   const router = useRouter();
@@ -43,7 +42,7 @@ export default function GamePage() {
   const blop = new Audio('/audio/blop.mp3');
 
   const word =
-    `${IMG_BASEURL}/word.png`;
+    `https://static.malang-lab.com/static/word.png`;
 
   useEffect(() => {
     setCountShow(true) // 다음 라운드에 카운트다운 다시 키기
