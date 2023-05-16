@@ -7,6 +7,7 @@ import guestSlice from './guestSlice';
 import readyInfoSlice from './readyInfoSlice';
 import wordNumSlice from './wordNumSlice';
 import roundInfoSlice from './roundInfoSlice';
+import tokenSlice from './tokenSlice';
 
 // redux 생성 함수
 const store = configureStore({
@@ -17,6 +18,7 @@ const store = configureStore({
     readyInfo: readyInfoSlice,
     wordNum: wordNumSlice,
     roundInfo: roundInfoSlice,
+    token: tokenSlice,
   },
 });
 

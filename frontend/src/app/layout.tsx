@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import { Providers } from '@/store/provider';
 import { SocketProvider } from '../context/SocketContext';
 import dynamic from 'next/dynamic';
-import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,7 +28,7 @@ export default function RootLayout({
     // redux 적용
     <html lang="en" className={inter.className}>
       <head>
-        <link rel="icon" href="%PUBLIC_URL%/icon.ico" />
+        <link rel="icon" />
       </head>
       <body className="text-black">
         <Providers>
