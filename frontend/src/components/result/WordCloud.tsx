@@ -40,7 +40,7 @@ export default function WordCloud() {
     rotations: 3,
     rotationAngles: [0, 70],
     scale: 'sqrt',
-    spiral: 'circle',
+    spiral: 'archimedean',
     transitionDuration: 1000,
   };
 
