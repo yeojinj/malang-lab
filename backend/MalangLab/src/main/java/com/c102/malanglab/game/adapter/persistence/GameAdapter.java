@@ -103,7 +103,6 @@ public class GameAdapter implements GamePort {
         }
     }
 
-
     /** 닉네임 설정 */
     @Override
     public boolean setNickname(Long roomId, String userId, String nickname) {
@@ -428,7 +427,7 @@ public class GameAdapter implements GamePort {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         long minRemainTime = Long.MAX_VALUE;    // 라운드 종료까지 남은 시간 중 최솟값
         String minGuestId = "";                 // 해당 기록을 낸 참가자 아이디
-        for (int roundNum = 1; roundNum <= totalRound - 1; roundNum++) {     // 각 라운드마다
+        for (int roundNum = 1; roundNum <= totalRound; roundNum++) {     // 각 라운드마다
             key = "room:" + roomId + ":info:" + roundNum;
             int roundTime = Integer.parseInt((String) hashOperations.get(key, "time"));  // 라운드 제한시간
 
@@ -476,7 +475,35 @@ public class GameAdapter implements GamePort {
      * @return
      */
     private Guest getHiddenFaster(Long roomId) {
-        return null;
+        // 1. 전체 턴 수
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        String key = "room:" + roomId + ":info";
+        int totalRound = Integer.parseInt((String) hashOperations.get(key, "total-round"));
+
+        // 2. 모든 라운드 통틀어서 히든 단어를 가장 먼저 찾은 사람 찾기
+        ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+        long minTime = Long.MAX_VALUE;    // 히든 단어를 찾은 시간 중 최솟값
+        String minGuestId = "";                 // 해당 기록을 낸 참가자 아이디
+        for (int roundNum = 1; roundNum <= totalRound; roundNum++) {    // 각 라운드마다
+            // 해당 라운드에서 히든 단어를 가장 빨리 찾은 사람과 시간 가져와서 비교
+            key = "room:" + roomId + ":" + roundNum + ":hidden:user-time";
+            long size = zSetOperations.zCard(key);
+            for (long i = 0; i < size; i++) {
+                Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.rangeWithScores(key, i, i);
+                for (TypedTuple<Object> tuple : typedTuples) {
+                    String value = (String) tuple.getValue();
+                    long score = Double.valueOf(tuple.getScore()).longValue();
+                    if (guestRepository.existsById(value)) {   // 퇴장한 유저 제외
+                        if (minTime > score) {
+                            minTime = score;
+                            minGuestId = value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return guestRepository.findById(minGuestId).orElseThrow(() -> new IllegalArgumentException("수상자가 존재하지 않습니다."));
     }
 
     /**
