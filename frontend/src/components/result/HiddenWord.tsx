@@ -8,8 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 export default function HiddenWord() {
-  const word =
-    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
+  const word = `https://static.malang-lab.com/static/word.png`;
   const [hidden, setHidden] = useState<string>('');
   const [guestList, setGuestList] = useState([]);
   const pin = useSelector((state: RootState) => state.gameinfo.id);

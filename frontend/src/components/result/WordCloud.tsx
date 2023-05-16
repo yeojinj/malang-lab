@@ -32,7 +32,7 @@ export default function WordCloud() {
     <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">
       <Image
         className="absolute -left-80 animate-bounce"
-        src="https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/magnifier.png"
+        src={`https://static.malang-lab.com/static/magnifier.png`}
         alt="magnifier"
         width={200}
         height={200}
@@ -47,7 +47,7 @@ export default function WordCloud() {
       />
       <Image
         className="absolute -right-80 bottom-1 animate-bounce"
-        src="https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/black-blue.png"
+        src={`https://static.malang-lab.com/static/black-blue.png`}
         alt="black-blue"
         width={200}
         height={200}
