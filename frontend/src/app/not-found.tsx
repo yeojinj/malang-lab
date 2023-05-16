@@ -1,5 +1,7 @@
+
+
 export default function NotFound() {
-  const notfound = 'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/notfound.png'
+  const notfound ='https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/notfound.png'
   return <div
     className="min-h-screen bg-cover bg-center flex flex-col align-middle justify-center bg-bg-4"
   >

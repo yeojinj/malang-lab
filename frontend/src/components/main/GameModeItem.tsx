@@ -11,6 +11,7 @@ type Props = {
   mode: Mode;
 };
 
+
 export default function GameModeItem({ mode }: Props) {
   const [audio, setAudio] = useState<HTMLAudioElement>();
   // const audio = new Audio('/audio/hover.mp3')

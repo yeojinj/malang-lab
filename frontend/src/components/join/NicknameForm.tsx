@@ -75,7 +75,6 @@ export default function NicknameForm() {
   useEffect(() => {
     if (imagePath.length) {
       const res = joinGuest()
-      console.log(res, '💜💜💙💜💜💙')
       if (res) router.push('/ready');
     }
   }, [imagePath]);
