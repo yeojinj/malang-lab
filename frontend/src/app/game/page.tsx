@@ -29,7 +29,7 @@ export default function GamePage() {
   const router = useRouter();
   const { publishUpdate } = useSocket();
   const [countShow, setCountShow] = useState(true);
-  const audio = new Audio('/audio/end.mp3');
+  const [audio] = useState(typeof Audio !== "undefined" && new Audio('/audio/end.mp3'));
 
   // redux에서 가져올 값
   const num: number = useSelector((state: RootState) => state.wordNum.num);
