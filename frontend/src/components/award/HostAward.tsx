@@ -30,7 +30,9 @@ export default function HostAward({ awardDatas }: Props) {
       </>
       )} */}
       <Confetti />
-      {awardDatas?.length !== 0 && <Carousel items={awardDatas} />}
+      <div className="text-center">
+        {awardDatas?.length !== 0 && <Carousel items={awardDatas} />}
+      </div>
       {/* <HostAwardItem awardInfo={awardDatas?.[order]} /> */}
       {/* <Image
         src={

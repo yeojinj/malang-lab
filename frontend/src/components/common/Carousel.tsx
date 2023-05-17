@@ -25,7 +25,7 @@ function Carousel({ items }) {
         ...item,
         renderItem: (
           <section
-            className={`relative grid aspect-[2] w-full place-items-center text-2xl transition-all duration-700 bg-white shadow-lg rounded px-5 ${
+            className={`h-80 w-[100%] flex flex-col items-center gap-5 justify-center bg-white shadow-lg rounded px-5 ${
               currentSlide === index ? 'z-10 scale-150' : 'bg-opacity-50'
             }`}
           >
@@ -43,7 +43,7 @@ function Carousel({ items }) {
   });
 
   return (
-    <div className="py-20 relative">
+    <div className="text-center">
       <button
         onClick={slideToPrevItem}
         className="absolute top-1/2 -translate-y-1/2 -translate-x-full left-[10%]"
@@ -63,7 +63,7 @@ function Carousel({ items }) {
           />
         </svg>
       </button>
-      <div className="mx-auto w-[80%] overflow-x-clip py-[4%] relative">
+      <div className="mx-auto w-[80%] overflow-x-clip py-[4%]">
         {carouselFragment}
       </div>
       <button
