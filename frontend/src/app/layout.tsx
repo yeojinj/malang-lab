@@ -29,7 +29,7 @@ export default function RootLayout({
     // redux 적용
     <html lang="en" className={inter.className}>
       <head>
-        <link rel="icon" href="%PUBLIC_URL%/icon.ico" />
+        <link rel="icon" />
       </head>
       <body className="text-black">
         <Providers>

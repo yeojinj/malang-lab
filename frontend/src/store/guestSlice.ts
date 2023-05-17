@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface Guest {
-  pin: string;
+  pin: number;
   nickname: string;
   imageUrl: string;
   title: string;
 };
 
 const initialState: Guest = {
-  pin: '',
+  pin: 0,
   nickname: '',
   imageUrl: '',
   title: '',

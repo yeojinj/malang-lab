@@ -11,12 +11,17 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function StartBtn({ category }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { publish } = useSocket();
+  const { publish, publishUpdate } = useSocket();
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const gameinfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
 
   const handleClick = async () => {
     if (gameinfo.present == gameinfo.settings.length) {
+      // 수상 넘어가기
+      const destination = `/app/room.${gameinfo.id}`;
+      const type = 'MOVE_CELEBRATE';
+      // const message = null;
+      publishUpdate(destination, type);
       router.push('/award');
     } else {
       // 게임 시작 API
