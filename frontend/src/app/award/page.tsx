@@ -14,7 +14,6 @@ import { HomeIcon } from '@heroicons/react/24/solid'
 // types
 import { AwardInfo } from '@/store/Types';
 import AlertBox from '@/components/common/AlertBox';
-import Blur from '@/components/common/Blur';
 
 export default function Page() {
   const isHost: boolean = useSelector(
@@ -58,11 +57,7 @@ export default function Page() {
       ) : (
         <GuestAward awardDatas={awardDatas} />
       )}
-      {done && <div className='z-100'>
-        <Blur />
-        <AlertBox text='bye' />
-      </div>}
-
+      {done && <AlertBox text='bye' />}
     </div>
   );
 }

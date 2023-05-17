@@ -35,9 +35,8 @@ export default function GuestAward({ awardDatas }: Props) {
           })}
         </div>
       )}
-      {done && <>
-        <Blur />
-        <AlertBox text='bye' /></>}
+      {done && 
+        <AlertBox text='bye' />}
     </>
   );
 }

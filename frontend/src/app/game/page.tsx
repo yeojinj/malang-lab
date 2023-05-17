@@ -115,8 +115,6 @@ export default function GamePage() {
       {/* 게임 끝 & Host */}
       {roundInfo.finish && isHost && (
         <>
-          <div className="invisible"></div>
-          <Blur />
           <AlertBox text={`${roundInfo.round}라운드 종료!`} />
           <button
             className="bg-black absolute z-20 mx-auto font-semibold rounded text-white px-10 py-2 bottom-48"
@@ -129,12 +127,9 @@ export default function GamePage() {
 
       {/* 게임 끝 & Guest */}
       {roundInfo.finish && !isHost && (
-        <>
-          <Blur />
           <AlertBox
             text={`${roundInfo.round}라운드 종료!\n 화면을 확인하세요`}
           />
-        </>
       )}
     </div>
   );
