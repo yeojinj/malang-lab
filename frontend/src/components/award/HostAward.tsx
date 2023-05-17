@@ -27,7 +27,7 @@ export default function HostAward({ awardDatas }: Props) {
           <AlertBox text={'bye'} />
         </>
       )}
-      <HostAwardItem awardInfo={awardDatas[order]} />
+      <HostAwardItem awardInfo={awardDatas?.[order]} />
       <Image
         src={
           'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/awardbtn.png'

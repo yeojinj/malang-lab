@@ -1,6 +1,6 @@
 'use client';
 
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface Setting {
   id: string;
@@ -43,7 +43,6 @@ export const gameInfoSlice = createSlice({
     // pin 번호
     setPincodeAction(state, action) {
       state.id = action.payload;
-      console.log(state.id)
     },
     // 방 제목 입력
     setNameAction(state, action) {
@@ -59,7 +58,6 @@ export const gameInfoSlice = createSlice({
     },
     // keyword가 입력 될때
     changekeywordAction(state, action) {
-      console.log(action.payload);
       state.settings[action.payload.idx].keyword = action.payload.value;
     },
     // hidden이 입력될 때
