@@ -4,7 +4,7 @@ import { axios, authApi, BASE_URL } from './axios.config';
 import { Guest } from '@/store/guestSlice';
 import { GameInfo } from '@/store/gameInfoSlice';
 import { WordInfo } from '@/store/Types';
-import { ReadyInfo } from '@/store/readyInfoSlice';
+import Swal from 'sweetalert2';
 
 // 토큰 생성하기
 export const getTokenApi = async () => {
@@ -86,7 +86,7 @@ export const checkGuestInfoApi = async (payload: Guest) => {
   } catch (err) {
     console.log('닉네임 및 캐릭터 설정 실패', err);
     if (err.response.data.status == 400) {
-      alert(err.response.data.message);
+      Swal.fire({ icon: 'error', title: err.response.data.message });
     }
   }
 };
