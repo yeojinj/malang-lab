@@ -5,7 +5,6 @@ import GuestAwardItem from '@/components/award/GuestAwardItem';
 import Blur from '@/components/common/Blur';
 import AlertBox from '@/components/common/AlertBox';
 import { AwardInfo } from '@/store/Types';
-import useToken from '@/hooks/useToken';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
@@ -28,12 +27,12 @@ export default function GuestAward({ awardDatas }: Props) {
           <AlertBox text={'수상자 발표!\n 화면을 확인하세요'} />
         </>
       ) : (
-        <>
+        <div className="grid-cols-1">
           <Confetti />
           {myAward?.map((item, idx) => {
             return <GuestAwardItem awardInfo={item} key={idx} />;
           })}
-        </>
+        </div>
       )}
     </>
   );

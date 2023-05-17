@@ -23,11 +23,11 @@ export default function GuestAwardItem({ awardInfo }: Props) {
     });
   };
 
-  console.log(awardInfo, 'awardInfo')
+  console.log(awardInfo, 'awardInfo');
 
   return (
     <div className="flex flex-col" ref={cardRef}>
-      <div className="shadow-[7px_7px_10px_rgba(0,0,0,0.25)] rounded-[10px] bg-white w-[300px] sm:w-[600px] h-[80vh] my-5 flex flex-col justify-center align-middle py-3">
+      <div className="shadow-[7px_7px_10px_rgba(0,0,0,0.25)] rounded-[10px] bg-white w-[300px] sm:w-[600px] h-[80vh] my-5 flex flex-col justify-center align-middle p-3">
         <img
           src={award[awardInfo?.type]?.imagePath}
           width={500}
@@ -36,10 +36,13 @@ export default function GuestAwardItem({ awardInfo }: Props) {
           className="h-[400px] w-[300px] mx-auto my-5"
         />
         <div className="text-center font-bold text-2xl">
-          <span className="text-[#006DFF]">{award[awardInfo?.type]?.name}</span> 획득!
+          <span className="text-[#006DFF]">{award[awardInfo?.type]?.name}</span>{' '}
+          획득!
         </div>
         <img
-          src={'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/barcode.png'}
+          src={
+            'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/barcode.png'
+          }
           width={200}
           height={100}
           alt="barcode"

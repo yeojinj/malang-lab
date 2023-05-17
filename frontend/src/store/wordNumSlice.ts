@@ -16,7 +16,6 @@ export const wordNumSlice = createSlice({
   reducers: {
     // CHECK_DB 신호 올 때마다 상태 갱신
     setWordAction(state, action) {
-      console.log(action.payload, 'wordnum')
       state.num = action.payload;
     },
     // 라운드 끝나면 totalnum 업데이트
