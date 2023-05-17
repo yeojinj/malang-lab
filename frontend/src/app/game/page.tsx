@@ -27,7 +27,6 @@ export default function GamePage() {
   const word =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
   const router = useRouter();
-  const dispatch = useDispatch();
   const { publishUpdate } = useSocket();
   const [countShow, setCountShow] = useState(true);
   const audio = new Audio('/audio/end.mp3');
