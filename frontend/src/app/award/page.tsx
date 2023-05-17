@@ -19,7 +19,7 @@ export default function Page() {
   const isHost: boolean = useSelector(
     (state: RootState) => state.status.isHost,
   );
-  const hostPin = useSelector((state: RootState) => state.gameinfo.id)
+  const hostPin = useSelector((state: RootState) => state.gameinfo.id);
   const guestPin = useSelector((state: RootState) => state.guest.pin);
   const [awardDatas, setAwardDatas] = useState<AwardInfo[]>([]);
   const done = useSelector((state: RootState) => state.status.done)
