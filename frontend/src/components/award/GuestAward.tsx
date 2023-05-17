@@ -5,7 +5,6 @@ import GuestAwardItem from '@/components/award/GuestAwardItem';
 import Blur from '@/components/common/Blur';
 import AlertBox from '@/components/common/AlertBox';
 import { AwardInfo } from '@/store/Types';
-import useToken from '@/hooks/useToken';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
