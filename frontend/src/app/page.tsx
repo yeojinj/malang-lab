@@ -6,6 +6,8 @@ import GameModeItem from '@/components/main/GameModeItem';
 // apis
 import { useSocket } from '@/context/SocketContext';
 import { getTokenApi } from '@/apis/apis';
+import Blur from '@/components/common/Blur';
+import AlertBox from '@/components/common/AlertBox';
 
 export interface Mode {
   name: string;
@@ -42,10 +44,10 @@ export default function MainPage() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex justify-center items-center bg-bg-2 pulsate">
-      <div className="w-[80vw] sm:w-[60vw] flex justify-center items-center m-auto glass py-5 my-10 sm:my-0 sm:py-10">
+    <div className="min-h-screen bg-cover bg-center flex justify-center items-center bg-bg-2">
+     <div className="w-[80vw] sm:w-[60vw] flex justify-center items-center m-auto glass py-5 my-10 sm:my-0 sm:py-10">
         <div className="w-[96%] h-[60%] flex flex-col">
-          <p className="text-center text-3xl sm:text-4xl font-semibold">
+          <p className="text-center text-3xl sm:text-4xl font-semibold pulsate">
             말랑연구소
           </p>
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 mx-auto my-10">

@@ -32,8 +32,8 @@ export default function AlertBox({ text }: Props) {
   return (
     <>
       {text === 'bye' ? (
-        <div className="flex flex-col gap-20 item-center justify-center absolute">
-          <div className="bg-white shadow-[7px_7px_10px_rgba(0,0,0,0.25)] relative rounded-[10px] w-[90vw] sm:w-[50vw] z-20">
+        <div className="flex flex-col gap-20 item-center justify-center fixed left-[50%] -translate-x-2/4 translate-y-2/5 z-20">
+          <div className="bg-white shadow-[7px_7px_10px_rgba(0,0,0,0.25)] relative rounded-[10px] w-[90vw] sm:w-[50vw]">
             <Image
               src={bye}
               width={200}

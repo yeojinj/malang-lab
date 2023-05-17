@@ -10,22 +10,25 @@ import { RootState } from '@/store/store';
 // components
 import GuestAward from '@/components/award/GuestAward';
 import HostAward from '@/components/award/HostAward';
-import AlertBox from '@/components/common/AlertBox';
+import { HomeIcon } from '@heroicons/react/24/solid'
 // types
 import { AwardInfo } from '@/store/Types';
+import AlertBox from '@/components/common/AlertBox';
+import Blur from '@/components/common/Blur';
 
 export default function Page() {
   const isHost: boolean = useSelector(
     (state: RootState) => state.status.isHost,
   );
   const hostPin = useSelector((state: RootState) => state.gameinfo.id);
+  const done = useSelector((state: RootState) => state.status.done)
   const guestPin = useSelector((state: RootState) => state.guest.pin);
   const [awardDatas, setAwardDatas] = useState<AwardInfo[]>([]);
   const gameinfo = useSelector((state: RootState) => state.gameinfo);
   const { publish } = useSocket();
 
   const handleClickBye = () => {
-    if(gameinfo?.id) {
+    if (gameinfo?.id) {
       const destination = `/app/room.${gameinfo.id}`;
       publish(destination, 'BYE', null)
     }
@@ -50,11 +53,16 @@ export default function Page() {
       {isHost ? (
         <>
           <HostAward awardDatas={awardDatas} />
-          <button className='button-black mt-5 w-[40%]' onClick={handleClickBye} >종료하기</button>
+          <HomeIcon className='w-[70px] absolute bottom-4 right-4 text-white hover:scale-105' onClick={handleClickBye} />
         </>
       ) : (
         <GuestAward awardDatas={awardDatas} />
       )}
+      {done && <div className='z-100'>
+        <Blur />
+        <AlertBox text='bye' />
+      </div>}
+
     </div>
   );
 }

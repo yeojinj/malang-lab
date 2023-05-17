@@ -10,7 +10,7 @@ export default function PinCode() {
   const code: number = useSelector((state: RootState) => state.gameinfo.id);
 
   return (
-    <div className="flex mt-3 mb-10 justify-center">
+    <div className="flex mt-3 mb-10 justify-center mx-auto">
         <div
           style={{
             background:

@@ -6,6 +6,7 @@ const HandleQueue = dispatch => async message => {
   if (message.body) {
     const quote = JSON.parse(message.body);
     if (quote.type === 'CHECK_DB' && quote.body) {
+      console.log(quote.body, '💙💙💙')
       const res = await wordsNumApi(quote.body);
       if (res) {
         dispatch(setWordAction(res));
