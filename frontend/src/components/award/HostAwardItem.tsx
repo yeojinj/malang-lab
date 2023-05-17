@@ -14,7 +14,7 @@ export default function HostAwardItem({ awardInfo }: Props) {
         {award[awardInfo?.type]?.title}
       </p>
       <Image
-        src={award[awardInfo?.type]?.imagePath}
+        src={`/imgs/${award[awardInfo?.type]?.imagePath}`}
         width={300}
         height={300}
         alt="award"

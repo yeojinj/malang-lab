@@ -18,7 +18,7 @@ export default function GuestAward({ awardDatas }: Props) {
   const myAward = awardDatas?.filter(item => {
     return item.guest.nickname === nickname;
   });
-  console.log(myAward, 'myAward');
+  
   return (
     <>
       {myAward?.length === 0 ? (
