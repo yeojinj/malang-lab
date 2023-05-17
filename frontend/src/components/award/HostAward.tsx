@@ -6,6 +6,8 @@ import { AwardInfo } from '@/store/Types';
 import { useState } from 'react';
 import AlertBox from '../common/AlertBox';
 import Blur from '../common/Blur';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 type Props = {
   awardDatas: AwardInfo[];
@@ -13,15 +15,15 @@ type Props = {
 
 export default function HostAward({ awardDatas }: Props) {
   const [order, setOrder] = useState<number>(0);
-  const handleClick = () => {
-    if (order < 3) {
-      setOrder(order + 1);
-    }
-  };
+  const done = useSelector((state : RootState) => state.status.done)
+
+  const handleClickDone = () => {
+    
+  } 
 
   return (
     <>
-      {order === 3 && (
+      { done && (
         <>
           <Blur />
           <AlertBox text={'bye'} />
@@ -36,7 +38,6 @@ export default function HostAward({ awardDatas }: Props) {
         height={100}
         alt="btn"
         className="w-16 h-20 absolute bottom-[50%] right-5 cursor-pointer"
-        onClick={handleClick}
       />
     </>
   );

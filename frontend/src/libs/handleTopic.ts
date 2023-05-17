@@ -1,6 +1,6 @@
 import { setReadyMember, guestOutAction } from '@/store/readyInfoSlice';
 import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
-import { useRouter } from 'next/navigation';
+import { updateDoneStatus } from '@/store/statusSlice';
 
 const HandleTopic = (dispatch, router) => message => {
   var joinAudio = new Audio('/audio/hello.mp3');
@@ -40,6 +40,9 @@ const HandleTopic = (dispatch, router) => message => {
     //
     if (quote.type === 'MOVE_CELEBRATE') {
       router.push('/award');
+    }
+    if (quote.type === 'BYE') {
+      dispatch(updateDoneStatus())
     }
   } else {
     alert('got empty message');
