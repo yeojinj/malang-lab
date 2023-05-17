@@ -1,7 +1,7 @@
 'use client';
 
 import 'animate.css';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 // apis
@@ -10,7 +10,7 @@ import { useSocket } from '@/context/SocketContext';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useDispatch } from 'react-redux';
-import { setTotalAction, wordZeroAction } from '@/store/wordNumSlice';
+import { setTotalAction } from '@/store/wordNumSlice';
 import { RoundInfo } from '@/store/roundInfoSlice';
 import { GameInfo } from '@/store/gameInfoSlice';
 // Components
@@ -23,7 +23,6 @@ import Timer from '@/components/game/Timer';
 import AlertBox from '@/components/common/AlertBox';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
 
-
 export default function GamePage() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -33,19 +32,25 @@ export default function GamePage() {
 
   // redux에서 가져올 값
   const num: number = useSelector((state: RootState) => state.wordNum.num);
-  const roundInfo: RoundInfo = useSelector((state: RootState) => state.roundInfo);
+  const roundInfo: RoundInfo = useSelector(
+    (state: RootState) => state.roundInfo,
+  );
   const gameInfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
-  const userNum: number = useSelector((state: RootState) => state.readyInfo).length;
-  const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
+  const userNum: number = useSelector(
+    (state: RootState) => state.readyInfo,
+  ).length;
+  const isHost: boolean = useSelector(
+    (state: RootState) => state.status.isHost,
+  );
 
   // const playerRef = useRef<HTMLAudioElement>(null);
   // const blop = new Audio('/audio/blop.mp3');
 
   const word =
-  'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
+    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
 
   useEffect(() => {
-    setCountShow(true) // 다음 라운드에 카운트다운 다시 키기
+    setCountShow(true); // 다음 라운드에 카운트다운 다시 키기
     const timeout = setTimeout(() => {
       setCountShow(false);
     }, 3200);
@@ -53,8 +58,7 @@ export default function GamePage() {
   }, [roundInfo.keyword]);
 
   const handleClick = async () => {
-    dispatch(setTotalAction(num));
-    dispatch(wordZeroAction());``
+    // dispatch(setTotalAction(num));
     router.push('/result');
   };
 
@@ -71,8 +75,9 @@ export default function GamePage() {
 
   return (
     <div
-      className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${isHost ? 'justify-center' : ''
-        } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
+      className={`min-h-screen bg-cover flex flex-col align-middle bg-bg-1 whitespace-pre-wrap ${
+        isHost ? 'justify-center' : ''
+      } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
     >
       {/* <audio ref={playerRef} src={'/audio/blop.mp3'} /> */}
       {/* 카운트다운 */}
