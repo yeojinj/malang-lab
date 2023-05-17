@@ -3,28 +3,11 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useSpringCarousel } from 'react-spring-carousel';
+import HostAwardItem from '../award/HostAwardItem';
 
-function WordCarousel() {
-  const items = [
-    {
-      id: 'item-1',
-      title: '멋사',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-2',
-      title: '우테코',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      title: '싸피',
-      username: '나유나',
-      profileImg: 'character',
-    },
-  ];
+function Carousel({ items }) {
+  console.log(items, 'items in carousel');
+
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const {
@@ -46,18 +29,7 @@ function WordCarousel() {
               currentSlide === index ? 'z-10 scale-150' : 'bg-opacity-50'
             }`}
           >
-            <Image
-              className="mx-auto absolute -top-14 left-auto"
-              src={`/imgs/${item.profileImg}.png`}
-              alt="Picture of the author"
-              width={100}
-              height={100}
-              priority
-            />
-            <h1 className="h-full text-3xl flex items-center">{item.title}</h1>
-            <p className="text-xs absolute right-5 bottom-5">
-              by {item.username}
-            </p>
+            <HostAwardItem awardInfo={item} />
           </section>
         ),
       };
@@ -117,4 +89,4 @@ function WordCarousel() {
   );
 }
 
-export default WordCarousel;
+export default Carousel;
