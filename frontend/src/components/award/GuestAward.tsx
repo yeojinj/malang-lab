@@ -15,6 +15,7 @@ type Props = {
 export default function GuestAward({ awardDatas }: Props) {
   // 내가 받은 award
   const nickname = useSelector((state: RootState) => state.guest.nickname);
+  const done = useSelector((state: RootState) => state.status.done)
   const myAward = awardDatas?.filter(item => {
     return item.guest.nickname === nickname;
   });
@@ -34,6 +35,8 @@ export default function GuestAward({ awardDatas }: Props) {
           })}
         </div>
       )}
+      {done && 
+        <AlertBox text='bye' />}
     </>
   );
 }

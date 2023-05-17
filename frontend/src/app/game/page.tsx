@@ -104,7 +104,7 @@ export default function GamePage() {
             <div className="text-[#44474B] text-[1.5rem] sm:text-[3rem] font-semibold mt-10 sm:mt-16">
               제시어 : {roundInfo.keyword}
             </div>
-            <div className="text-[#44474B] mx-5 my-2 font-semibold text-[0.8rem] sm:text-[1rem]">
+            <div className="text-[#44474B] mx-auto my-2 font-semibold text-[0.8rem] sm:text-[1rem]">
               떠오르는 단어를 마구마구 입력해주세요!
             </div>
           </div>
@@ -115,8 +115,6 @@ export default function GamePage() {
       {/* 게임 끝 & Host */}
       {roundInfo.finish && isHost && (
         <>
-          <div className="invisible"></div>
-          <Blur />
           <AlertBox text={`${roundInfo.round}라운드 종료!`} />
           <button
             className="bg-black absolute z-20 mx-auto font-semibold rounded text-white px-10 py-2 bottom-48"
@@ -129,12 +127,9 @@ export default function GamePage() {
 
       {/* 게임 끝 & Guest */}
       {roundInfo.finish && !isHost && (
-        <>
-          <Blur />
           <AlertBox
             text={`${roundInfo.round}라운드 종료!\n 화면을 확인하세요`}
           />
-        </>
       )}
     </div>
   );

@@ -10,24 +10,24 @@ import { RootState } from '@/store/store';
 // components
 import GuestAward from '@/components/award/GuestAward';
 import HostAward from '@/components/award/HostAward';
-import Blur from '@/components/common/Blur';
-import AlertBox from '@/components/common/AlertBox';
+import { HomeIcon } from '@heroicons/react/24/solid'
 // types
 import { AwardInfo } from '@/store/Types';
+import AlertBox from '@/components/common/AlertBox';
 
 export default function Page() {
   const isHost: boolean = useSelector(
     (state: RootState) => state.status.isHost,
   );
   const hostPin = useSelector((state: RootState) => state.gameinfo.id);
+  const done = useSelector((state: RootState) => state.status.done)
   const guestPin = useSelector((state: RootState) => state.guest.pin);
   const [awardDatas, setAwardDatas] = useState<AwardInfo[]>([]);
-  const done = useSelector((state: RootState) => state.status.done)
   const gameinfo = useSelector((state: RootState) => state.gameinfo);
   const { publish } = useSocket();
 
   const handleClickBye = () => {
-    if(gameinfo?.id) {
+    if (gameinfo?.id) {
       const destination = `/app/room.${gameinfo.id}`;
       publish(destination, 'BYE', null)
     }
@@ -48,19 +48,16 @@ export default function Page() {
   }, [hostPin, guestPin]);
 
   return (
-    <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle bg-bg-2 items-center">
+    <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex flex-col justify-center align-middle bg-bg-2 items-center">
       {isHost ? (
         <>
           <HostAward awardDatas={awardDatas} />
-          <button className='button-black' onClick={handleClickBye} >종료하기</button>
+          <HomeIcon className='w-[70px] absolute bottom-4 right-4 text-white hover:scale-105' onClick={handleClickBye} />
         </>
       ) : (
         <GuestAward awardDatas={awardDatas} />
       )}
-      {done && <>
-        <Blur />
-        <AlertBox text='bye' />
-      </>}
+      {done && <AlertBox text='bye' />}
     </div>
   );
 }

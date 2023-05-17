@@ -9,8 +9,6 @@ type Props = {
 };
 
 export default function HostAward({ awardDatas }: Props) {
-  
-
   return (
     <>
       <Confetti />

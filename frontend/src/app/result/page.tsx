@@ -34,16 +34,14 @@ export default function ResultPage() {
 
   return (
     <div className="w-screen h-screen bg-cover bg-bg-3 flex flex-col justify-center items-center gap-16 lg:gap-32">
-      <header className="text-4xl font-bold">
+      <header className="text-4xl font-bold text-center mx-auto">
         총 {num}개의 단어를 생각했어요!
       </header>
       <nav className="flex flex-col lg:flex-row justify-center items-center gap-10">
         {cards.map(card => (
-          <>
-            <div onMouseEnter={handleMouseEnter}>
-              <ResultCard key={card.title} card={card} />
+            <div key={card.title} onMouseEnter={handleMouseEnter}>
+              <ResultCard  card={card} />
             </div>
-          </>
         ))}
       </nav>
       <StartBtn category={'다음 라운드 시작'} />
