@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 // apis
 import { checkGuestInfoApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
@@ -13,7 +14,6 @@ export default function NicknameForm() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { publish } = useSocket();
-  const Swal = require('sweetalert2');
   const guest: Guest = useSelector((state: RootState) => state.guest);
   const [nickname, setNickname] = useState<string>('');
   const [imagePath, setImagePath] = useState<string>('');
