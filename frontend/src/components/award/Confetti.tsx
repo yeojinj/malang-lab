@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { confetti, ConfettiOptions } from 'tsparticles-confetti';
 
-const duration = 30 * 1000;
+const duration = 10 * 1000;
 
 function randomInRange(min: number, max: number) {
   return Math.random() * (max - min) + min;
