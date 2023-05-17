@@ -28,12 +28,12 @@ export default function GuestAward({ awardDatas }: Props) {
           <AlertBox text={'수상자 발표!\n 화면을 확인하세요'} />
         </>
       ) : (
-        <>
+        <div className="grid-cols-1">
           <Confetti />
           {myAward?.map((item, idx) => {
             return <GuestAwardItem awardInfo={item} key={idx} />;
           })}
-        </>
+        </div>
       )}
     </>
   );
