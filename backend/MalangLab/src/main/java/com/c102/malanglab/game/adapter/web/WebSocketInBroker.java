@@ -27,8 +27,14 @@ public class WebSocketInBroker {
             case JOIN:
                 gameStatusCase.joinMember(roomId, userId, (Message<GuestResponse>) message);
                 break;
+            case MOVE_CELEBRATE:
+                gameStatusCase.moveCelebrateMember(roomId);
+                break;
             case EXIT:
                 gameStatusCase.exitMember(roomId, userId);
+                break;
+            case BYE:
+                gameStatusCase.goodBye(roomId);
                 break;
             default:
                 break;

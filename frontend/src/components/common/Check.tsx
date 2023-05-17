@@ -34,7 +34,7 @@ export default function Check() {
       }
       // 게스트 이면 퇴장 알리기
       else {
-        if(guest.pin.length) {
+        if(guest.pin != 0) {
           console.log('나가는 게스트 확인.,,,');
           // api 요청
           guestOutApi(guest?.pin);

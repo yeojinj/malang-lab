@@ -9,71 +9,32 @@ import { RootState } from '@/store/store';
 // components
 import GuestAward from '@/components/award/GuestAward';
 import HostAward from '@/components/award/HostAward';
-
-const mocks = [
-  {
-    type: 'IDEA_MACHINE',
-    guest: {
-      id: '',
-      nickname: '',
-      imagePath: '',
-      roomId: 0,
-    },
-  },
-  {
-    type: 'HIDDEN_FASTER',
-    guest: {
-      id: '',
-      nickname: '',
-      imagePath: '',
-      roomId: 0,
-    },
-  },
-  {
-    type: 'LAST_FIGHTER',
-    guest: {
-      id: '',
-      nickname: '',
-      imagePath: '',
-      roomId: 0,
-    },
-  },
-  {
-    type: 'QUICK_THINKER',
-    guest: {
-      id: '',
-      nickname: '',
-      imagePath: '',
-      roomId: 0,
-    },
-  },
-];
+import { AwardInfo } from '@/store/Types';
 
 export default function Page() {
-  const isHost = useSelector((state: RootState) => state.status.isHost);
-  const gameinfo = useSelector((state: RootState) => state.gameinfo);
-  const [awardDatas, setAwardDatas] = useState([]);
+  const isHost: boolean = useSelector(
+    (state: RootState) => state.status.isHost,
+  );
+  const pin = isHost
+    ? useSelector((state: RootState) => state.gameinfo.id)
+    : useSelector((state: RootState) => state.guest.pin);
+  const [awardDatas, setAwardDatas] = useState<AwardInfo[]>([]);
 
   useEffect(() => {
     // award 데이터 받아오기
     const handleAward = async () => {
-      try {
-        const res = await awardsApi(gameinfo.id);
-        console.log(res, 'awards data');
-        setAwardDatas(res);
-      } catch (err) {
-        console.log('Failed to fetch word cloud data', err);
-      }
+      const res = await awardsApi(pin);
+      setAwardDatas(res);
     };
     handleAward();
-  }, [gameinfo.id]);
+  }, [pin]);
 
   return (
-    <div>
+    <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle bg-bg-2 items-center">
       {isHost ? (
-        <HostAward awardDatas={mocks} />
+        <HostAward awardDatas={awardDatas} />
       ) : (
-        <GuestAward awardDatas={mocks} />
+        <GuestAward awardDatas={awardDatas} />
       )}
     </div>
   );

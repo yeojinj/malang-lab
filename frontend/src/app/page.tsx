@@ -6,6 +6,7 @@ import GameModeItem from '@/components/main/GameModeItem';
 // apis
 import { useSocket } from '@/context/SocketContext';
 import { getTokenApi } from '@/apis/apis';
+import AlertBox from '@/components/common/AlertBox';
 
 export interface Mode {
   name: string;
