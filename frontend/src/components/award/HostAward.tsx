@@ -4,10 +4,7 @@ import Image from 'next/image';
 import HostAwardItem from '@/components/award/HostAwardItem';
 import { AwardInfo } from '@/store/Types';
 import { useState } from 'react';
-import AlertBox from '../common/AlertBox';
-import Blur from '../common/Blur';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+
 
 type Props = {
   awardDatas: AwardInfo[];
@@ -15,20 +12,9 @@ type Props = {
 
 export default function HostAward({ awardDatas }: Props) {
   const [order, setOrder] = useState<number>(0);
-  const done = useSelector((state : RootState) => state.status.done)
-
-  const handleClickDone = () => {
-    
-  } 
 
   return (
     <>
-      { done && (
-        <>
-          <Blur />
-          <AlertBox text={'bye'} />
-        </>
-      )}
       <HostAwardItem awardInfo={awardDatas?.[order]} />
       <Image
         src={

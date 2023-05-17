@@ -10,6 +10,7 @@ type Props = {
 };
 
 export default function ResultCardPage({ params }: Props) {
+
   return (
     <div className="h-screen overflow-x-hidden bg-cover bg-bg-3 flex flex-col items-center justify-center">
       {params.slug === 'wordcloud' && <WordCloud />}
