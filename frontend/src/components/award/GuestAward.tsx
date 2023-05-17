@@ -23,10 +23,7 @@ export default function GuestAward({ awardDatas }: Props) {
   return (
     <>
       {myAward?.length === 0 ? (
-        <>
-          <Blur />
           <AlertBox text={'수상자 발표!\n 화면을 확인하세요'} />
-        </>
       ) : (
         <div className="grid-cols-1">
           <Confetti />
@@ -35,8 +32,7 @@ export default function GuestAward({ awardDatas }: Props) {
           })}
         </div>
       )}
-      {done && 
-        <AlertBox text='bye' />}
+      {done && <AlertBox text='bye' />}
     </>
   );
 }
