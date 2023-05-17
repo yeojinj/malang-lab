@@ -118,6 +118,10 @@ export default function GamePage() {
       {/* 게임 끝 & Host */}
       {roundInfo.finish && isHost && (
         <>
+        <div className='invisible'>
+
+        <BgAudioPlayer src="/audio/end.mp3"/>
+        </div>
           <Blur />
           <AlertBox text={`${roundInfo.round}라운드 종료!`} />
           <button

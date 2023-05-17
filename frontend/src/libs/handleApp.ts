@@ -1,6 +1,7 @@
 
 const HandleApp = dispatch => async message => {
   if (message.body) {
+    alert(message.body)
     const quote = JSON.parse(message.body);
     console.log(quote, 'app이야...')
     if (quote.type === 'JOIN') {
