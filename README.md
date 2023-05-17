@@ -62,7 +62,7 @@
 
 <p align="center">
 <img width="400" height="280" src=https://github.com/devTaemin/devTaemin/assets/48127239/80683234-064b-4775-9364-092f70cc8dfe>
-<img width="400" height="280" src=>
+<img width="400" height="280" src=https://github.com/devTaemin/devTaemin/assets/48127239/86870b91-b8fb-4aec-a9f5-d2b15965232b>
 </p>
 
 <br>
