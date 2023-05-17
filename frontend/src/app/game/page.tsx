@@ -104,7 +104,7 @@ export default function GamePage() {
             <div className="text-[#44474B] text-[3rem] font-semibold mt-10 sm:mt-16">
               제시어 : {roundInfo.keyword}
             </div>
-            <div className="text-[#44474B] mx-5 my-2 font-semibold">
+            <div className="text-[#44474B] ma-auto text-center my-2 font-semibold">
               떠오르는 단어를 마구마구 입력해주세요!
             </div>
           </div>

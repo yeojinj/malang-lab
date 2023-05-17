@@ -10,7 +10,6 @@ import { RootState } from '@/store/store';
 // components
 import GuestAward from '@/components/award/GuestAward';
 import HostAward from '@/components/award/HostAward';
-import Blur from '@/components/common/Blur';
 import AlertBox from '@/components/common/AlertBox';
 // types
 import { AwardInfo } from '@/store/Types';
@@ -22,7 +21,6 @@ export default function Page() {
   const hostPin = useSelector((state: RootState) => state.gameinfo.id);
   const guestPin = useSelector((state: RootState) => state.guest.pin);
   const [awardDatas, setAwardDatas] = useState<AwardInfo[]>([]);
-  const done = useSelector((state: RootState) => state.status.done)
   const gameinfo = useSelector((state: RootState) => state.gameinfo);
   const { publish } = useSocket();
 
@@ -48,19 +46,15 @@ export default function Page() {
   }, [hostPin, guestPin]);
 
   return (
-    <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex justify-center align-middle bg-bg-2 items-center">
+    <div className="w-[100vw] min-h-[100vh] bg-cover bg-center flex flex-col justify-center align-middle bg-bg-2 items-center">
       {isHost ? (
         <>
           <HostAward awardDatas={awardDatas} />
-          <button className='button-black' onClick={handleClickBye} >종료하기</button>
+          <button className='button-black mt-5 w-[40%]' onClick={handleClickBye} >종료하기</button>
         </>
       ) : (
         <GuestAward awardDatas={awardDatas} />
       )}
-      {done && <>
-        <Blur />
-        <AlertBox text='bye' />
-      </>}
     </div>
   );
 }
