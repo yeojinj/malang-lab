@@ -363,8 +363,9 @@ public class GameAdapter implements GamePort {
     private List<Guest> getGuestList(Set<ZSetOperations.TypedTuple<Object>> typedTuples) {
         return typedTuples.stream()
                 .map(tuple -> String.valueOf(tuple.getValue()))
-                .map(id -> guestRepository.findById(id).orElseGet(null)) // 3. 히든단어 찾은 사람들 정보 조회
-                .filter(d -> !Objects.isNull(d))
+                .map(id -> guestRepository.findById(id)) // 3. 히든단어 찾은 사람들 정보 조회
+                .filter(d -> d.isPresent())
+                .map(d -> d.get())
                 .collect(Collectors.toList());
     }
 

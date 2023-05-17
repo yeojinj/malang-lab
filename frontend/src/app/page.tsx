@@ -6,7 +6,6 @@ import GameModeItem from '@/components/main/GameModeItem';
 // apis
 import { useSocket } from '@/context/SocketContext';
 import { getTokenApi } from '@/apis/apis';
-import AlertBox from '@/components/common/AlertBox';
 
 export interface Mode {
   name: string;
@@ -29,7 +28,6 @@ export default function MainPage() {
     const handleToken = async () => {
       try {
         const newToken = await getTokenApi();
-        console.log(newToken, 'made newToken');
         setToken(newToken);
       } catch {}
     };
@@ -39,14 +37,12 @@ export default function MainPage() {
   // 토큰이 있는 사용자는 웹소켓 연결
   useEffect(() => {
     if(token){
-      console.log(token, 'new token');
       makeClient('wss://api.malang-lab.com/ws');
     }
   }, [token]);
 
   return (
     <div className="min-h-screen bg-cover bg-center flex justify-center items-center bg-bg-2">
-      {/* <AlertBox text='bye'/> */}
       <div className="w-[80vw] sm:w-[60vw] flex justify-center items-center m-auto glass py-5 my-10 sm:my-0 sm:py-10">
         <div className="w-[96%] h-[60%] flex flex-col">
           <p className="text-center text-3xl sm:text-4xl font-semibold">

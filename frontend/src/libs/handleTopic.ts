@@ -1,5 +1,6 @@
 import { setReadyMember, guestOutAction } from '@/store/readyInfoSlice';
 import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
+import { updateDoneStatus } from '@/store/statusSlice';
 
 const HandleTopic = (dispatch, router) => message => {
   var joinAudio = new Audio('/audio/hello.mp3');
@@ -25,12 +26,10 @@ const HandleTopic = (dispatch, router) => message => {
     }
     // 유저 이탈
     if (quote.type === 'EXIT') {
-      alert(message.body);
       dispatch(guestOutAction(quote.body.nickname));
     }
     // 호스트 이탈
     if (quote.type === 'DESTROY') {
-      console.debug('호스트가 퇴장했어요');
       router.push('/');
     }
     if (quote.type === 'GUEST_LIST') {
@@ -39,6 +38,9 @@ const HandleTopic = (dispatch, router) => message => {
     //
     if (quote.type === 'MOVE_CELEBRATE') {
       router.push('/award');
+    }
+    if (quote.type === 'BYE') {
+      dispatch(updateDoneStatus())
     }
   } else {
     alert('got empty message');

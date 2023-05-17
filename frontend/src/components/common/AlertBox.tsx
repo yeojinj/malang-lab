@@ -1,10 +1,8 @@
 'use client'
 
-import { useSocket } from '@/context/SocketContext';
-import { RootState } from '@/store/store';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type Props = {
   text: string;
@@ -18,17 +16,7 @@ export default function AlertBox({ text }: Props) {
   const bye =
     'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/bye.png';
 
-  const gameinfo = useSelector((state: RootState) => state.gameinfo);
-  const { publish } = useSocket();
-
-  const handleClickBye = () => {
-    console.log(gameinfo, '🙂')
-    if(gameinfo?.id) {
-      const destination = `/app/room.${gameinfo.id}`;
-      publish(destination, 'BYE', null)
-    }
-  };
-
+  const router = useRouter();
   const [audio, setAudio] = useState<HTMLAudioElement>();
 
   // 버튼위에 마우스가 올라가 있을 때만 실행
@@ -36,9 +24,10 @@ export default function AlertBox({ text }: Props) {
     audio?.play();
   };
 
-  useEffect(() => {
-    setAudio(new Audio('/audio/blop.mp3'));
-  }, []);
+  // 홈으로 돌아가기
+  const handleClickGoHome = () => {
+    router.push('/')
+  }
 
   return (
     <>
@@ -56,7 +45,7 @@ export default function AlertBox({ text }: Props) {
               다음에 만나요~
             </h1>
           </div>
-          <button onClick={handleClickBye} onMouseEnter={handleMouseEnter} className="button-black w-[50%] sm:w-[40%] h-12 mx-auto rounded-[5px] text-lg hover:scale-105 z-20">
+          <button onClick={handleClickGoHome} onMouseEnter={handleMouseEnter} className="button-black w-[50%] sm:w-[40%] h-12 mx-auto rounded-[5px] text-lg hover:scale-105 z-20">
             홈으로
           </button>
         </div>

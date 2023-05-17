@@ -9,8 +9,6 @@ import { useSocket } from '@/context/SocketContext';
 // redux
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { useDispatch } from 'react-redux';
-import { setTotalAction } from '@/store/wordNumSlice';
 import { RoundInfo } from '@/store/roundInfoSlice';
 import { GameInfo } from '@/store/gameInfoSlice';
 // Components
@@ -54,7 +52,6 @@ export default function GamePage() {
   }, [roundInfo.keyword]);
 
   const handleClick = async () => {
-    // dispatch(setTotalAction(num));
     router.push('/result');
   };
 
@@ -93,7 +90,7 @@ export default function GamePage() {
             <Timer onFinish={handleFinish} time={roundInfo.timeLimit} />
           </div>
           <WordNum num={num} />
-          <div className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
+          <div className="absolute font-bold text-[4rem] text-[#44474B] top-72 pulsate">
             {roundInfo.keyword}
           </div>
           <Image src={word} alt="word" width={800} height={500} />

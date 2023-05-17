@@ -3,6 +3,7 @@
 import StartBtn from '@/components/ready/StartBtn';
 import ResultCard from '@/components/result/ResultCard';
 import { RootState } from '@/store/store';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const cards = [
@@ -25,6 +26,12 @@ const cards = [
 
 export default function ResultPage() {
   const num: number = useSelector((state: RootState) => state.wordNum.num);
+  const [audio] = useState(typeof Audio !== "undefined" && new Audio('/audio/hover.mp3'));
+
+  const handleMouseEnter = () => {
+    audio?.play();
+  }
+
   return (
     <div className="w-screen h-screen bg-cover bg-bg-3 flex flex-col justify-center items-center gap-16 lg:gap-32">
       <header className="text-4xl font-bold">
@@ -32,7 +39,11 @@ export default function ResultPage() {
       </header>
       <nav className="flex flex-col lg:flex-row justify-center items-center gap-10">
         {cards.map(card => (
-          <ResultCard key={card.title} card={card} />
+          <>
+            <div onMouseEnter={handleMouseEnter}>
+              <ResultCard key={card.title} card={card} />
+            </div>
+          </>
         ))}
       </nav>
       <StartBtn category={'다음 라운드 시작'} />

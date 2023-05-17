@@ -3,28 +3,11 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useSpringCarousel } from 'react-spring-carousel';
+import HostAwardItem from '../award/HostAwardItem';
 
-function WordCarousel() {
-  const items = [
-    {
-      id: 'item-1',
-      title: '멋사',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-2',
-      title: '우테코',
-      username: '나유나',
-      profileImg: 'character',
-    },
-    {
-      id: 'item-3',
-      title: '싸피',
-      username: '나유나',
-      profileImg: 'character',
-    },
-  ];
+function Carousel({ items }) {
+  console.log(items, 'items in carousel');
+
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const {
@@ -42,22 +25,11 @@ function WordCarousel() {
         ...item,
         renderItem: (
           <section
-            className={`relative grid aspect-[2] w-full place-items-center text-2xl transition-all duration-700 bg-white shadow-lg rounded px-5 ${
+            className={`h-80 w-[100%] flex flex-col items-center gap-5 justify-center bg-white shadow-lg rounded px-5 ${
               currentSlide === index ? 'z-10 scale-150' : 'bg-opacity-50'
             }`}
           >
-            <Image
-              className="mx-auto absolute -top-14 left-auto"
-              src={`/imgs/${item.profileImg}.png`}
-              alt="Picture of the author"
-              width={100}
-              height={100}
-              priority
-            />
-            <h1 className="h-full text-3xl flex items-center">{item.title}</h1>
-            <p className="text-xs absolute right-5 bottom-5">
-              by {item.username}
-            </p>
+            <HostAwardItem awardInfo={item} />
           </section>
         ),
       };
@@ -71,7 +43,7 @@ function WordCarousel() {
   });
 
   return (
-    <div className="py-20 relative">
+    <div className="text-center">
       <button
         onClick={slideToPrevItem}
         className="absolute top-1/2 -translate-y-1/2 -translate-x-full left-[10%]"
@@ -91,7 +63,7 @@ function WordCarousel() {
           />
         </svg>
       </button>
-      <div className="mx-auto w-[80%] overflow-x-clip py-[4%] relative">
+      <div className="mx-auto w-[80%] overflow-x-clip py-[4%]">
         {carouselFragment}
       </div>
       <button
@@ -117,4 +89,4 @@ function WordCarousel() {
   );
 }
 
-export default WordCarousel;
+export default Carousel;
