@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 // apis
-import { checkGuestInfoApi, joinGuestApi } from '@/apis/apis';
+import { checkGuestInfoApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,6 +18,16 @@ export default function NicknameForm() {
   const [nickname, setNickname] = useState<string>('');
   const [imagePath, setImagePath] = useState<string>('');
   const token = localStorage.getItem('token')
+  const [audio, setAudio] = useState<HTMLAudioElement>();
+
+  // 버튼위에 마우스가 올라가 있을 때만 실행
+  const handleMouseEnter = () => {
+    audio?.play();
+  };
+
+  useEffect(() => {
+    setAudio(new Audio('/audio/blop.mp3'));
+  }, []);
 
   // 1. 닉네임 입력 ---------------------------------------------------------
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,15 +84,14 @@ export default function NicknameForm() {
   // 이미지 주소 받아오는데 성공하면 실행
   useEffect(() => {
     if (imagePath.length) {
-      const res = joinGuest()
-      console.log(res, '💜💜💙💜💜💙')
-      if (res) router.push('/ready');
+      joinGuest()
+      router.push('/ready');
     }
   }, [imagePath]);
 
   return (
     <section className="w-[70%] sm:w-[50%] md:w-[40%] lg:w-[30%] flex flex-col justify-center align-middle gap-5">
-      <p className="text-center text-3xl sm:text-4xl lg:text-5xl font-bold mb-5">
+      <p className="text-center text-3xl sm:text-4xl lg:text-5xl font-bold mb-5 pulsate">
         닉네임 설정하기
       </p>
       <input
@@ -91,11 +100,12 @@ export default function NicknameForm() {
         placeholder="닉네임 입력"
         onChange={handleChangeNickname}
         onKeyPress={handleKeyPress}
-        className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg"
+        className="block w-[80%] sm:w-[60%] h-12 mx-auto pl-5 rounded-[5px] text-lg hover:scale-105"
       />
       <button
-        className="button-black w-[80%] sm:w-[60%] h-12 mx-auto rounded-[5px] text-lg"
+        className="button-black w-[80%] sm:w-[60%] h-12 mx-auto rounded-[5px] text-lg hover:scale-105"
         onClick={handleClickComplete}
+        onMouseEnter={handleMouseEnter}
       >
         완료
       </button>

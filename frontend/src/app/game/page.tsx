@@ -1,46 +1,52 @@
 'use client';
 
 import 'animate.css';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+// apis
+import { useSocket } from '@/context/SocketContext';
+// redux
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { useDispatch } from 'react-redux';
+import { setTotalAction } from '@/store/wordNumSlice';
+import { RoundInfo } from '@/store/roundInfoSlice';
+import { GameInfo } from '@/store/gameInfoSlice';
+// Components
 import Blur from '@/components/common/Blur';
 import CountDown from '@/components/game/CountDown';
 import GameUserNum from '@/components/game/GameUserNum';
 import WordNum from '@/components/game/WordNum';
-import Image from 'next/image';
 import WordList from '@/components/game/WordList';
 import Timer from '@/components/game/Timer';
 import AlertBox from '@/components/common/AlertBox';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { setTotalAction, wordZeroAction } from '@/store/wordNumSlice';
-import { useSocket } from '@/context/SocketContext';
 import BgAudioPlayer from '@/components/common/BgAudioPlayer';
-import { RoundInfo } from '@/store/roundInfoSlice';
-import { GameInfo } from '@/store/gameInfoSlice';
 
 export default function GamePage() {
+  const word =
+    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
   const router = useRouter();
-  const dispatch = useDispatch();
   const { publishUpdate } = useSocket();
-
   const [countShow, setCountShow] = useState(true);
+  const [audio] = useState(typeof Audio !== "undefined" && new Audio('/audio/end.mp3'));
 
   // redux에서 가져올 값
   const num: number = useSelector((state: RootState) => state.wordNum.num);
-  const roundInfo: RoundInfo = useSelector((state: RootState) => state.roundInfo);
+  const roundInfo: RoundInfo = useSelector(
+    (state: RootState) => state.roundInfo,
+  );
   const gameInfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
-  const userNum: number = useSelector((state: RootState) => state.readyInfo).length;
-  const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
+  const userNum: number = useSelector(
+    (state: RootState) => state.readyInfo,
+  ).length;
+  const isHost: boolean = useSelector(
+    (state: RootState) => state.status.isHost,
+  );
 
-  const playerRef = useRef<HTMLAudioElement>(null);
-
-  const word =
-    'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/word.png';
-  
+  // 다음 라운드에 카운트다운 다시 켜기
   useEffect(() => {
-    setCountShow(true) // 다음 라운드에 카운트다운 다시 키기
+    setCountShow(true); // 다음 라운드에 카운트다운 다시 키기
     const timeout = setTimeout(() => {
       setCountShow(false);
     }, 3200);
@@ -48,17 +54,21 @@ export default function GamePage() {
   }, [roundInfo.keyword]);
 
   const handleClick = async () => {
-    dispatch(setTotalAction(num));
-    dispatch(wordZeroAction());
+    // dispatch(setTotalAction(num));
     router.push('/result');
   };
 
+  // publish 라운드 종료 메시지
   const handleFinish = () => {
-    // publish 라운드 종료 메시지
     const destination = `/topic/room.${gameInfo.id}`;
     const type = 'ROUND_FINISH';
     publishUpdate(destination, type);
   };
+
+  // 라운드 종료 시 심벌즈 효과음 재생
+  useEffect(() => {
+    if (roundInfo?.finish && isHost) audio?.play();
+  }, [roundInfo?.finish]);
 
   return (
     <div
@@ -66,8 +76,6 @@ export default function GamePage() {
         isHost ? 'justify-center' : ''
       } ${roundInfo.finish ? 'justify-center' : ''} items-center`}
     >
-      <BgAudioPlayer src="/audio/gamefull.wav" />
-      <audio ref={playerRef} src={'/audio/blop.mp3'} />
       {/* 카운트다운 */}
       {countShow && (
         <>
@@ -79,14 +87,15 @@ export default function GamePage() {
       {/* 카운트다운 끝 & Host */}
       {!countShow && isHost && (
         <>
+          <BgAudioPlayer src="/audio/gamefull.wav" />
           <div className="flex fixed top-0 w-screen mr-10">
             <GameUserNum num={userNum} />
             <Timer onFinish={handleFinish} time={roundInfo.timeLimit} />
           </div>
           <WordNum num={num} />
-          <h1 className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
+          <div className="absolute font-bold text-[4rem] text-[#44474B] top-72 animate__animated animate__heartBeat">
             {roundInfo.keyword}
-          </h1>
+          </div>
           <Image src={word} alt="word" width={800} height={500} />
         </>
       )}
@@ -94,15 +103,14 @@ export default function GamePage() {
       {/* 카운트다운 끝 & Guest */}
       {!countShow && !isHost && (
         <>
-          {/* <div className="flex sm:fixed sm:right-10 justify-center">
-            <Timer setFinish={setFinish} time={roundInfo.timeLimit} />
-          </div> */}
-          <h1 className="text-[#44474B] text-[3rem] font-semibold mt-10 sm:mt-16">
-            제시어 : {roundInfo.keyword}
-          </h1>
-          <h2 className="text-[#44474B] mx-5 my-2 font-semibold">
-            떠오르는 단어를 마구마구 입력해주세요!
-          </h2>
+          <div className="pulsate">
+            <div className="text-[#44474B] text-[3rem] font-semibold mt-10 sm:mt-16">
+              제시어 : {roundInfo.keyword}
+            </div>
+            <div className="text-[#44474B] mx-5 my-2 font-semibold">
+              떠오르는 단어를 마구마구 입력해주세요!
+            </div>
+          </div>
           <WordList />
         </>
       )}
@@ -110,6 +118,7 @@ export default function GamePage() {
       {/* 게임 끝 & Host */}
       {roundInfo.finish && isHost && (
         <>
+          <div className="invisible"></div>
           <Blur />
           <AlertBox text={`${roundInfo.round}라운드 종료!`} />
           <button

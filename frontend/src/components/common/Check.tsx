@@ -30,12 +30,18 @@ export default function Check() {
       if (isHost) {
         console.log('폭파 호스트 확인 점,,,,');
         hostOutApi(String(pin));
+        router.push('/')
       }
       // 게스트 이면 퇴장 알리기
       else {
-        console.log('나가는 게스트 확인.,,,');
-        guestOutApi(guest?.pin);
-        guestOutAction(guest?.nickname);
+        if(guest.pin != 0) {
+          console.log('나가는 게스트 확인.,,,');
+          // api 요청
+          guestOutApi(guest?.pin);
+          // 리스트에 반영
+          guestOutAction(guest?.nickname);
+          router.push('/')
+        }
       }
     };
 
@@ -46,9 +52,9 @@ export default function Check() {
   }, [guest, pin]);
 
   // 토큰이 없는 경우 홈화면으로
-  useEffect(() => {
-    if (!token) router.push('/');
-  }, [token]);
+  // useEffect(() => {
+  //   if (!token) router.push('/');
+  // }, [token]);
 
   return null;
 }

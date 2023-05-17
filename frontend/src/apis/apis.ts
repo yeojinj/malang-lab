@@ -139,7 +139,7 @@ export const inputWordApi = async (payload: WordInfo) => {
 };
 
 // 참여자 퇴장
-export const guestOutApi = async (payload: string) => {
+export const guestOutApi = async (payload: number) => {
   console.log(payload, 'pin!!!!!!!!!!');
 
   // 닉네임이 존재하는 사용자 일 경우에만 새로고침 할 수 있도록
@@ -148,7 +148,7 @@ export const guestOutApi = async (payload: string) => {
     // 나가기
     navigator.sendBeacon(`${BASE_URL}/game/${payload}/user/out`, token);
     // 토큰 삭제
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
   }
 };
 
@@ -161,7 +161,7 @@ export const hostOutApi = async (payload: string) => {
   // 나가기
   navigator.sendBeacon(`${BASE_URL}/game/${payload}/destroy`, token);
   // 토큰 삭제
-  localStorage.removeItem('token');
+  // localStorage.removeItem('token');
 };
 
 // 단어 입력 수 결과 받아오기
@@ -199,10 +199,10 @@ export const hiddenWordApi = async (pin: number) => {
 export const awardsApi = async (pin: number) => {
   try {
     const res = await authApi.get(`/game/${pin}/awards`);
-    console.log(res.data);
+    console.log(res.data, 'awardData');
     return res.data.data;
   } catch (err) {
-    console.log('히든 단어 사람 가져오기 실패', err);
+    console.log('어워드 가져오기 실패', err);
   }
 };
 

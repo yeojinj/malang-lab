@@ -4,6 +4,7 @@ import { gameStartApi } from '@/apis/apis';
 import { useSocket } from '@/context/SocketContext';
 import { GameInfo, updatePresentAction } from '@/store/gameInfoSlice';
 import { RootState } from '@/store/store';
+import { wordZeroAction } from '@/store/wordNumSlice';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,15 +12,21 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function StartBtn({ category }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { publish } = useSocket();
+  const { publish, publishUpdate } = useSocket();
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const gameinfo: GameInfo = useSelector((state: RootState) => state.gameinfo);
 
   const handleClick = async () => {
     if (gameinfo.present == gameinfo.settings.length) {
+      // 수상 넘어가기----------------------------------------------
+      const destination = `/app/room.${gameinfo.id}`;
+      const type = 'MOVE_CELEBRATE';
+      // const message = null;
+      publishUpdate(destination, type);
       router.push('/award');
     } else {
-      // 게임 시작 API
+      // 다음 게임 시작하기------------------------------------------
+      dispatch(wordZeroAction());
       const res = await gameStartApi(gameinfo.id);
       // 해당 라운드 정보
       const sendinfo = gameinfo.settings[gameinfo.present];

@@ -1,5 +1,6 @@
 const { transform } = require('typescript');
 
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -15,7 +16,7 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'box-gradient':
           'linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%)',
-        'bg-1':
+          'bg-1':
           "url('https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/bg-1.png')",
         'bg-2':
           "url('https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/bg-2.png')",
@@ -30,8 +31,8 @@ module.exports = {
       },
       keyframes: {
         wiggle: {
-          '0%, 100%': { transform: 'rotate(-1deg)' },
-          '50%': { transform: 'rotate(1deg)' },
+          '0%, 100%': { transform: 'rotate(-8deg)' },
+          '50%': { transform: 'rotate(8deg)' },
         },
         bounce: {
           '0%, 100%': {

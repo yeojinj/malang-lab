@@ -16,7 +16,7 @@ export default function WordList() {
   const [word, setWord] = useState<string>('');
   const [words, setWords] = useState<string[]>([]);
   const { publish } = useSocket();
-  const roomId: string = useSelector((state: RootState) => state.guest.pin);
+  const roomId: number = useSelector((state: RootState) => state.guest.pin);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
 
   const wordinfo: WordInfo = {
@@ -99,9 +99,7 @@ export default function WordList() {
             저는 그냥 문어예요✨
           </span>
           <Image
-            src={
-              'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png'
-            }
+            src={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png`}
             alt=""
             width={50}
             height={50}
