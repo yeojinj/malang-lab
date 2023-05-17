@@ -33,7 +33,7 @@ export default function WordCloud() {
     enableTooltip: true,
     deterministic: false,
     fontFamily: 'Inter',
-    fontSizes: [20, 80],
+    fontSizes: [20, 60],
     fontStyle: 'normal',
     fontWeight: 'normal',
     padding: 1,
@@ -45,9 +45,9 @@ export default function WordCloud() {
   };
 
   return (
-    <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-10 relative">
+    <div className="bg-white shadow-lg roundedd bg-opacity-50 mb-5 relative">
       <Image
-        className="absolute -left-80 animate-bounce"
+        className="absolute top-10 -left-80 animate-bounce"
         src={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/magnifier.png`}
         alt="magnifier"
         width={200}
@@ -56,7 +56,7 @@ export default function WordCloud() {
       />
       <ReactWordcloud
         words={words ? words : []}
-        size={[500, 500]}
+        size={[800, 600]}
         options={options}
       />
       <Image

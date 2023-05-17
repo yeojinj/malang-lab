@@ -15,7 +15,6 @@ export default function Loading() {
         >
           <div>
             <filter id="tooltip-filter">
-              {/* <feGaussianBlur in="SourceGraphic" stdDeviation={9} result="blur"> */}
               <feColorMatrix
                 in="blur"
                 mode="matrix"
@@ -28,7 +27,6 @@ export default function Loading() {
                   operator="atop"
                 ></feComposite>
               </feColorMatrix>
-              {/* </feGaussianBlur> */}
             </filter>
           </div>
         </svg>

@@ -9,15 +9,12 @@ import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { guestOutAction } from '@/store/readyInfoSlice';
 import { Guest } from '@/store/guestSlice';
-import useToken from '@/hooks/useToken';
 
 export default function Check() {
   const guest: Guest = useSelector((state: RootState) => state.guest);
   const isHost: boolean = useSelector((state: RootState) => state.status.isHost);
   const pin: number = useSelector((state: RootState) => state.gameinfo.id);
   const router = useRouter();
-  const { getToken } = useToken();
-  const token = getToken();
 
   // 새로고침 또는 페이지를 이동할 때
   useEffect(() => {
@@ -50,11 +47,6 @@ export default function Check() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [guest, pin]);
-
-  // 토큰이 없는 경우 홈화면으로
-  // useEffect(() => {
-  //   if (!token) router.push('/');
-  // }, [token]);
 
   return null;
 }
