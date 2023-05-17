@@ -32,7 +32,6 @@ export const roundInfoSlice = createSlice({
     },
     setFinish(state) {
       state.finish = true;
-      console.log(state);
     },
   },
 });
