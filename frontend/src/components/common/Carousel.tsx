@@ -6,8 +6,6 @@ import { useSpringCarousel } from 'react-spring-carousel';
 import HostAwardItem from '../award/HostAwardItem';
 
 function Carousel({ items }) {
-  console.log(items, 'items in carousel');
-
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const {
