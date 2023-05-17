@@ -22,7 +22,7 @@ export default function GuestsList({ host }: Props) {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, []);
+  }, [readyInfo]);
 
   return (
     <div

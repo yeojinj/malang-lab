@@ -40,9 +40,7 @@ export default function GuestAwardItem({ awardInfo }: Props) {
           획득!
         </div>
         <img
-          src={
-            'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/barcode.png'
-          }
+          src={'/imgs/barcode.png'}
           width={200}
           height={100}
           alt="barcode"
