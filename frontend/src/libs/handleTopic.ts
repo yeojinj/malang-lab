@@ -1,6 +1,5 @@
 import { setReadyMember, guestOutAction } from '@/store/readyInfoSlice';
 import { setFinish, setRoundInfo } from '@/store/roundInfoSlice';
-import { useRouter } from 'next/navigation';
 
 const HandleTopic = (dispatch, router) => message => {
   var joinAudio = new Audio('/audio/hello.mp3');
