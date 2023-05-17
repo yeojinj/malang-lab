@@ -17,7 +17,7 @@ export default function HostAward({ awardDatas }: Props) {
   const handleClick = () => {
     if (order < 3) {
       setOrder(order + 1);
-    } else if (order === 2) {
+    } else if (order === 3) {
       setShow(true);
     }
   };
@@ -30,7 +30,7 @@ export default function HostAward({ awardDatas }: Props) {
           <AlertBox text={'bye'} />
         </>
       )}
-      <HostAwardItem awardInfo={awardDatas[order]} />
+      <HostAwardItem awardInfo={awardDatas?.[order]} />
       <Image
         src={
           'https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/awardbtn.png'
