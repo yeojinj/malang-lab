@@ -27,7 +27,13 @@ export default function GamePage() {
   const router = useRouter();
   const { publishUpdate } = useSocket();
   const [countShow, setCountShow] = useState(true);
-  const [audio] = useState(typeof Audio !== "undefined" && new Audio('/audio/end.mp3'));
+  const [audio] = useState(
+    typeof Audio !== 'undefined' && new Audio('/audio/end.mp3'),
+  );
+  const [timeattack, setTimeattack] = useState<boolean>(false);
+  const [attack] = useState(
+    typeof Audio !== 'undefined' && new Audio('/audio/timer.mp3'),
+  );
 
   // redux에서 가져올 값
   const num: number = useSelector((state: RootState) => state.wordNum.num);
@@ -62,6 +68,11 @@ export default function GamePage() {
     publishUpdate(destination, type);
   };
 
+  // timeattack
+  useEffect(() => {
+    if (timeattack) attack?.play();
+  }, [timeattack]);
+
   // 라운드 종료 시 심벌즈 효과음 재생
   useEffect(() => {
     if (roundInfo?.finish && isHost) audio?.play();
@@ -84,10 +95,14 @@ export default function GamePage() {
       {/* 카운트다운 끝 & Host */}
       {!countShow && isHost && (
         <>
-          <BgAudioPlayer src="/audio/gamefull.wav" />
+          {!roundInfo.finish && <BgAudioPlayer src="/audio/gamefull.mp3" />}
           <div className="flex fixed top-0 w-screen mr-10">
             <GameUserNum num={userNum} />
-            <Timer onFinish={handleFinish} time={roundInfo.timeLimit} />
+            <Timer
+              onFinish={handleFinish}
+              time={roundInfo.timeLimit}
+              setTimeattack={setTimeattack}
+            />
           </div>
           <WordNum num={num} />
           <div className="absolute font-bold text-[4rem] text-[#44474B] top-72 pulsate">
@@ -127,9 +142,7 @@ export default function GamePage() {
 
       {/* 게임 끝 & Guest */}
       {roundInfo.finish && !isHost && (
-          <AlertBox
-            text={`${roundInfo.round}라운드 종료!\n 화면을 확인하세요`}
-          />
+        <AlertBox text={`${roundInfo.round}라운드 종료!\n 화면을 확인하세요`} />
       )}
     </div>
   );

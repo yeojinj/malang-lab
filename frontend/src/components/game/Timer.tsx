@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 type Props = {
   onFinish: React.Dispatch<React.SetStateAction<boolean>>;
   time: number;
+  setTimeattack: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Timer({ onFinish, time }: Props) {
+export default function Timer({ onFinish, time, setTimeattack }: Props) {
   const MINUTES_IN_MS: number = time * 1000;
   const INTERVAL: number = 1000;
   const [timeLeft, setTimeLeft] = useState<number>(MINUTES_IN_MS);
@@ -15,6 +16,10 @@ export default function Timer({ onFinish, time }: Props) {
     const timer = setInterval(() => {
       setTimeLeft(prevTime => prevTime - INTERVAL);
     }, INTERVAL);
+
+    if (timeLeft === 5000) {
+      setTimeattack(true);
+    }
 
     if (timeLeft <= 0) {
       clearInterval(timer);
