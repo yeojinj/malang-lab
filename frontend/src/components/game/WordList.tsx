@@ -104,7 +104,7 @@ export default function WordList() {
             alt=""
             width={70}
             height={70}
-            className="absolute bottom-5 sm:bottom-16 right-[20px] animate-bounce"
+            className="absolute bottom-3 sm:bottom-14 right-[20px] animate-bounce"
           />
         </div>
       </div>
