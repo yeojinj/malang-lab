@@ -2,16 +2,16 @@
   width: 200px;
   position: absolute;
   left: -100px;
-  bottom: 100px;
+  bottom: 40px !important;
   text-align: center;
-  font-size: 15px !important;
+  font-size: 15px;
   background: #ffffff;
   box-shadow: rgba(0, 0, 0, 0.3) 0 2px 2px;
   border-radius: 10px 10px 0px 0px;
 }
 
 .ribbon p {
-  font-size: 15px !important;
+  font-size: 15px;
   color: #000000;
   margin: 0px;
   padding: 15px 10px;

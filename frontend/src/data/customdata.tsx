@@ -9,6 +9,8 @@ const character = [
   'malang8',
   'malang9',
   'malang10',
+  'malang11',
+  'malang12',
 ];
 const sticker = [
   'item1',
@@ -23,6 +25,12 @@ const sticker = [
   'item10',
   'item11',
   'item13',
+  'item14',
+  'item15',
+  'item16',
+  'item17',
+  'item18',
+  'item19',
 ];
 
 export { character, sticker };
