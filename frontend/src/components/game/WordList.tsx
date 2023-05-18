@@ -18,6 +18,7 @@ export default function WordList() {
   const { publish } = useSocket();
   const roomId: number = useSelector((state: RootState) => state.guest.pin);
   const roundInfo = useSelector((state: RootState) => state.roundInfo);
+  const imagePath = useSelector((state: RootState) => state.guest.imageUrl);
 
   const wordinfo: WordInfo = {
     word,
@@ -96,13 +97,13 @@ export default function WordList() {
         />
         <div className="group relative flex justify-center">
           <span className="absolute bottom-20 -right-4 sm:bottom-32 sm:-right-8 scale-0 transition-all rounded p-2 text-lg text-white group-hover:scale-100 bg-black">
-            저는 그냥 문어예요✨
+            저는 그냥 말랑이예요✨
           </span>
           <Image
-            src={`https://s3.ap-northeast-2.amazonaws.com/static.malang-lab.com/static/octo-malang.png`}
+            src={imagePath}
             alt=""
-            width={50}
-            height={50}
+            width={70}
+            height={70}
             className="absolute bottom-5 sm:bottom-16 right-[20px] animate-bounce"
           />
         </div>
