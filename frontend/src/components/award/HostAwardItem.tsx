@@ -10,15 +10,15 @@ type Props = {
 export default function HostAwardItem({ awardInfo }: Props) {
   return (
     <>
-      <p className="text-black font-bold text-[1.3rem] mt-4">
+      <p className="text-black font-bold text-[1.3rem] mt-2">
         {award[awardInfo?.type]?.title}
       </p>
       <Image
-        src={`/imgs/${award[awardInfo?.type]?.imagePath}`}
+        src={awardInfo?.guest.imagePath}
         width={300}
         height={300}
         alt="award"
-        className="h-[200px] w-[150px]"
+        className="h-[200px] w-[200px] animate-bounce"
       />
       <div className="relative">
         <Ribbon nickname={awardInfo?.guest.nickname} />
