@@ -6,6 +6,12 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    domains: ['s3.ap-northeast-2.amazonaws.com']
+  },
 };
 
-module.exports = nextConfig
+// const withImages = require('next-images');
+// module.exports = withImages();
+
+module.exports = nextConfig;

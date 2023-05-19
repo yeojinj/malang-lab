@@ -1,0 +1,45 @@
+spring:
+  rabbitmq:
+    port: 5672
+    stomp-port: 61613
+    host: ENC(R63XLXvnUL0mU32Sts4KUJuqubvj0eyhoggeO7vJ+ic=)
+    virtual-host: ENC(aHrz94iirnMQgilAY8VCnhyoCP/QQ4Jc)
+    username: ENC(tYq3BmmTuCgAWE+pUbu60A==)
+    password: ENC(c3kXGdgS5sDyjLTeQkIScKiHPLFj7XwN)
+    system:
+      username: ENC(bq3aIoG79aXz9Xlpu0aFId/Gy/QzmBMJ)
+      password: ENC(sOjFpjOAVA0PFrShaNFEcezLLYk7WGZC4ymnxfIJHw4=)
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ENC(8e7kwdMKDq3c5ZRnWQAckgf3/X2G5u5C18zXbiWIYNs9utAWnwJTow3pqamuZX1kUorMypyvlrE=)
+    username: ENC(NCOgpqaAu9Hb4wUjNpOY6p4tdJIkUgNT)
+    password: ENC(/UoGpFo8ByaVICDxKpZVzw1gGNhdd+kv67GnYqC78Lo=)
+  data:
+    redis:
+      port: 6379
+      host: ENC(APo4roRnbfRYNUo027T3DSUR0vu5x22288tInpytFt8=)
+      password: ENC(ofuv+U0GHQFknWY/ELPzXXP3FYh8H/FR24jmE4qphYA=)
+cloud:
+  aws:
+    s3:
+      bucket: static.malang-lab.com
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ENC(unXu+pIUrzXUv7abvtqr803jUsWrrzJ+jyZzcU5iKQs=)
+      secret-key: ENC(ASwAeKvdZ6IffS3T3vRYpjI06gS2/63FnWpXENeU6ucpjcp7/Ftki7LabKNR5+ddHLBaGYw11sA=)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

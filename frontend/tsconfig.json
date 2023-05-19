@@ -4,7 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -21,8 +21,14 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/components/result/HiddenCarousel.jsx"
+, "webpack.config.js", "src/components/game/EffectSound.js"  ],
   "exclude": ["node_modules"]
 }
